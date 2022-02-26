@@ -8,7 +8,7 @@ int main(void)
 	scanf("%d", &curr_flat);
 
 	int curr_entr = (curr_flat - 1) / (n_floor * n_flat) + 1;
-	int curr_floor = ( (curr_flat - 1) % (n_floor * n_flat) ) / n_flat + 1;
+	int curr_floor = ((curr_flat - 1) % (n_floor * n_flat)) / n_flat + 1;
 
 	printf("Текущий подъезд: %d ; текущий этаж: %d\n", curr_entr, curr_floor);
 
