@@ -3,3 +3,8 @@
 *.gcda
 *.gcno
 *.swp
+*.out
+*.o
+*.pch
+*.gch
+
