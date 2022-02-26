@@ -19,7 +19,7 @@ int check_input(float *x, float *y)
 
 float distance(float x1, float x2, float y1, float y2)
 {
-	return sqrtf( (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) );
+	return sqrtf((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 }
 
 int main(void)
@@ -37,21 +37,21 @@ int main(void)
 	}
 	
 	printf("Enter the coordinates of B (x, y):\n");
-        check = check_input(&x_b, &y_b);
-        if (check != ERR_OK)
-        {
+	check = check_input(&x_b, &y_b);
+	if (check != ERR_OK)
+	{
 		printf("ERROR [2]: Invalid coordinates of B\n");
-                return check;
-        }
+	        return check;
+	}
 
 	printf("Enter the coordinates of C (x, y):\n");
-        check = check_input(&x_c, &y_c);
-        if (check != ERR_OK)
-        {       
-                printf("ERROR [2]: Invalid coordinates of C\n");
-                return check;
-        }
-        
+	check = check_input(&x_c, &y_c);
+	if (check != ERR_OK)
+	{       
+		printf("ERROR [2]: Invalid coordinates of C\n");
+	        return check;
+	}
+
 	dist_ab = distance(x_a, x_b, y_a, y_b);
 	dist_bc = distance(x_b, x_c, y_b, y_c);
 	dist_ac = distance(x_a, x_c, y_a, y_c);
@@ -68,7 +68,7 @@ int main(void)
 	else
 	{
 		float half_per = (dist_ab + dist_bc + dist_ac) / 2;
-		float area  = sqrt(half_per * (half_per - dist_ab) * (half_per - dist_bc) * (half_per - dist_ac));
+		double area = sqrt(half_per * (half_per - dist_ab) * (half_per - dist_bc) * (half_per - dist_ac));
 		printf("Area of triangle ABC: %f\n", area);
 	}
 

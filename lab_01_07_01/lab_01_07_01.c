@@ -4,9 +4,9 @@
 #define ERR_EPS 1
 #define ERR_VALUE 2
 
-float get_sum(float x, float epsilon)
+double get_sum(double x, double epsilon)
 {
-	float sum = x, curr_x = x;
+	double sum = x, curr_x = x;
 	int i = 1;
 
 	while (fabs(curr_x) >= epsilon)
@@ -54,11 +54,11 @@ int main(void)
 		return check;
 	}
 	
-	float sum = get_sum(x, epsilon), f_value = sin(x);
-	float delta = fabs(f_value - sum);
-	float rel_error;
+	double sum = get_sum(x, epsilon), f_value = sin(x);
+	double delta = fabs(f_value - sum);
+	double rel_error;
 	
-	if (f_value == 0.0)
+	if (f_value <= 0.000000001)
 		rel_error = 0.0;
 	else
 		rel_error = delta / fabs(f_value);
