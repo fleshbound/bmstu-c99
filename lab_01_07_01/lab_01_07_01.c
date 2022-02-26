@@ -9,7 +9,7 @@ float get_sum(float x, float epsilon)
 	float sum = x, curr_x = x;
 	int i = 1;
 
-	while ( fabs(curr_x) >= epsilon )
+	while (fabs(curr_x) >= epsilon)
 	{
 		i += 2;
 		curr_x *= pow(-1, i) * (x * x) / (i * (i - 1));

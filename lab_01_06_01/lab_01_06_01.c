@@ -24,12 +24,12 @@ float distance(float x1, float x2, float y1, float y2)
 
 int main(void)
 {
-	float x_A, y_A, x_B, y_B, x_C, y_C;
-	float dist_AB, dist_BC, dist_AC;
+	float x_a, y_a, x_b, y_b, x_c, y_c;
+	float dist_ab, dist_bc, dist_ac;
 	int check;
 
 	printf("Enter the coordinates of A (x, y):\n");
-	check = check_input(&x_A, &y_A);
+	check = check_input(&x_a, &y_a);
 	if (check != ERR_OK)
 	{
 		printf("ERROR [2]: Invalid coordinates of A\n");
@@ -37,7 +37,7 @@ int main(void)
 	}
 	
 	printf("Enter the coordinates of B (x, y):\n");
-        check = check_input(&x_B, &y_B);
+        check = check_input(&x_b, &y_b);
         if (check != ERR_OK)
         {
 		printf("ERROR [2]: Invalid coordinates of B\n");
@@ -45,20 +45,20 @@ int main(void)
         }
 
 	printf("Enter the coordinates of C (x, y):\n");
-        check = check_input(&x_C, &y_C);
+        check = check_input(&x_c, &y_c);
         if (check != ERR_OK)
         {       
                 printf("ERROR [2]: Invalid coordinates of C\n");
                 return check;
         }
         
-	dist_AB = distance(x_A, x_B, y_A, y_B);
-	dist_BC = distance(x_B, x_C, y_B, y_C);
-	dist_AC = distance(x_A, x_C, y_A, y_C);
+	dist_ab = distance(x_a, x_b, y_a, y_b);
+	dist_bc = distance(x_b, x_c, y_b, y_c);
+	dist_ac = distance(x_a, x_c, y_a, y_c);
 
-	int check1 = fabs(dist_AB + dist_BC) <= dist_AC;
-	int check2 = fabs(dist_AB + dist_AC) <= dist_BC;
-	int check3 = fabs(dist_AC + dist_BC) <= dist_AB;
+	int check1 = fabs(dist_ab + dist_bs) <= dist_ac;
+	int check2 = fabs(dist_ab + dist_ac) <= dist_bc;
+	int check3 = fabs(dist_ac + dist_bc) <= dist_ab;
 
 	if (check1 || check2 || check3)
 	{
@@ -67,9 +67,9 @@ int main(void)
 	}
 	else
 	{
-		float half_per = (dist_AB + dist_BC + dist_AC) / 2;
-		float area  = sqrt( half_per * (half_per - dist_AB) 
-				* (half_per - dist_BC) * (half_per - dist_AC) );
+		float half_per = (dist_ab + dist_bc + dist_ac) / 2;
+		float area  = sqrt( half_per * (half_per - dist_ab) 
+				* (half_per - dist_bc) * (half_per - dist_ac) );
 		printf("Area of triangle ABC: %f\n", area);
 	}
 

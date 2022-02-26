@@ -6,7 +6,7 @@ void int_division(int num1, int num2, int *div, int *mod)
 {
 	int i = 0;	
 
-	while ( (num1 - num2) >= 0 )
+	while ((num1 - num2) >= 0)
 	{
 		i = i + 1;
 		num1 = num1 - num2;
@@ -25,7 +25,7 @@ int main(void)
 
 	if (check_n == 2)
 	{
-		if ( (a <= 0) || (d <= 0) )
+		if ((a <= 0) || (d <= 0))
 		{
 			printf("ERROR [%d]: Numbers must be positive\n", ERR_NEG);
 			return ERR_NEG;
