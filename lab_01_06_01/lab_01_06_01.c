@@ -56,7 +56,7 @@ int main(void)
 	dist_bc = distance(x_b, x_c, y_b, y_c);
 	dist_ac = distance(x_a, x_c, y_a, y_c);
 
-	int check1 = fabs(dist_ab + dist_bs) <= dist_ac;
+	int check1 = fabs(dist_ab + dist_bc) <= dist_ac;
 	int check2 = fabs(dist_ab + dist_ac) <= dist_bc;
 	int check3 = fabs(dist_ac + dist_bc) <= dist_ab;
 
@@ -68,8 +68,7 @@ int main(void)
 	else
 	{
 		float half_per = (dist_ab + dist_bc + dist_ac) / 2;
-		float area  = sqrt( half_per * (half_per - dist_ab) 
-				* (half_per - dist_bc) * (half_per - dist_ac) );
+		float area  = sqrt(half_per * (half_per - dist_ab) * (half_per - dist_bc) * (half_per - dist_ac));
 		printf("Area of triangle ABC: %f\n", area);
 	}
 

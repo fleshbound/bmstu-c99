@@ -4,7 +4,7 @@
 # Скрипт должен находиться в папке "scripts"
 
 if [ -z "$1" ]; then
-	echo "Invalid script code"
+	echo "Invalid key(s) (number of lab)"
 	exit 1
 else
 	code="$1"
@@ -19,9 +19,9 @@ else
 	for file in $pos_in_files; do
 		i=$(( i + 1 ))
 		
-		numbers="$(grep -o "[0-9][0-9]* [0-9][0-9]*" "$file")"
+		numbers="$(grep -o "[+,-]*[0-9][0-9]*\.*[0-9]*" "$file")"
 		
-		./vroom1.sh "$i" "$file"
+		./sub_test_pos.sh "$i" "$file"
 		
 		if [ $? -eq 0 ]; then
 			echo "Test $i: OK"

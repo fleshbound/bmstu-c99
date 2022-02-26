@@ -9,9 +9,9 @@ int main(void)
 	printf("Введите основания a, b и угол фи (град.):\n");
 	scanf("%f %f %f", &a, &b, &phi);
 
-	float phi_rad = phi * M_PI / 180.0, delta = fabs(a - b) / 2;
-	float height = delta * tanf(phi_rad);
-	float space = 2 * 0.5 * delta * height + (a + b - 2 * delta) / 2 * height;
+	float phi_rad = phi * M_PI / 180.0;
+	float height = fabs(b - a) / 2 * tanf(phi_rad);
+	float space = (a + b) / 2 * height;
 
 	printf("Площадь трапеции: %f \n", space);
 

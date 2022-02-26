@@ -21,7 +21,7 @@ else
 		
 		numbers="$(grep -o "[+,-]*[0-9][0-9]*\.*[0-9]*" "$file")"
 		
-		./sub_test "$i" "$file"
+		./sub_test_pos.sh "$i" "$file"
 		
 		if [ $? -eq 0 ]; then
 			echo "Test $i: OK"
