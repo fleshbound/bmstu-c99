@@ -10,10 +10,11 @@ float get_sum(float x, float epsilon)
 	int i = 1;
 
 	while (fabs(curr_x) >= epsilon)
-	{
+	{	
 		i += 2;
 		curr_x *= pow(-1, i) * (x * x) / (i * (i - 1));
-		sum += curr_x;
+		if (fabs(curr_x) >= epsilon)
+			sum += curr_x;
 	}
 
 	return sum;
@@ -41,15 +42,15 @@ int main(void)
 {
 	float x, epsilon;
 	
-	printf("Enter the x and the epsilon:\n");
+	printf("Enter the x (float) and the epsilon (greater than zero, less or equal to one):\n");
 	int check = check_input(&x, &epsilon);
 	
 	if (check != ERR_OK)
 	{	
 		if (check == ERR_EPS)
-			printf("ERROR: Invalid value of epsilon\n");		
+			printf("ERROR [1]: Invalid value of epsilon\n");		
 		else
-			printf("ERROR: Invalid input\n");	
+			printf("ERROR [2]: Invalid input\n");	
 		return check;
 	}
 	
@@ -62,7 +63,7 @@ int main(void)
 	else
 		rel_error = delta / fabs(f_value);
 
-	printf("s(x) = %f; f(x) = %f;\ndelta: %f; relative error: %f\n", sum, f_value, delta, rel_error);
+	printf("s(x) = %f ; f(x) = %f ;\ndelta: %f ; relative error: %f\n", sum, f_value, delta, rel_error);
 
 	return 0;
 }

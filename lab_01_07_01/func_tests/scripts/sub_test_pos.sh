@@ -13,8 +13,8 @@ touch "tmp.txt"
 	 ./temp.exe < "$2"
 } > "tmp.txt"
 
-data1="$(grep -o "[0-9][0-9]*" "tmp.txt")"
-data2="$(grep -o "[0-9][0-9]*" "$pos_out_file")"
+data1="$(grep -o "[+,-]*[0-9][0-9]*\.*[0-9]*" "tmp.txt")"
+data2="$(grep -o "[+,-]*[0-9][0-9]*\.*[0-9]*" "$pos_out_file")"
 
 rm "tmp.txt"
 
