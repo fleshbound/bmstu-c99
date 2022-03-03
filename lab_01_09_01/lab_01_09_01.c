@@ -49,12 +49,12 @@ int main(void)
 		}
 	}
 
-	if (flag == 0)
+/*	if (flag == 0)
 	{
 		printf("Error: No value has been entered.\n");
 		return ERR_VALUE;
 	}
-
+*/
 	g_x = sin(sum);
 	printf("g(x): %f \n", g_x);
 
