@@ -10,7 +10,7 @@
 
 int check_scanf(float *num)
 {
-	printf("Enter x: ");
+	//printf("Enter x: ");
 	int check = scanf("%f", num);
 
 	if (check != 1)
@@ -37,7 +37,7 @@ int main(void)
 	int check = 0, i = 1, flag = 0;
 	float x, sum = 0, g_x = 0;
 
-	printf("Enter float positive values; negative value will end the entering\nand show the result of calculating.\n");
+	printf("Enter float positive values; negative value will end the entering\nand show the result of calculating:\n");
 	while (check == ERR_OK)
 	{
 		check = check_scanf(&x);
@@ -49,12 +49,12 @@ int main(void)
 		}
 	}
 
-/*	if (flag == 0)
+	if (flag == 0)
 	{
 		printf("Error: No value has been entered.\n");
 		return ERR_VALUE;
 	}
-*/
+
 	g_x = sin(sum);
 	printf("g(x): %f \n", g_x);
 
