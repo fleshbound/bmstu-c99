@@ -41,7 +41,7 @@ int main(void)
 	if (check != ERR_OK)
 	{
 		printf("ERROR [2]: Invalid coordinates of B\n");
-	        return check;
+		return check;
 	}
 
 	printf("Enter the coordinates of C (x, y):\n");
@@ -49,7 +49,7 @@ int main(void)
 	if (check != ERR_OK)
 	{       
 		printf("ERROR [2]: Invalid coordinates of C\n");
-	        return check;
+		return check;
 	}
 
 	dist_ab = distance(x_a, x_b, y_a, y_b);
