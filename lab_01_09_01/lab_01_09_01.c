@@ -8,10 +8,10 @@
 
 // Input check
 
-int check_scanf(float *num)
+int check_scanf(double *num)
 {
 	//printf("Enter x: ");
-	int check = scanf("%f", num);
+	int check = scanf("%lf", num);
 
 	if (check != 1)
 	{
@@ -35,7 +35,7 @@ int check_scanf(float *num)
 int main(void)
 {
 	int check = 0, i = 1, flag = 0;
-	float x, sum = 0, g_x = 0;
+	double x, sum = 0, g_x = 0;
 
 	printf("Enter float positive values; negative value will end the entering\nand show the result of calculating:\n");
 	while (check == ERR_OK)
@@ -56,7 +56,7 @@ int main(void)
 	}
 
 	g_x = sin(sum);
-	printf("g(x): %f \n", g_x);
+	printf("g(x): %lf \n", g_x);
 
 	return 0;
 }
