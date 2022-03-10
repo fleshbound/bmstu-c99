@@ -1,6 +1,7 @@
 #include <stdio.h>
 #define ERR_NEG 1
 #define ERR_VALUE 2
+#define CODE_OK 0
 
 void int_division(int num1, int num2, int *div, int *mod)
 {
@@ -23,22 +24,21 @@ int main(void)
 	printf("Enter a and d (integers):\n");
 	check_n = scanf("%d %d", &a, &d);
 
-	if (check_n == 2)
-	{
-		if ((a <= 0) || (d <= 0))
-		{
-			printf("ERROR [%d]: Numbers must be positive\n", ERR_NEG);
-			return ERR_NEG;
-		}
-	}					
-	else
+	if (check_n != 2)
 	{
 		printf("ERROR [%d]: Invalid value\n", ERR_VALUE);
 		return ERR_VALUE;	
 	}
-	
+
+	if ((a <= 0) || (d <= 0))
+	{                       
+		printf("ERROR [%d]: Numbers must be positive\n", ERR_NEG);
+		return ERR_NEG;
+	}
+
 	int_division(a, d, &q, &r);
 	printf("Integer division: %d ; modulus: %d \n", q, r);
 
-	return 0;
+	return CODE_OK;
 }
+

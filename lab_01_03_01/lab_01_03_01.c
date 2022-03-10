@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <math.h>
+#define CODE_OK 0
+
 
 int main(void)
 {
@@ -16,5 +18,6 @@ int main(void)
 
 	printf("Объем смеси (л): %f ; температура смеси: %f\n", value, temp);
 
-	return 0;
+	return CODE_OK;
 }
+

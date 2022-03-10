@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <math.h>
-#define ERR_OK 0
+#define CODE_OK 0
 #define ERR_EPS 1
 #define ERR_VALUE 2
+#define EPS 0.000000001
 
 double get_sum(double x, double epsilon)
 {
@@ -30,12 +31,24 @@ int check_input(float *x, float *eps)
 			return ERR_EPS;
 		}
 
-		return ERR_OK;
+		return CODE_OK;
 	}
+	
+	return ERR_VALUE;
+}
+
+void show_results(float x, float epsilon)
+{
+	double sum = get_sum(x, epsilon), f_value = sin(x);
+	double delta = fabs(f_value - sum);
+	double rel_error;
+
+	if (f_value <= EPS)
+		rel_error = 0.0;
 	else
-	{
-		return ERR_VALUE;
-	}
+	rel_error = delta / fabs(f_value);
+
+	printf("s(x) = %f ; f(x) = %f ;\ndelta: %f ; relative error: %f\n", sum, f_value, delta, rel_error);
 }
 
 int main(void)
@@ -45,25 +58,22 @@ int main(void)
 	printf("Enter the x (float) and the epsilon (greater than zero, less or equal to one):\n");
 	int check = check_input(&x, &epsilon);
 	
-	if (check != ERR_OK)
+	if (check != CODE_OK)
 	{	
 		if (check == ERR_EPS)
+		{
 			printf("ERROR [1]: Invalid value of epsilon\n");		
+			return ERR_EPS;
+		}
 		else
+		{
 			printf("ERROR [2]: Invalid input\n");	
-		return check;
+			return ERR_VALUE;
+		}
 	}
 	
-	double sum = get_sum(x, epsilon), f_value = sin(x);
-	double delta = fabs(f_value - sum);
-	double rel_error;
+	show_results(x, epsilon);
 	
-	if (f_value <= 0.000000001)
-		rel_error = 0.0;
-	else
-		rel_error = delta / fabs(f_value);
-
-	printf("s(x) = %f ; f(x) = %f ;\ndelta: %f ; relative error: %f\n", sum, f_value, delta, rel_error);
-
-	return 0;
+	return CODE_OK;
 }
+

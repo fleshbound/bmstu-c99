@@ -1,4 +1,5 @@
 #include <stdio.h>
+#define CODE_OK 0
 
 int main(void)
 {
@@ -12,5 +13,6 @@ int main(void)
 
 	printf("Текущий подъезд: %d ; текущий этаж: %d\n", curr_entr, curr_floor);
 
-	return 0;
+	return CODE_OK;
 }
+

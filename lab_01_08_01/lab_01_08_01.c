@@ -1,27 +1,21 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdint.h>
 
-#define ERR_OK 0
+#define CODE_OK 0
 #define ERR_VALUE 1
 #define ERR_BYTE 2
-
+#define BITES 255
 
 int power(int base, int power_n)
 {	
 	int result = 1;
 
-	if (power_n == 0)
+	while (power_n > 0)
 	{
-		return result;
-	}
-	else
-	{
-		while (power_n > 0)
-		{
-			result *= base; 
-			power_n--;
-		}
+		result *= base; 
+		power_n--;
 	}
 
 	return result;
@@ -31,9 +25,9 @@ int power(int base, int power_n)
 // Function gets a decimal number (int)
 // and returns its binary form (long long)
 
-long long switch_to_bin(int numb_dec)
+uint32_t switch_to_bin(int numb_dec)
 {
-	long long result = 0, digit = 0;
+	uint32_t result = 0, digit = 0;
 
 	int i = 0;
 	while (numb_dec > 0)
@@ -51,7 +45,7 @@ long long switch_to_bin(int numb_dec)
 
 // Function prints (formatted) binary number (long long) in 8 places
 
-void print_byte(long long number_bin)
+void print_byte(uint32_t number_bin)
 {
 	for (int i = 7; i >= 0; i--)
 	{
@@ -65,7 +59,7 @@ void print_byte(long long number_bin)
 
 // Function prints formatted byte-zip-result
 
-void print_bin(long long b1, long long b2, long long b3, long long b4)
+void print_bin(uint32_t b1, uint32_t b2, uint32_t b3, uint32_t b4)
 {
 	print_byte(b1);
 	print_byte(b2);
@@ -77,7 +71,7 @@ void print_bin(long long b1, long long b2, long long b3, long long b4)
 // Function gets a binary number (long long)
 // and returns its decimal form (int)
 
-int switch_to_dec(long long numb)
+int switch_to_dec(uint32_t numb)
 {
 	int result = 0, i = 0;
 
@@ -96,59 +90,110 @@ int switch_to_dec(long long numb)
 
 // Input check
 
-void check_scanf(int *b)
+int check_scanf(int *b)
 {
 	int check = scanf("%d", b);
 
 	if (check != 1)
 	{
-		printf("Error: Invalid value.\n");
-		exit(ERR_VALUE);
+		return ERR_VALUE;
 	}
-	else
-	{
-		if (*b > 255 || *b < 0)
+
+	if (*b > BITES || *b < 0)
 		{
-			printf("Error: Invalid byte.\n");
-			exit(ERR_BYTE);
+			return ERR_BYTE;
 		}
-	}
+
+	return CODE_OK;
 }
+
+int all_check_scanf(int *b1, int *b2, int *b3, int *b4)
+{
+	
+	printf("First byte: ");
+        int check = check_scanf(b1);
+        if (check == ERR_VALUE)
+        {
+                printf("Error: Invalid value.\n");
+                return ERR_VALUE;
+        }
+        if (check == ERR_BYTE)
+        {
+                printf("Error: Invalid byte.\n");
+                return ERR_BYTE;
+        }
+
+        printf("Second byte: ");
+        check = check_scanf(b2);
+        if (check == ERR_VALUE)
+        {
+                printf("Error: Invalid value.\n");
+                return ERR_VALUE;
+        }
+        if (check == ERR_BYTE)
+        {
+                printf("Error: Invalid byte.\n");
+                return ERR_BYTE;
+        }
+
+        printf("Third byte: ");
+        check = check_scanf(b3);
+        if (check == ERR_VALUE)
+        {
+                printf("Error: Invalid value.\n");
+                return ERR_VALUE;
+        }
+        if (check == ERR_BYTE)
+        {
+                printf("Error: Invalid byte.\n");
+                return ERR_BYTE;
+        }
+
+        printf("Fourth byte: ");
+        check = check_scanf(b4);
+        if (check == ERR_VALUE)
+        {
+                printf("Error: Invalid value.\n");
+                return ERR_VALUE;
+        }
+        if (check == ERR_BYTE)
+        {
+                printf("Error: Invalid byte.\n");
+                return ERR_BYTE;
+        }
+
+	return CODE_OK;
+}
+
 
 int main(void)
 {
 	int dec_b1, dec_b2, dec_b3, dec_b4;
-	long long b1, b2, b3, b4;
-	int uz1, uz2, uz3, uz4;
 
 	printf("Enter four bytes of unsigned number (zero<=x<two-five-six)\n");
 	
-	printf("First byte: ");
-	check_scanf(&dec_b1);
+	int all_check = all_check_scanf(&dec_b1, &dec_b2, &dec_b3, &dec_b4);
 
-	printf("Second byte: ");
-	check_scanf(&dec_b2);
+	if (all_check == ERR_VALUE)
+		return ERR_VALUE;
+	if (all_check == ERR_BYTE)
+		return ERR_BYTE;
 
-	printf("Third byte: ");
-	check_scanf(&dec_b3);
-
-	printf("Fourth byte: ");
-	check_scanf(&dec_b4);
-
-	b1 = switch_to_bin(dec_b1);
-	b2 = switch_to_bin(dec_b2);
-	b3 = switch_to_bin(dec_b3);
-	b4 = switch_to_bin(dec_b4);
+	uint32_t b1 = switch_to_bin(dec_b1);
+	uint32_t b2 = switch_to_bin(dec_b2);
+	uint32_t b3 = switch_to_bin(dec_b3);
+	uint32_t b4 = switch_to_bin(dec_b4);
 	
 	printf("Result: ");
 	print_bin(b1, b2, b3, b4);
 
-	uz1 = switch_to_dec(b1);
-	uz2 = switch_to_dec(b2);
-	uz3 = switch_to_dec(b3);
-	uz4 = switch_to_dec(b4);
+	int unzipped1 = switch_to_dec(b1);
+	int unzipped2 = switch_to_dec(b2);
+	int unzipped3 = switch_to_dec(b3);
+	int unzipped4 = switch_to_dec(b4);
 
-	printf(" %d %d %d %d\n", uz1, uz2, uz3, uz4);
+	printf(" %d %d %d %d\n", unzipped1, unzipped2, unzipped3, unzipped4);
 
-	return 0;
+	return CODE_OK;
 }
+
