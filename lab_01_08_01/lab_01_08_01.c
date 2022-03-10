@@ -108,8 +108,7 @@ int check_scanf(int *b)
 }
 
 int all_check_scanf(int *b1, int *b2, int *b3, int *b4)
-{
-	
+{	
 	printf("First byte: ");
 	int check = check_scanf(b1);
 	if (check == ERR_VALUE)
