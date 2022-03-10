@@ -51,12 +51,12 @@ double get_sum(int *code)
 		}
 	}
 
-        if (flag == 0)
-        {
+	if (flag == 0)
+	{
 		*code = ERR_VALUE;
 		printf("Error: No value was entered\n");
 		return ERR_VALUE;
-        }
+	}
 
 	return sum;
 }

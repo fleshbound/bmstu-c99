@@ -100,9 +100,9 @@ int check_scanf(int *b)
 	}
 
 	if (*b > BITES || *b < 0)
-		{
-			return ERR_BYTE;
-		}
+	{
+		return ERR_BYTE;
+	}
 
 	return CODE_OK;
 }
@@ -111,56 +111,56 @@ int all_check_scanf(int *b1, int *b2, int *b3, int *b4)
 {
 	
 	printf("First byte: ");
-        int check = check_scanf(b1);
-        if (check == ERR_VALUE)
-        {
-                printf("Error: Invalid value.\n");
-                return ERR_VALUE;
-        }
-        if (check == ERR_BYTE)
-        {
-                printf("Error: Invalid byte.\n");
-                return ERR_BYTE;
-        }
+	int check = check_scanf(b1);
+	if (check == ERR_VALUE)
+	{
+		printf("Error: Invalid value.\n");
+		return ERR_VALUE;
+	}
+	if (check == ERR_BYTE)
+	{
+		printf("Error: Invalid byte.\n");
+		return ERR_BYTE;
+	}
 
-        printf("Second byte: ");
-        check = check_scanf(b2);
-        if (check == ERR_VALUE)
-        {
-                printf("Error: Invalid value.\n");
-                return ERR_VALUE;
-        }
-        if (check == ERR_BYTE)
-        {
-                printf("Error: Invalid byte.\n");
-                return ERR_BYTE;
-        }
+	printf("Second byte: ");
+	check = check_scanf(b2);
+	if (check == ERR_VALUE)
+	{
+		printf("Error: Invalid value.\n");
+		return ERR_VALUE;
+	}
+	if (check == ERR_BYTE)
+	{
+		printf("Error: Invalid byte.\n");
+		return ERR_BYTE;
+	}
 
-        printf("Third byte: ");
-        check = check_scanf(b3);
-        if (check == ERR_VALUE)
-        {
-                printf("Error: Invalid value.\n");
-                return ERR_VALUE;
-        }
-        if (check == ERR_BYTE)
-        {
-                printf("Error: Invalid byte.\n");
-                return ERR_BYTE;
-        }
+	printf("Third byte: ");
+	check = check_scanf(b3);
+	if (check == ERR_VALUE)
+	{
+		printf("Error: Invalid value.\n");
+		return ERR_VALUE;
+	}
+	if (check == ERR_BYTE)
+	{
+		printf("Error: Invalid byte.\n");
+		return ERR_BYTE;
+	}
 
-        printf("Fourth byte: ");
-        check = check_scanf(b4);
-        if (check == ERR_VALUE)
-        {
-                printf("Error: Invalid value.\n");
-                return ERR_VALUE;
-        }
-        if (check == ERR_BYTE)
-        {
-                printf("Error: Invalid byte.\n");
-                return ERR_BYTE;
-        }
+	printf("Fourth byte: ");
+	check = check_scanf(b4);
+	if (check == ERR_VALUE)
+	{
+		printf("Error: Invalid value.\n");
+		return ERR_VALUE;
+	}
+	if (check == ERR_BYTE)
+	{
+		printf("Error: Invalid byte.\n");
+		return ERR_BYTE;
+	}
 
 	return CODE_OK;
 }

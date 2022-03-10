@@ -46,7 +46,7 @@ void show_results(float x, float epsilon)
 	if (f_value <= EPS)
 		rel_error = 0.0;
 	else
-	rel_error = delta / fabs(f_value);
+		rel_error  = delta / fabs(f_value);
 
 	printf("s(x) = %f ; f(x) = %f ;\ndelta: %f ; relative error: %f\n", sum, f_value, delta, rel_error);
 }
