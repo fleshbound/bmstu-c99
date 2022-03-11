@@ -69,11 +69,9 @@ int main(void)
 			printf("ERROR [1]: Invalid value of epsilon\n");		
 			return ERR_EPS;
 		}
-		else
-		{
-			printf("ERROR [2]: Invalid input\n");	
-			return ERR_VALUE;
-		}
+
+		printf("ERROR [2]: Invalid input\n");	
+		return ERR_VALUE;
 	}
 	
 	show_results(x, epsilon);

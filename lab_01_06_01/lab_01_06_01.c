@@ -7,14 +7,12 @@
 int check_input(float *x, float *y)
 {
 	int n_var = scanf("%f %f", x, y);
-	if (n_var == 2)
-	{
-		return CODE_OK;
-	}
-	else
+	if (n_var != 2)
 	{
 		return ERR_VALUE;
 	}
+
+	return CODE_OK;
 }
 
 float distance(float x1, float x2, float y1, float y2)
