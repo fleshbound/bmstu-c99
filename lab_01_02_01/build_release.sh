@@ -28,7 +28,7 @@ elif ( echo "$1" | grep -Eq "^*.exe$"  ); then
 	done
 
 	gcc -std=c99 -Wall -Werror -Wpedantic -g0 -c "$@"
-	gcc -o "$exe_name" "*.o"
+	gcc -o "$exe_name" *.o -lm
 	echo "[$0] Release build was created"
 	exit 0
 else
