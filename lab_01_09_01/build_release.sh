@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Принимает на вход 1) имя исполняемого 2-N) имена объектных файлов
+# Принимает на вход 1) имя исполняемого 2-N) имена файлов с кодом
 
 ERR_ARGS=1
 ERR_EXT=2
 ERR_EXIST=3
 
-check_reg="^*.o"
+check_reg="^*.c"
 if [ -z "$2" ]; then
 	echo "$0: Wrong number of arguments (expected 2 or more, got $#)"
 	exit $ERR_ARGS
@@ -27,8 +27,9 @@ elif ( echo "$1" | grep -Eq "^*.exe$"  ); then
 		fi
 	done
 
-	gcc -o "$exe_name" "$@"
-	echo "[$0] Executable file was created"
+	gcc -std=c99 -Wall -Werror -Wpedantic -g0 -c "$@"
+	gcc -o "$exe_name" "*.o"
+	echo "[$0] Release build was created"
 	exit 0
 else
 	echo "$0: Wrong executable file extension (.exe expected)"
