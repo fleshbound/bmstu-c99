@@ -38,6 +38,12 @@ int input_array(int *a, size_t *size)
 	{
 		int element;
 		check = scanf("%d", &element);
+		
+		if ((check != 1) && (i < 0))
+		{
+			code = ERR_EMPTY;
+			i += 1;
+		}
 
 		if (check == 1)
 		{
@@ -59,7 +65,7 @@ int input_array(int *a, size_t *size)
 		return ERR_FULL;
 	}
 
-	if ((check != 1) && (*size == 0))
+	if (code == ERR_EMPTY)
 	{
 		printf("Error: Array must contain one element at least.\n");
 		return ERR_EMPTY;

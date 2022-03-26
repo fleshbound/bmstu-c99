@@ -203,6 +203,11 @@ int main(void)
 		return ERR_NOPOS;
 	}
 
+	if (res >= 0)
+	{
+		return ERR_VALUE;	
+	}
+
 	printf("Result: %d\n", res);
 
 	return EXIT_SUCCESS;
