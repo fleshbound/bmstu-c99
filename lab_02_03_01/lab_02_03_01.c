@@ -132,5 +132,5 @@ int main(void)
 
 	output_array(array, new_size);
 
-    	return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }

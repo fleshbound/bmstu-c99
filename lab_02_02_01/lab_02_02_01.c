@@ -59,17 +59,18 @@ int is_prime(int number)
 }
 
 
-// Перенос простых чисел в массив b из массива a
-int input_prime(int *b, const int *a, size_t size)
+// Вывод простых чисел
+int output_prime(const int *a, size_t size)
 {
 	int q = 0;
+	
+	printf("Primes:\n");
 
 	for (int i = 0; i < size; i++)
 	{
 		if (is_prime(a[i]))
 		{
-			b[q] = a[i];
-			q += 1;
+			printf("%d ", a[i]);
 		}
 	}
 	
@@ -80,7 +81,7 @@ int input_prime(int *b, const int *a, size_t size)
 		return ERR_NONE;
 	}
 	
-	return q;
+	return EXIT_SUCCESS;
 }
 
 
@@ -151,16 +152,12 @@ int main(void)
 		return ERR_NEG;
 	}
     
-	int primes[N];
-	size_t length = input_prime(primes, array, size);
-	
-	if (length == ERR_NONE)
+	int check_output = output_prime(array, size);
+
+	if (check_output == ERR_NONE)
 	{
 		return ERR_NONE;
 	}
-	
-	printf("Primes:\n");
-	output_array(primes, length);
 	
 	return EXIT_SUCCESS;
 }
