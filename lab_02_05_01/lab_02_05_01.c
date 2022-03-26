@@ -177,6 +177,11 @@ int main(void)
 		return ERR_SIZE;
 	}
 
+	if (check_size == ERR_VALUE)
+	{
+		return ERR_VALUE;
+	}
+	
 	int check_input = input_array(array, array + size);
 	
 	if (check_input == ERR_VALUE)

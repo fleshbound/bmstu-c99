@@ -71,9 +71,10 @@ int output_prime(const int *a, size_t size)
 		if (is_prime(a[i]))
 		{
 			printf("%d ", a[i]);
+			q += 1;
 		}
 	}
-	
+
 	if (q == 0)
 	{
 		printf("No prime numbers were found\n");
@@ -81,6 +82,8 @@ int output_prime(const int *a, size_t size)
 		return ERR_NONE;
 	}
 	
+	printf("\n");
+
 	return EXIT_SUCCESS;
 }
 
