@@ -41,10 +41,10 @@ int is_prime(int number)
 
 	if (number == 2)
 	{
-		return 0;
+		return 1;
 	}
 
-	for (int i = 3; i <= sqrt(number) / 1 + 1; i++)
+	for (int i = 2; i <= sqrt(number) / 1 + 1; i++)
 	{
 		if (number % i == 0)
 		{
@@ -158,7 +158,7 @@ int main(void)
 		return ERR_VALUE;
 	}
     
-	size_t new_size = count_primes(array);
+	size_t new_size = count_primes(array, size);
 	int primes[new_size];
 	int check_insert = insert_primes(primes, array, new_size, size);
 
@@ -167,7 +167,7 @@ int main(void)
 		return ERR_NONE;
 	}
 	
-	output_array(primes, new_size)
+	output_array(primes, new_size);
 
 	return EXIT_SUCCESS;
 }

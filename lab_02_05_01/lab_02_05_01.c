@@ -117,7 +117,7 @@ int get_sign(const int number)
 	return 0;
 }
 
-// Получение суммы neg[0] * pos[0] + ...
+// Получение суммы neg[0] * pos[0] + ... (позитивные в обратном порядке)
 int get_sum(int *p_begin, const int *p_end)
 {
 	int k = get_min_length(p_begin, p_end);
@@ -130,60 +130,46 @@ int get_sum(int *p_begin, const int *p_end)
 	}
 
 	int sum = 0;
-
-	int i = 0; // Глобальный счетчик
-	int *pa = p_begin; // Указатель на элемент массива i
-	int q_neg = 0, q_pos = 0; // Количество рассмотренных отриц./полож. чисел
-	int last_neg_ind = -1, last_pos_ind = -1; // Индекс последнего отриц./полож. числа
-
-	while (q_neg + q_pos < 2 * k)
+	
+	int q_neg = 0;
+	int last_pos_ind = p_end - p_begin;
+	int *pa = p_begin;
+	
+	while (q_neg < k)
 	{
-		int flag = 0; // Флаг, указывающий, нужно ли подбирать противоположное
-		int curr_elem = *pa, curr_sign = get_sign(curr_elem);
+		int curr_elem = *pa; 
+		int curr_neg = 0;
+		int flag_need_pos = 0;
 		
-		if ((curr_elem > 0) && (i > last_pos_ind))
+		if (curr_elem < 0)
 		{
-			q_pos += 1;
-			flag = 1;
-			last_pos_ind = i;
-		}
-
-		if ((curr_elem < 0) && (i > last_neg_ind))
-		{
+			curr_neg = curr_elem;
+			flag_need_pos = 1;
 			q_neg += 1;
-			flag = 1;
-			last_neg_ind = i;
 		}
+		
+		int i = last_pos_ind;
+		int *pa_pos = p_begin + i;
+		int curr_pos = 0;
 
-		int curr_opp = 0; // "Противоположное" к текущему (y[0] для x[0])
-		int ind = (curr_sign == -1) ? last_pos_ind : last_neg_ind; // Индекс последнего числа с другим знаком
-		int j = 0;
-		int *pa_j = p_begin + j; // Элемент на позиции j
-
-		while ((pa_j != p_end) && (flag))
+		while ((pa_pos >= p_begin) && (flag_need_pos))
 		{
-			if ((abs(get_sign(*pa_j) - curr_sign) == 2) && (j > ind))
+			pa_pos -= 1;
+			i -= 1;
+
+			int elem = *pa_pos;
+			if ((elem > 0) && (i < last_pos_ind))
 			{
-				curr_opp = *pa_j;
-				flag = 0;
-				
-				last_pos_ind = (curr_opp > 0) ? j : last_pos_ind;
-				last_neg_ind = (curr_opp < 0) ? j : last_neg_ind;
-				
-				q_pos += 1 * (curr_opp > 0);
-				q_neg += 1 * (curr_opp < 0);
+				last_pos_ind = i;
+				curr_pos = elem;
+				flag_need_pos = 0;
 			}
-		
-			pa_j += 1;
-			j += 1;
 		}
 
-		int curr_multi = curr_elem * curr_opp;
-		
+		int curr_multi = curr_neg * curr_pos;
 		sum += curr_multi;
-		
+
 		pa += 1;
-		i += 1;
 	}
 
 	return sum;
