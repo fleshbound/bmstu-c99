@@ -19,7 +19,8 @@ rm temp_gcov.txt
 
 echo "Current COVERAGE: $coverage"
 
+#cat err_gcov.txt
 rm err_gcov.txt
-rm *.c.gcov
+# rm *.c.gcov
 
 exit 0

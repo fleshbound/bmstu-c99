@@ -59,37 +59,50 @@ int is_prime(int number)
 }
 
 
-// Вывод простых чисел
-int output_prime(const int *a, size_t size)
+// Копирование простых чисел из a в b
+int insert_primes(int *b, const int *a, const size_t new_size, const size_t size)
 {
 	int q = 0;
 	
-	printf("Primes:\n");
+	if (new_size == 0)
+	{
+		printf("No prime numbers were found\n");
+
+		return ERR_NONE;
+	}
 
 	for (int i = 0; i < size; i++)
 	{
 		if (is_prime(a[i]))
 		{
-			printf("%d ", a[i]);
+			b[q] = a[i];
 			q += 1;
 		}
 	}
-
-	if (q == 0)
-	{
-		printf("No prime numbers were found\n");
-		
-		return ERR_NONE;
-	}
-	
-	printf("\n");
 
 	return EXIT_SUCCESS;
 }
 
 
+// Подсчет количества простых чисел
+int count_primes(const int *a, const size_t size)
+{
+	int q = 0;
+
+	for (int i = 0; i < size; i++)
+	{
+		if (is_prime(a[i]))
+		{
+			q += 1;
+		}
+	}
+
+	return q;
+}
+
+
 // Вывод массива
-void output_array(const int *a, size_t n)
+void output_array(const int *a, const size_t n)
 {
 	for (int i = 0; i < n; i++)
 	{
@@ -155,13 +168,17 @@ int main(void)
 		return ERR_NEG;
 	}
     
-	int check_output = output_prime(array, size);
+	size_t new_size = count_primes(array);
+	int primes[new_size];
+	int check_insert = insert_primes(primes, array, new_size, size);
 
-	if (check_output == ERR_NONE)
+	if (check_insert == ERR_NONE)
 	{
 		return ERR_NONE;
 	}
 	
+	output_array(primes, new_size)
+
 	return EXIT_SUCCESS;
 }
 

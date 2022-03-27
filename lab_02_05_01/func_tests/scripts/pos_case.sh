@@ -45,3 +45,5 @@ else
 
 	rm $file_stream_out_current
 fi
+
+../../collect_coverage ../../*.exe

@@ -3,8 +3,7 @@
 #define N 10
 #define ERR_VALUE 1
 #define ERR_SIZE 2
-#define ERR_NOPOS 3
-#define ERR_NONEG 4
+#define ERR_EMPTY 3
 
 
 // Ввод размера массива
@@ -35,94 +34,6 @@ int input_size(size_t *size)
 }
 
 
-// Возвращает минимум из пары целых чисел
-int get_min(int a, int b)
-{
-	if (a <= b)
-	{
-		return a;
-	}
-	else
-	{
-		return b;
-	}
-}
-
-// Возвращает pos[0]*neg[0] + ...
-int get_value(int *p_begin, const int *p_end)
-{
-	int *pa = p_begin;
-	int q = 0, p = 0;
-
-	while (pa != p_end)
-	{
-		if (*pa < 0)
-		{
-			q += 1;
-		}
-
-		if (*pa > 0)
-		{
-			p += 1;
-		}
-	
-		pa += 1;
-	}
-
-	if (p == 0)
-	{
-		printf("Error: Cannot get the value (no positive numbers)\n");
-	
-		return ERR_NOPOS;
-	}
-
-	if (q == 0)
-	{
-		printf("Error: Cannot get the value (no negative numbers)\n");
-
-		return ERR_NONEG;
-	}
-
-	int k = get_min(p, q);
-	int n = 2 * k;
-	int curr_multi = 0, curr_sum = 0;
-	int curr_pos = 0, curr_neg = 0;
-	pa = p_begin;
-
-	while (pa != p_end)
-	{
-		if (n == 0)
-		{
-			return curr_sum;
-		}
-
-		if (*pa > 0)
-		{
-			curr_pos = *pa;
-			n -= 1;
-		}
-
-		if (*pa < 0)
-		{
-			curr_neg = *pa;
-			n -= 1;
-		}
-
-		if ((curr_neg != 0) && (curr_pos != 0))
-		{
-			curr_multi = curr_neg * curr_pos;
-			curr_sum += curr_multi;
-			curr_neg = 0;
-			curr_pos = 0;
-		}
-
-		pa += 1;
-	}
-	
-	return curr_sum;
-}
-
-
 // Ввод массива
 int input_array(int *p_begin, const int *p_end)
 {
@@ -150,65 +61,166 @@ int input_array(int *p_begin, const int *p_end)
 }
 
 
-// Вывод массива
-void output_array(int *p_begin, const int *p_end)
+// Возвращает минимум из пары целых чисел
+int get_min(const int a, const int b)
+{
+	if (a <= b)
+	{
+		return a;
+	}
+	else
+	{
+		return b;
+	}
+}
+
+
+// Возвращает минимальное количество положительных и отрицательных
+// элементов, из которых будет складываться сумма
+int get_min_length(int *p_begin, const int *p_end)
 {
 	int *pa = p_begin;
+	int q_neg = 0, q_pos = 0;
 
 	while (pa != p_end)
 	{
-		printf("%d ", *pa);
+		if (*pa < 0)
+		{
+			q_neg += 1;
+		}
+
+		if (*pa > 0)
+		{
+			q_pos += 1;
+		}
+
 		pa += 1;
 	}
 
-	printf("\n");
+	return get_min(q_neg, q_pos);
 }
 
+
+// Получить значение знака числа
+int get_sign(const int number)
+{
+	if (number > 0)
+	{
+		return 1;
+	}
+
+	if (number < 0)
+	{
+		return -1;
+	}
+
+	return 0;
+}
+
+// Получение суммы neg[0] * pos[0] + ...
+int get_sum(int *p_begin, const int *p_end)
+{
+	int k = get_min_length(p_begin, p_end);
+
+	if (k == 0)
+	{
+		printf("Error: No negative and/or no positive numbers\n");
+
+		return ERR_EMPTY;
+	}
+
+	int sum = 0;
+
+	int i = 0; // Глобальный счетчик
+	int *pa = p_begin; // Указатель на элемент массива i
+	int q_neg = 0, q_pos = 0; // Количество рассмотренных отриц./полож. чисел
+	int last_neg_ind = -1, last_pos_ind = -1; // Индекс последнего отриц./полож. числа
+
+	while (q_neg + q_pos < 2 * k)
+	{
+		int flag = 0; // Флаг, указывающий, нужно ли подбирать противоположное
+		int curr_elem = *pa, curr_sign = get_sign(curr_elem);
+		
+		if ((curr_elem > 0) && (i > last_pos_ind))
+		{
+			q_pos += 1;
+			flag = 1;
+			last_pos_ind = i;
+		}
+
+		if ((curr_elem < 0) && (i > last_neg_ind))
+		{
+			q_neg += 1;
+			flag = 1;
+			last_neg_ind = i;
+		}
+
+		int curr_opp = 0; // "Противоположное" к текущему (y[0] для x[0])
+		int ind = (curr_sign == -1) ? last_pos_ind : last_neg_ind; // Индекс последнего числа с другим знаком
+		int j = 0;
+		int *pa_j = p_begin + j; // Элемент на позиции j
+
+		while ((pa_j != p_end) && (flag))
+		{
+			if ((abs(get_sign(*pa_j) - curr_sign) == 2) && (j > ind))
+			{
+				curr_opp = *pa_j;
+				flag = 0;
+				
+				last_pos_ind = (curr_opp > 0) ? j : last_pos_ind;
+				last_neg_ind = (curr_opp < 0) ? j : last_neg_ind;
+				
+				q_pos += 1 * (curr_opp > 0);
+				q_neg += 1 * (curr_opp < 0);
+			}
+		
+			pa_j += 1;
+			j += 1;
+		}
+
+		int curr_multi = curr_elem * curr_opp;
+		
+		sum += curr_multi;
+		
+		pa += 1;
+		i += 1;
+	}
+
+	return sum;
+}
 
 int main(void)
 {
 	int array[N];
-	size_t size;
-
-	int check_size = input_size(&size);
 	
-	if (check_size == ERR_SIZE)
-	{
-		return ERR_SIZE;
-	}
+	size_t size;
+	int check_size = input_size(&size);
 
 	if (check_size == ERR_VALUE)
 	{
 		return ERR_VALUE;
 	}
-	
+
+	if (check_size == ERR_SIZE)
+	{
+		return ERR_SIZE;
+	}
+
 	int check_input = input_array(array, array + size);
-	
+
 	if (check_input == ERR_VALUE)
 	{
 		return ERR_VALUE;
 	}
 
-	// output_array(array, array + size);
-	
-	int res = get_value(array, array + size);
-	
-	if (res == ERR_NONEG)
+	int result = get_sum(array, array + size);
+
+	if (result == ERR_EMPTY)
 	{
-		return ERR_NONEG;
+		return ERR_EMPTY;
 	}
 
-	if (res == ERR_NOPOS)
-	{
-		return ERR_NOPOS;
-	}
-
-	if (res >= 0)
-	{
-		return ERR_VALUE;	
-	}
-
-	printf("Result: %d\n", res);
+	printf("Result: %d\n", result);
 
 	return EXIT_SUCCESS;
 }

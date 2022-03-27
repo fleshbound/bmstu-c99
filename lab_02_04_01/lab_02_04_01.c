@@ -42,23 +42,26 @@ int input_array(int *a, size_t *size)
 		if ((check != 1) && (i < 0))
 		{
 			code = ERR_EMPTY;
-			i += 1;
 		}
+		
+		i += 1;
 
-		if (check == 1)
+		if (i == N)
 		{
-			i += 1;
-
-			a[i] = element;
-			if (i == N - 1)
+			if (check == 1)
 			{
 				check = 0;
 				code = ERR_FULL;
 			}
 		}
+		else
+		{
+			a[i] = element;
+		}
+		
 	}
 
-	*size = i + 1;
+	*size = i;
 
 	if (code == ERR_FULL)
 	{
