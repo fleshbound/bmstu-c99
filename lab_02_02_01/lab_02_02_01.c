@@ -3,7 +3,6 @@
 #include <math.h>
 #define N 10
 #define ERR_VALUE 1
-#define ERR_NEG 3
 #define ERR_SIZE 2
 #define ERR_NONE 11
 
@@ -25,13 +24,6 @@ int input_array(int *a, size_t size)
 			return ERR_VALUE;
 		}
 		
-		if (element <= 0)
-		{
-			printf("Error: Numbers must be positive\n");
-		
-			return ERR_NEG;
-		}
-		
 		a[i] = element;
 	}
 	
@@ -42,7 +34,7 @@ int input_array(int *a, size_t size)
 // Проверка на простоту числа
 int is_prime(int number)
 {
-	if (number == 1)
+	if (number <= 1)
 	{
 		return 0;
 	}
@@ -161,11 +153,6 @@ int main(void)
 	if (check_input == ERR_VALUE)
 	{
 		return ERR_VALUE;
-	}
-	
-	if (check_input == ERR_NEG)
-	{
-		return ERR_NEG;
 	}
     
 	size_t new_size = count_primes(array);
