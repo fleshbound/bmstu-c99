@@ -57,8 +57,7 @@ int input_array(int *a, size_t *size)
 		else
 		{
 			a[i] = element;
-		}
-		
+		}	
 	}
 
 	*size = i;

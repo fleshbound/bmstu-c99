@@ -39,9 +39,14 @@ int is_prime(int number)
 		return 0;
 	}
 
-	for (int i = 2; i <= sqrt(number) / 1 + 1; i++)
+	if (number == 2)
 	{
-		if ((number % i == 0) && (i != number))
+		return 0;
+	}
+
+	for (int i = 3; i <= sqrt(number) / 1 + 1; i++)
+	{
+		if (number % i == 0)
 		{
 			return 0;
 		}
@@ -100,8 +105,6 @@ void output_array(const int *a, const size_t n)
 	{
 		printf("%d ", a[i]);
 	}
-	
-	printf("\n");
 }
 
 
