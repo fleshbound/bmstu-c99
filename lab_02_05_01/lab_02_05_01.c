@@ -101,22 +101,6 @@ int get_min_length(int *p_begin, const int *p_end)
 }
 
 
-// Получить значение знака числа
-int get_sign(const int number)
-{
-	if (number > 0)
-	{
-		return 1;
-	}
-
-	if (number < 0)
-	{
-		return -1;
-	}
-
-	return 0;
-}
-
 // Получение суммы neg[0] * pos[0] + ... (позитивные в обратном порядке)
 int get_sum(int *p_begin, const int *p_end)
 {
