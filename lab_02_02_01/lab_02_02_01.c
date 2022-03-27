@@ -57,11 +57,11 @@ int is_prime(int number)
 
 
 // Копирование простых чисел из a в b
-int insert_primes(int *b, const int *a, const size_t new_size, const size_t size)
+int insert_primes(int *b, const int *a, const size_t prime_count, const size_t size)
 {
 	int q = 0;
 	
-	if (new_size == 0)
+	if (prime_count == 0)
 	{
 		printf("No prime numbers were found\n");
 
@@ -158,16 +158,16 @@ int main(void)
 		return ERR_VALUE;
 	}
     
-	size_t new_size = count_primes(array, size);
-	int primes[new_size];
-	int check_insert = insert_primes(primes, array, new_size, size);
+	size_t prime_count = count_primes(array, size);
+	int primes[N];
+	int check_insert = insert_primes(primes, array, prime_count, size);
 
 	if (check_insert == ERR_NONE)
 	{
 		return ERR_NONE;
 	}
 	
-	output_array(primes, new_size);
+	output_array(primes, prime_count);
 
 	return EXIT_SUCCESS;
 }
