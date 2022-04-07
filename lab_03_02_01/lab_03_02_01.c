@@ -51,7 +51,6 @@ void output_array(int *const a, const size_t size)
 }
 
 
-
 // Вывод матрицы
 void output_matrix(int m[N][M], const size_t rows, const size_t cols)
 {
@@ -156,6 +155,12 @@ int main(void)
         return error_input;
     
     delete_min_sum_elem(matrix, &rows, &cols);
+
+    if ((rows == 0) || (cols == 0))
+    {
+        printf("Error: Empty result matrix\n");
+        return ERR_SIZE;
+    }
 
     printf("\nResult matrix:\n");
     output_matrix(matrix, rows, cols);
