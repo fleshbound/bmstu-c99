@@ -1,0 +1,7 @@
+*.exe
+*.swp
+*.swo
+*.o
+*.gcno
+*.gcda
+
