@@ -1,3 +1,0 @@
-Enter number of rows:
-Enter number of columns:
-Error: Elements must be integer

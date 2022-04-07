@@ -74,7 +74,8 @@ void fill_array(int m[N][M], int *const a, const size_t rows, const size_t cols)
 // Вывод массива
 void output_array(int *const a, const size_t size)
 {
-    for (size_t i = 0; i < size; i++) printf("%d%s", a[i], (i == size - 1) ? "\n" : " ");
+    for (size_t i = 0; i < size; i++) 
+        printf("%d%s", a[i], (i == size - 1) ? "\n" : " ");
 }
 
 
