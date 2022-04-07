@@ -32,16 +32,12 @@ int input_size(size_t *const size, const size_t max_size)
 int input_elements(int m[N][M], const size_t rows, const size_t cols)
 {
     for (size_t i = 0; i < rows; i++)
-    {
         for (size_t j = 0; j < cols; j++)
-        {
             if (scanf("%d", &m[i][j]) != 1)
             {
                 printf("Error: Elements must be integer\n");
                 return ERR_VALUE;
             }
-        }
-    }
 
     return EXIT_SUCCESS;
 }
@@ -55,12 +51,14 @@ void output_array(int *const a, const size_t size)
 }
 
 
+
 // Вывод матрицы
 void output_matrix(int m[N][M], const size_t rows, const size_t cols)
 {
     for (size_t i = 0; i < rows; i++)
         output_array(m[i], cols);
 }
+
 
 // Ввод размеров и элементов матрицы
 int input_matrix(int m[N][M], size_t *const rows, size_t *const cols)
@@ -74,6 +72,12 @@ int input_matrix(int m[N][M], size_t *const rows, size_t *const cols)
     error_size = input_size(cols, M);
     if (error_size != EXIT_SUCCESS)
         return error_size;
+
+    if ((*rows == *cols) && (*rows == 1))
+    {
+        printf("Error: Matrix must consist of more than one element\n");
+        return ERR_SIZE;
+    }
 
     printf("Enter elements:\n");
     int error_matrix = input_elements(m, *rows, *cols);
