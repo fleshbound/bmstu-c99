@@ -73,12 +73,6 @@ int input_matrix(int m[N][M], size_t *const rows, size_t *const cols)
     if (error_size != EXIT_SUCCESS)
         return error_size;
 
-    if ((*rows == *cols) && (*rows == 1))
-    {
-        printf("Error: Matrix must consist of more than one element\n");
-        return ERR_SIZE;
-    }
-
     printf("Enter elements:\n");
     int error_matrix = input_elements(m, *rows, *cols);
     if (error_matrix != EXIT_SUCCESS)
@@ -156,7 +150,7 @@ void delete_min_sum_elem(int m[N][M], size_t *const rows, size_t *const cols)
 int main(void)
 {
     int matrix[N][M];
-    size_t rows, cols;
+    size_t rows = 0, cols = 0;
     int error_input = input_matrix(matrix, &rows, &cols);
     if (error_input != EXIT_SUCCESS)
         return error_input;
