@@ -118,15 +118,15 @@ int fill_array(int m[N][M], const size_t rows, const size_t cols, int *const arr
 }
 
 
-// Сдвиг массива на q позиций
+// Сдвиг массива на q позиций ВЛЕВО
 void shift_array(int *const array, const size_t size, const size_t q)
 {
     for (size_t i = 0; i < q; i++)
     {
-        int buf = array[size - 1];
-        for (size_t j = size - 1; j > 0; j--)
-            array[j] = array[j - 1];
-        array[0] = buf;
+        int buf = array[0];
+        for (size_t j = 0; j < size - 1; j++)
+            array[j] = array[j + 1];
+        array[size - 1] = buf;
     }
 }
 
