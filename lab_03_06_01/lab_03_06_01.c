@@ -117,7 +117,6 @@ int main(void)
     if (error_input != EXIT_SUCCESS)
         return error_input;
 
-    printf("\nResult matrix:\n");
     output_matrix(matrix, rows, cols);
 
     return EXIT_SUCCESS;
