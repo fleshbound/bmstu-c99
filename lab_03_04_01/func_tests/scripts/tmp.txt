@@ -1,3 +1,0 @@
-Enter number of rows:
-Enter number of columns:
-Error: Matrix must be square
