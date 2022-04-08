@@ -131,12 +131,6 @@ int sort_matrix_by_max(int m[N][M], const size_t rows, const size_t cols)
         }
     }
 
-    if (sorted)
-    {
-        printf("Error: Matrix is already sorted\n");
-        return ERR_SORT;
-    }
-
     return EXIT_SUCCESS;
 }
 
