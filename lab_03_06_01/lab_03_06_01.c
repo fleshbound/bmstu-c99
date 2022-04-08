@@ -29,19 +29,15 @@ int input_size(size_t *const size, const size_t max_size)
 
 
 // Ввод элементов матрицы в виде спирали по часовой с проверкой на корректность
-int input_elements_spiral(int m[N][M], const size_t rows, const size_t cols)
+int fill_elements_spiral(int m[N][M], const size_t rows, const size_t cols)
 {
-    size_t i = 0, j = 0, n = 0;
+    size_t i = 0, j = 0, n = 1;
     size_t i_begin = 0, i_end = 0, j_begin = 0, j_end = 0;
 
-    while (n < rows * cols)
+    while (n <= rows * cols)
     { 
-        if (scanf("%d", &m[i][j]) != 1)
-        {
-            printf("Error: Elements must be integer\n");
-            return ERR_VALUE;
-        }
-        
+        m[i][j] = n;
+
         if ((j < cols - j_end - 1) && (i == i_begin))
             j++;
         else if ((j == cols - j_end - 1) && (i < rows - i_end - 1))
@@ -84,10 +80,7 @@ int input_matrix(int m[N][M], size_t *const rows, size_t *const cols)
         return ERR_SIZE;
     }
 
-    printf("Enter elements:\n");
-    int error_matrix = input_elements_spiral(m, *rows, *cols);
-    if (error_matrix != EXIT_SUCCESS)
-        return error_matrix;
+    fill_elements_spiral(m, *rows, *cols);
 
     return EXIT_SUCCESS;
 }
@@ -117,6 +110,7 @@ int main(void)
     if (error_input != EXIT_SUCCESS)
         return error_input;
 
+    printf("\nResult matrix:\n");
     output_matrix(matrix, rows, cols);
 
     return EXIT_SUCCESS;
