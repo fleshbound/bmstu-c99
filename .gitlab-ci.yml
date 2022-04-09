@@ -1,0 +1,9 @@
+rk_01:
+        image: gcc
+        stage: build
+        only:
+                - rk_01
+        script:
+                - cd rk_01
+                - gcc -Wall -Werror main.c
+                - cat test01.txt | ./a.out
