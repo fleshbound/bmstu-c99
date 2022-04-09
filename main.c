@@ -14,7 +14,7 @@ int get_size(size_t *const size, size_t const max_size)
     if (scanf("%lu", size) != CORRECT_INPUT_NUM)
         return ERR_VALUE;
 
-    if (size > max_size || size == 0)
+    if (*size > max_size || *size == 0)
         return ERR_SIZE;
 
     return EXIT_SUCCESS;
@@ -24,7 +24,7 @@ int get_size(size_t *const size, size_t const max_size)
 int input_array(int *const a, const size_t size)
 {
     for (size_t i = 0; i < size; i++)
-        if (scanf("%d", a[i]) != CORRECT_INPUT_NUM)
+        if (scanf("%d", &a[i]) != CORRECT_INPUT_NUM)
             return ERR_VALUE;
     return EXIT_SUCCESS;
 }
@@ -52,17 +52,19 @@ int input_matrix(int m[N][M], size_t *const rows, size_t *const cols)
         return error_size;
 
     printf("Number of cols:\n");
-    error_size = get_size(cols, M)
+    error_size = get_size(cols, M);
     if (error_size != EXIT_SUCCESS)
         return error_size;
 
     printf("Elements:\n");
-    for (size_t i = 0; i < rows; i++)
+    for (size_t i = 0; i < *rows; i++)
     {
-        int error_array = input_array(m[i], cols);
+        int error_array = input_array(m[i], *cols);
         if (error_array != EXIT_SUCCESS)
             return error_array;
     }
+
+    return EXIT_SUCCESS;
 }
 
 
@@ -76,12 +78,12 @@ void shift_array_side(int *const a, const size_t size, const size_t q, const int
                 a[j] = a[j + 1];
             a[size - 1] = buf;
         }
-        else if (code < 0)
+        else if (code > 0)
         {
             int buf = a[size - 1];
-            for (size_t j = size - 1; j > 0; j++)
+            for (size_t j = size - 1; j > 0; j--)
                 a[j] = a[j - 1];
-            a[0] = a[size - 1];
+            a[0] = buf;
         }
 }
 
@@ -94,11 +96,12 @@ void transp_matrix(int m[N][M], size_t *const rows, size_t *const cols)
     else
         new_rows = new_cols;
 
+    int buf;
     for (size_t i = 0; i < new_rows; i++)
     {
         for (size_t j = i; j < new_cols; j++)
         {
-            int buf = m[i][j];
+            buf = m[i][j];
             m[i][j] = m[j][i];
             m[j][i] = buf;
         }
@@ -113,7 +116,7 @@ void transp_matrix(int m[N][M], size_t *const rows, size_t *const cols)
 void shift_side(const size_t num_shift, int m[N][M], const size_t rows, const size_t cols, const size_t shift)
 {
     for (size_t i = 0; i < rows; i++)
-        shift_array_side(m[i], cols, num_shift, code);
+        shift_array_side(m[i], cols, num_shift, shift);
 }
 
 
@@ -121,7 +124,7 @@ void shift_down(const size_t num_shift, int m[N][M], size_t *const rows, size_t 
 {
     transp_matrix(m, rows, cols);
     for (size_t i = 0; i < *rows; i++)
-        shift_array_side(m[i], *cols, num_shift, code);
+        shift_array_side(m[i], *cols, num_shift, shift);
     transp_matrix(m, rows, cols);
 }
 
@@ -143,11 +146,12 @@ int main(void)
         return error_input;
 
     int actions[K];
-    int error_input = input_array(actions, K);
+    printf("\nEnter four action codes:\n");
+    error_input = input_array(actions, K);
     if (error_input != EXIT_SUCCESS)
         return error_input;
 
-    shift_matrix(matrix, rows, cols, actions);
+    shift_matrix(matrix, &rows, &cols, actions);
     
     printf("\nResult:\n");
     print_matrix(matrix, rows, cols);
