@@ -47,7 +47,7 @@ int input_array(int *a, size_t *size)
         
         i += 1;
         if ((i == N) && (check == CORRECT_INPUT_NUM))
-                code = ERR_FULL;
+            code = ERR_FULL;
         else
             a[i] = element;
     }

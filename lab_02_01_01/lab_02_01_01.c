@@ -91,12 +91,12 @@ int main(void)
 
     int error_input = input_array(a, size);
     if (error_input != EXIT_SUCCESS)
-        return error_input
+        return error_input;
 
     int multi = 0;
     int multi_error = get_multi(a, size, &multi);
     if (error_multi != EXIT_SUCCESS)
-        return error_multi
+        return error_multi;
 
     printf("%d\n", multi);
     return EXIT_SUCCESS;
