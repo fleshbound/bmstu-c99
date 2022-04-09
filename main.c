@@ -56,6 +56,12 @@ int input_matrix(int m[N][M], size_t *const rows, size_t *const cols)
     if (error_size != EXIT_SUCCESS)
         return error_size;
 
+    if (*rows != *cols)
+    {
+        printf("Error: Matrix must be square\n");
+        return ERR_SIZE;
+    }
+
     printf("Elements:\n");
     for (size_t i = 0; i < *rows; i++)
     {
