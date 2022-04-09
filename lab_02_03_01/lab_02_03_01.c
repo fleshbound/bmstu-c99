@@ -70,7 +70,7 @@ int input_array(int *const a, const size_t size)
 
 
 // Ввод размера массива
-int input_size(size_t *const size)
+int get_size(size_t *const size)
 {
     size_t n;
 
@@ -104,7 +104,7 @@ void output_array(const int *a, const size_t size)
 int main(void)
 {
     size_t size;
-    int error_size = input_size(&size);
+    int error_size = get_size(&size);
     
     if (error_size != EXIT_SUCCESS)
         return error_size;

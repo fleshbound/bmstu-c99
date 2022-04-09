@@ -7,8 +7,9 @@
 #define END_CODE 4
 #define CORRECT_INPUT_NUM 1
 
+
 // Сортировка массива вставками (по возрастанию)
-void sort_insert(int *a, const size_t size)
+void sort_insert(int *const a, const size_t size)
 {
     if (size > 1)
     {
@@ -30,7 +31,7 @@ void sort_insert(int *a, const size_t size)
 
 
 // Ввод массива с проверкой на корректность
-int input_array(int *a, size_t *size)
+int input_array(int *const a, size_t *const size)
 {
     printf("Enter integers:\n");
 
@@ -84,7 +85,7 @@ void output_array(const int *a, const size_t size)
 int main(void)
 {
     int array[N];
-    size_t size;
+    size_t size = 0;
     int error_input = input_array(array, &size);
     if ((error_input != EXIT_SUCCESS) && (error_input != ERR_FULL))
         return error_input;

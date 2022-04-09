@@ -8,7 +8,7 @@
 
 
 // Ввод размера массива
-int input_size(size_t *size)
+int get_size(size_t *const size)
 {
     size_t n;
 
@@ -33,7 +33,7 @@ int input_size(size_t *size)
 
 
 // Ввод массива
-int input_array(int *p_begin, const int *p_end)
+int input_array(int *const p_begin, const int *const p_end)
 {
     int *pa = p_begin;
 
@@ -69,7 +69,7 @@ int get_min(const int a, const int b)
 
 // Возвращает минимальное количество положительных и отрицательных
 // элементов, из которых будет складываться сумма
-int get_min_length(int *p_begin, const int *p_end)
+int get_min_length(int *const p_begin, const int *const p_end)
 {
     int *pa = p_begin;
     int q_neg = 0, q_pos = 0;
@@ -90,7 +90,7 @@ int get_min_length(int *p_begin, const int *p_end)
 
 
 // Получение суммы neg[0] * pos[0] + ... (позитивные в обратном порядке)
-int get_sum(int *p_begin, const int *p_end, int *const result)
+int get_sum(int *const p_begin, const int *const p_end, int *const result)
 {
     int k = get_min_length(p_begin, p_end);
 
@@ -152,7 +152,7 @@ int main(void)
     int array[N];
     
     size_t size;
-    int error_size = input_size(&size);
+    int error_size = get_size(&size);
 
     if (error_size != EXIT_SUCCESS)
         return error_size;

@@ -10,7 +10,7 @@
 
 
 // Ввод массива с проверкой на корректность
-int input_array(int *a, size_t size)
+int input_array(int *const a, const size_t size)
 {
     printf("Enter integers:\n");
     
@@ -33,7 +33,7 @@ int input_array(int *a, size_t size)
 
 
 // Проверка на простоту числа
-int is_prime(int number)
+int is_prime(const int number)
 {
     if (number <= 1)
         return 0;
@@ -47,7 +47,7 @@ int is_prime(int number)
 
 
 // Копирование простых чисел из a в b
-int insert_primes(int *b, const int *a, const size_t prime_count, const size_t size)
+int insert_primes(int *const b, const int *a, const size_t prime_count, const size_t size)
 {
     int q = 0;
     
@@ -90,7 +90,7 @@ void output_array(const int *a, const size_t n)
 }
 
 
-int input_size(size_t *size)
+int get_size(size_t *const size)
 {
     size_t inp_s;
 
@@ -117,34 +117,22 @@ int input_size(size_t *size)
 int main(void)
 {
     size_t size;
-    int check_size = input_size(&size);
+    int error_size = get_size(&size);
 
-    if (check_size == ERR_VALUE)
-    {
-        return ERR_VALUE;
-    }
-
-    if (check_size == ERR_SIZE)
-    {
-        return ERR_SIZE;
-    }
+    if (error_size != EXIT_SUCCESS)
+    	return error_size;
 
     int array[N];
-    int check_input = input_array(array, size);
-    
-    if (check_input == ERR_VALUE)
-    {
-        return ERR_VALUE;
-    }
+    int error_input = input_array(array, size);
+    if (error_input != EXIT_SUCCESS)
+    	return error_input;
     
     size_t prime_count = count_primes(array, size);
     int primes[N];
-    int check_insert = insert_primes(primes, array, prime_count, size);
-
-    if (check_insert == ERR_NONE)
-        return ERR_NONE;
+    int error_insert = insert_primes(primes, array, prime_count, size);
+    if (error_insert != EXIT_SUCCESS)
+        return error_insert;
     
     output_array(primes, prime_count);
-
     return EXIT_SUCCESS;
 }

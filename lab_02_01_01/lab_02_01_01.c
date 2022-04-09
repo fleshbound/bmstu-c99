@@ -10,7 +10,7 @@
 
 
 // Ввод массива
-int input_array(int *arr, size_t size)
+int input_array(int *const arr, const size_t size)
 {
     printf("Enter integers:\n");
 
@@ -56,7 +56,7 @@ int get_odd_multi(const int *a, const size_t size, int *const multi)
 
 
 // Ввод размера массива
-int input_size(size_t *size)
+int get_size(size_t *const size)
 {
     size_t inp_s;
     
@@ -85,7 +85,7 @@ int main(void)
     int a[N];
     
     size_t size = 0;
-    int error_size = input_size(&size);
+    int error_size = get_size(&size);
     if (error_size == ERR_VALUE)
         return error_size;
 
