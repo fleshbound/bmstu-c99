@@ -120,12 +120,12 @@ int main(void)
     int error_size = get_size(&size);
 
     if (error_size != EXIT_SUCCESS)
-    	return error_size;
+        return error_size;
 
     int array[N];
     int error_input = input_array(array, size);
     if (error_input != EXIT_SUCCESS)
-    	return error_input;
+        return error_input;
     
     size_t prime_count = count_primes(array, size);
     int primes[N];
