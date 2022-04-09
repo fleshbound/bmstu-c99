@@ -4,6 +4,7 @@
 #define N 10
 #define ERR_EMPTY 1
 #define ERR_FULL 100
+#define END_CODE 4
 #define CORRECT_INPUT_NUM 1
 
 // Сортировка массива вставками (по возрастанию)
@@ -45,7 +46,11 @@ int input_array(int *a, size_t *size)
         if ((check != CORRECT_INPUT_NUM) && (i < 0))
             code = ERR_EMPTY;
         
-        i += 1;
+        if ((check != CORRECT_INPUT_NUM) && (i >= 0))
+            code = END_CODE;
+
+        i++;
+        
         if ((i == N) && (check == CORRECT_INPUT_NUM))
             code = ERR_FULL;
         else

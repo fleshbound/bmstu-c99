@@ -94,7 +94,7 @@ int main(void)
         return error_input;
 
     int multi = 0;
-    int multi_error = get_multi(a, size, &multi);
+    int error_multi = get_odd_multi(a, size, &multi);
     if (error_multi != EXIT_SUCCESS)
         return error_multi;
 
