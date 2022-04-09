@@ -6,6 +6,7 @@
 #define ERR_VALUE 1
 #define ERR_SIZE 2
 #define ERR_MULTI 3
+#define CORRECT_INPUT_NUM 1
 
 
 // Ввод массива
@@ -18,7 +19,7 @@ int input_array(int *arr, size_t size)
         int element;
         int check = scanf("%d", &element);
 
-        if (check != 1)
+        if (check != CORRECT_INPUT_NUM)
         {
             printf("Error: Numbers must be integer.\n");
             return ERR_VALUE;
@@ -48,7 +49,8 @@ int get_odd_multi(const int *a, const size_t size, int *const multi)
         printf("Error: No odd numbers were found\n");
         return ERR_MULTI;
     }
-    
+
+    *multi = curr_multi;    
     return EXIT_SUCCESS;
 }
 
@@ -61,7 +63,7 @@ int input_size(size_t *size)
     printf("Enter size of array:\n");
     int check = scanf("%lu", &inp_s);
 
-    if (check != 1)
+    if (check != CORRECT_INPUT_NUM)
     {
         printf("Error: Size must be an integer\n");
         return ERR_VALUE;

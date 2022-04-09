@@ -4,12 +4,13 @@
 #define N 10
 #define ERR_EMPTY 1
 #define ERR_FULL 100
-
+#define CORRECT_INPUT_NUM 1
 
 // Сортировка массива вставками (по возрастанию)
 void sort_insert(int *a, const size_t size)
 {
     if (size > 1)
+    {
         for (int i = 1; i < size; i++)
         {
             int curr_element = a[i];
@@ -23,6 +24,7 @@ void sort_insert(int *a, const size_t size)
 
             a[j + 1] = curr_element;
         }
+    }
 }
 
 
@@ -40,12 +42,11 @@ int input_array(int *a, size_t *size)
         int element;
         check = scanf("%d", &element);
         
-        if ((check != 1) && (i < 0))
+        if ((check != CORRECT_INPUT_NUM) && (i < 0))
             code = ERR_EMPTY;
         
         i += 1;
-        if (i == N)
-            if (check == 1)
+        if ((i == N) && (check == CORRECT_INPUT_NUM))
                 code = ERR_FULL;
         else
             a[i] = element;

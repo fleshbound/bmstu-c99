@@ -6,6 +6,7 @@
 #define ERR_VALUE 1
 #define ERR_SIZE 2
 #define ERR_NONE 11
+#define CORRECT_INPUT_NUM 1
 
 
 // Ввод массива с проверкой на корректность
@@ -18,7 +19,7 @@ int input_array(int *a, size_t size)
         int element;
         int check = scanf("%d", &element);
         
-        if (check != 1)
+        if (check != CORRECT_INPUT_NUM)
         {
             printf("Error: Not an integer\n");
             return ERR_VALUE;
@@ -96,7 +97,7 @@ int input_size(size_t *size)
     printf("Enter size of array:\n");
     int check = scanf("%lu", &inp_s);
 
-    if (check != 1)
+    if (check != CORRECT_INPUT_NUM)
     {
         printf("Error: Size must be an integer\n");
         return ERR_VALUE;
@@ -141,9 +142,7 @@ int main(void)
     int check_insert = insert_primes(primes, array, prime_count, size);
 
     if (check_insert == ERR_NONE)
-    {
         return ERR_NONE;
-    }
     
     output_array(primes, prime_count);
 
