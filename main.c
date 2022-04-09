@@ -86,12 +86,27 @@ void shift_array_side(int *const a, const size_t size, const size_t q, const int
 }
 
 
-void transp_matrix(int m[N][M], const size_t rows, const size_t cols)
+void transp_matrix(int m[N][M], size_t *const rows, size_t *const cols)
 {
-    for (size_t i = 0; i < rows; i++)
+    size_t new_cols = *cols, new_rows = *rows;
+    if (new_rows > new_cols)
+        new_cols = new_rows;
+    else
+        new_rows = new_cols;
+
+    for (size_t i = 0; i < new_rows; i++)
     {
-        
+        for (size_t j = i; j < new_cols; j++)
+        {
+            int buf = m[i][j];
+            m[i][j] = m[j][i];
+            m[j][i] = buf;
+        }
     }
+
+    buf = *rows;
+    *rows = *cols;
+    *cols = buf;
 }
 
 
@@ -102,18 +117,18 @@ void shift_side(const size_t num_shift, int m[N][M], const size_t rows, const si
 }
 
 
-void shift_down(const size_t num_shift, int m[N][M], const size_t rows, const size_t cols, const size_t shift)
+void shift_down(const size_t num_shift, int m[N][M], size_t *const rows, size_t *const cols, const size_t shift)
 {
-    transp_matrix(m);
-    for (size_t i = 0; i < rows; i++)
-        shift_array_side(m[i], cols, num_shift, code);
-    transp_matrix(m);
+    transp_matrix(m, rows, cols);
+    for (size_t i = 0; i < *rows; i++)
+        shift_array_side(m[i], *cols, num_shift, code);
+    transp_matrix(m, rows, cols);
 }
 
-void shift_matrix(int m[N][M], const size_t rows, const size_t cols, const int *act)
+void shift_matrix(int m[N][M], size_t *const rows, size_t *const cols, const int *act)
 {
-    shift_side(act[0], m, rows, cols, -1);
-    shift_side(act[1], m, rows, cols, 1);
+    shift_side(act[0], m, *rows, *cols, -1);
+    shift_side(act[1], m, *rows, *cols, 1);
     shift_down(act[2], m, rows, cols, -1);
     shift_down(act[3], m, rows, cols, 1);
 }
