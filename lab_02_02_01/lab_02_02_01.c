@@ -83,7 +83,7 @@ int count_primes(const int *a, const size_t size)
 
 
 // Вывод массива
-void output_array(const int *a, const size_t n)
+void print_array(const int *a, const size_t n)
 {
     for (int i = 0; i < n; i++)
         printf("%d ", a[i]);
@@ -133,6 +133,6 @@ int main(void)
     if (error_insert != EXIT_SUCCESS)
         return error_insert;
     
-    output_array(primes, prime_count);
+    print_array(primes, prime_count);
     return EXIT_SUCCESS;
 }

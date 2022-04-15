@@ -5,7 +5,7 @@
 #define ERR_VALUE 1
 #define ERR_SIZE 2
 #define ERR_EMPTY 3
-
+#define CORRECT_INPUT_NUM 1
 
 // Ввод размера массива
 int get_size(size_t *const size)
@@ -15,7 +15,7 @@ int get_size(size_t *const size)
     printf("Enter the size of array: ");
     int check = scanf("%lu", &n);
 
-    if (1 != check)
+    if (check != CORRECT_INPUT_NUM)
     {
         printf("Size must be integer\n");
         return ERR_VALUE;
@@ -62,8 +62,7 @@ int get_min(const int a, const int b)
 {
     if (a <= b)
         return a;
-    else
-        return b;
+    return b;
 }
 
 

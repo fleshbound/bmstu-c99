@@ -74,7 +74,7 @@ int input_array(int *const a, size_t *const size)
 
 
 // Вывод массива
-void output_array(const int *a, const size_t size)
+void print_array(const int *a, const size_t size)
 {
     for (int i = 0; i < size; i++)
         printf("%d ", a[i]);
@@ -91,7 +91,7 @@ int main(void)
         return error_input;
 
     sort_insert(array, size);
-    output_array(array, size);
+    print_array(array, size);
 
     if (error_input == ERR_FULL)
         return ERR_FULL;

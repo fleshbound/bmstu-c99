@@ -95,7 +95,7 @@ int get_size(size_t *const size)
 
 
 // Вывод массива
-void output_array(const int *a, const size_t size)
+void print_array(const int *a, const size_t size)
 {
     for (int i = 0; i < size; i++) 
         printf("%d%s", a[i], (i == size - 1) ? "\n" : " ");
@@ -116,7 +116,7 @@ int main(void)
         return error_array;
     
     int new_size = insert_fibo(array, size);
-    output_array(array, new_size);
+    print_array(array, new_size);
 
     return EXIT_SUCCESS;
 }
