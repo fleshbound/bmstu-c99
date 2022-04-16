@@ -6,12 +6,13 @@
 #define ERR_VALUE 1
 #define ERR_SIZE 2
 #define ERR_INDEX 3
+#define CORRECT_INP_NUM 1
 
 
 // Ввод размера массива
 int input_size(size_t *const size, const size_t max_size)
 {
-    if (scanf("%lu", size) != 1)
+    if (scanf("%lu", size) != CORRECT_INP_NUM)
     {
         printf("Error: Size must be integer\n");
         return ERR_VALUE;
@@ -34,7 +35,7 @@ int input_elements(int m[N][M], const size_t rows, const size_t cols)
     {
         for (size_t j = 0; j < cols; j++)
         {
-            if (scanf("%d", &m[i][j]) != 1)
+            if (scanf("%d", &m[i][j]) != CORRECT_INP_NUM)
             {
                 printf("Error: Elements must be integer\n");
                 return ERR_VALUE;
@@ -72,7 +73,7 @@ void fill_array(int m[N][M], int *const a, const size_t rows, const size_t cols)
 
 
 // Вывод массива
-void output_array(int *const a, const size_t size)
+void print_array(int *const a, const size_t size)
 {
     for (size_t i = 0; i < size; i++) 
         printf("%d%s", a[i], (i == size - 1) ? "\n" : " ");
@@ -112,7 +113,7 @@ int main(void)
     fill_array(matrix, array, rows, cols);
 
     printf("\nResult array: ");
-    output_array(array, rows);
+    print_array(array, rows);
     
     return EXIT_SUCCESS;
 }

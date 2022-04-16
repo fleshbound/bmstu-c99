@@ -7,12 +7,13 @@
 #define ERR_VALUE 1
 #define ERR_SIZE 2
 #define ERR_SORT 3
+#define CORRECT_INP_NUM 1
 
 
 // Ввод размера массива
 int input_size(size_t *const size, const size_t max_size)
 {
-    if (scanf("%lu", size) != 1)
+    if (scanf("%lu", size) != CORRECT_INP_NUM)
     {
         printf("Error: Size must be integer\n");
         return ERR_VALUE;
@@ -33,7 +34,7 @@ int input_elements(int m[N][M], const size_t rows, const size_t cols)
 {
     for (size_t i = 0; i < rows; i++)
         for (size_t j = 0; j < cols; j++)
-            if (scanf("%d", &m[i][j]) != 1)
+            if (scanf("%d", &m[i][j]) != CORRECT_INP_NUM)
             {
                 printf("Error: Elements must be integer\n");
                 return ERR_VALUE;
@@ -44,7 +45,7 @@ int input_elements(int m[N][M], const size_t rows, const size_t cols)
 
 
 // Вывод массива
-void output_array(int *const a, const size_t size)
+void print_array(int *const a, const size_t size)
 {
     for (size_t i = 0; i < size; i++)
         printf("%d%s", a[i], (i == size - 1) ? "\n" : " ");
@@ -52,10 +53,10 @@ void output_array(int *const a, const size_t size)
 
 
 // Вывод матрицы
-void output_matrix(int m[N][M], const size_t rows, const size_t cols)
+void print_matrix(int m[N][M], const size_t rows, const size_t cols)
 {
     for (size_t i = 0; i < rows; i++)
-        output_array(m[i], cols);
+        print_array(m[i], cols);
 }
 
 
@@ -118,7 +119,7 @@ int sort_matrix_by_max(int m[N][M], const size_t rows, const size_t cols)
         if (sorted == 0)
         {
             // printf("%lu (before swap):\n", i);
-            // output_matrix(m, rows, cols);
+            // print_matrix(m, rows, cols);
 
             int buf[M];
             copy_rows_second_to_first(cols, buf, m[ind_max]);
@@ -127,7 +128,7 @@ int sort_matrix_by_max(int m[N][M], const size_t rows, const size_t cols)
             copy_rows_second_to_first(cols, m[i], buf);
             
             // printf("%lu (after swap):\n", i);
-            // output_matrix(m, rows, cols);
+            // print_matrix(m, rows, cols);
         }
     }
 
@@ -148,7 +149,7 @@ int main(void)
         return error_sort;
 
     printf("\nResult matrix:\n");
-    output_matrix(matrix, rows, cols);
+    print_matrix(matrix, rows, cols);
 
     return EXIT_SUCCESS;
 }
