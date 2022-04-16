@@ -32,7 +32,7 @@ uint32_t switch_to_bin(int numb_dec)
 	int i = 0;
 	while (numb_dec > 0)
 	{
-		digit = (numb_dec % 2) * pow(10, i);
+		digit = (numb_dec % 2) * power(10, i);
 		numb_dec /= 2;	
 		
 		result += digit;
@@ -49,7 +49,7 @@ void print_byte(uint32_t number_bin)
 {
 	for (int i = 7; i >= 0; i--)
 	{
-		int div = number_bin / pow(10, i);
+		int div = number_bin / power(10, i);
 		number_bin %= power(10, i);
 
 		printf("%d", div);
@@ -195,4 +195,3 @@ int main(void)
 
 	return CODE_OK;
 }
-

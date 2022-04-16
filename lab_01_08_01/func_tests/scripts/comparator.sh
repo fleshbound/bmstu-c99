@@ -5,7 +5,7 @@
 file1="$1"
 file2="$2"
 
-reg_check="[+,-]*[0-9][0-9]*\.*[0-9]*"
+reg_check="^Result: [+,-]*[0-9][0-9]*\.*[0-9]*"
 
 data1="$( grep -o "$reg_check" "$file1" )"
 data2="$( grep -o "$reg_check" "$file2" )"

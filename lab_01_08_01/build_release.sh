@@ -1,37 +1,22 @@
 #!/bin/bash
 
-# Принимает на вход 1) имя исполняемого 2-N) имена файлов с кодом
+ERR_EXIST=1
+ 
+files=$( find . -regextype posix-egrep -regex "\.*/[a-zA-Z_0-9]+\.c" )
 
-ERR_ARGS=1
-ERR_EXT=2
-ERR_EXIST=3
+if [ -z "$files" ]; then
+    echo "$0: No .c files were found."
 
-check_reg="^*.c"
-if [ -z "$2" ]; then
-	echo "$0: Wrong number of arguments (expected 2 or more, got $#)"
-	exit $ERR_ARGS
-elif ( echo "$1" | grep -Eq "^*.exe$"  ); then
-	exe_name="$1"
-	shift
-	files="$@"
-
-	for file in $files; do
-		if ( echo "$file" | grep -Eq "$check_reg" ); then
-			if [ ! \( -f "$file" \) ]; then
-				echo "$0: File $file doesn't exist"
-				exit $ERR_EXIST
-			fi
-		else
-			echo "$0: Wrong object file(s) extension"
-			exit $ERR_EXT
-		fi
-	done
-
-	gcc -std=c99 -Wall -Werror -Wpedantic -g0 -c "$@"
-	gcc -o "$exe_name" *.o -lm
-	echo "[$0] Release build was created"
-	exit 0
-else
-	echo "$0: Wrong executable file extension (.exe expected)"
-	exit $ERR_EXT
+    exit $ERR_EXIST
 fi
+
+gcc -std=c99 -Wall -Werror -Wextra -Wno-unused-variable -Wfloat-equal -Wfloat-conversion -Wvla -O3 -g0 -c "$files"
+gcc -o app.exe ./*.o -lm
+
+if [ -s app.exe ]; then
+    echo "[$0] Release build was created"
+    exit 0
+else
+    exit 1
+fi
+
