@@ -18,20 +18,19 @@ if [ -z "$file_stream_out_except" ]; then
     exit $ERROR_NONE
 fi
 
+declare -a app_args=()
 if [ ! \( -z "$file_app_args"  \) ]; then
-    app_args=$( grep -F "" "$file_app_args" )
-else
-    app_args=""
+    mapfile app_args < "$file_app_args"
 fi
 
 touch $file_stream_out_current
 {
-    ../../app.exe "$app_args" < "$file_stream_in"
+    ../../app.exe "${app_args[@]}" < "$file_stream_in"
     res_code=$?
 } > $file_stream_out_current
 
 error_memory=0
-if [ $FLAG_VAL -eq 1 ]; then
+if [ "$FLAG_VAL" = "1" ]; then
     {
         valgrind --tool=memcheck --log-file=log.txt --quiet ../../app.exe "$file_app_args" < "$file_stream_in"
     } > /dev/null 2>&1
@@ -53,7 +52,7 @@ else
     fi
 fi
 
-if [ $error_answer -eq 0 ] && [ $error_memory -eq 0 ] && [ $FLAG_VAL -eq 1 ]; then
+if [ $error_answer -eq 0 ] && [ $error_memory -eq 0 ] && [ "$FLAG_VAL" = "1" ]; then
     exit $EXIT_SUCCESS_VALGRIND
 elif [ $error_answer -eq 0 ] && [ $error_memory -eq 0 ]; then
     exit $EXIT_SUCCESS
