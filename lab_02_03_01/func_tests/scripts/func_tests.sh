@@ -12,9 +12,7 @@ EXIT_SUCCESS_VALGRIND=3
 # Colors
 RED='\033[0;31m'
 NC='\033[0m' # No Color
-LBlue='\033[1;34m'
 LGreen='\033[1;32m'
-YE='\033[2;33m'
 
 # Updates flags (ignores incorrect)
 function update_flags

@@ -7,24 +7,24 @@ EXIT_SUCCESS_VALGRIND=3
 
 file_stream_in="$1"
 file_app_args="$2"
-app_args=""
 
 if [ $# -eq 3 ]; then
     file_stream_out_except="$2"
     file_app_args="$3"
 fi
 
-if [ -s "$file_app_args" ]; then
-    app_args=$( grep -F "" "$file_app_args" )
+declare -a app_args=()
+if [ ! \( -z "$file_app_args"  \) ]; then
+    mapfile app_args < "$file_app_args"
 fi
 
 {
-../../app.exe "$app_args" < "$file_stream_in"
-res_code=$?
+    ../../app.exe "$app_args" < "$file_stream_in"
+    res_code=$?
 } > /dev/null
 
 error_memory=0
-if [ $FLAG_VAL -eq 1 ]; then
+if [ "$FLAG_VAL" = "1" ]; then
     {
         valgrind --tool=memcheck --log-file=log.txt --quiet ../../app.exe "$file_app_args" < "$file_stream_in"
     } > /dev/null 2>&1
@@ -47,7 +47,7 @@ else
     fi
 fi
 
-if [ $error_answer -eq 0 ] && [ $error_memory -eq 0 ] && [ $FLAG_VAL -eq 1 ]; then
+if [ $error_answer -eq 0 ] && [ $error_memory -eq 0 ] && [ "$FLAG_VAL" = "1" ]; then
     exit $EXIT_SUCCESS_VALGRIND
 elif [ $error_answer -eq 0 ] && [ $error_memory -eq 0 ]; then
     exit $EXIT_SUCCESS
