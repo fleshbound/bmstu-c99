@@ -6,71 +6,62 @@
 #define M 10
 #define ERR_VALUE 1
 #define ERR_SIZE 2
-#define ERR_SORT 3
 #define CORRECT_INP_NUM 1
-
 
 // Ввод размера массива
 int input_size(size_t *const size, const size_t max_size)
 {
+    int exit_code = EXIT_SUCCESS;
+
     if (scanf("%lu", size) != CORRECT_INP_NUM)
     {
         printf("Error: Size must be integer\n");
-        return ERR_VALUE;
+        exit_code = ERR_VALUE;
     }
-
-    if ((*size > max_size) || (*size == 0))
+    
+    if (((*size > max_size) || (*size == 0)) && (exit_code == EXIT_SUCCESS))
     {
         printf("Error: Size must be greater than zero and less than or equal to ten\n");
-        return ERR_SIZE;
+        exit_code = ERR_SIZE;
     }
 
-    return EXIT_SUCCESS;
+    return exit_code;
 }
-
 
 // Ввод элементов матрицы с проверкой на корректность
 int input_elements(int m[N][M], const size_t rows, const size_t cols)
 {
+    int exit_code = EXIT_SUCCESS;
     for (size_t i = 0; i < rows; i++)
         for (size_t j = 0; j < cols; j++)
-            if (scanf("%d", &m[i][j]) != CORRECT_INP_NUM)
+            if ((scanf("%d", &m[i][j]) != CORRECT_INP_NUM) && (exit_code == EXIT_SUCCESS))
             {
                 printf("Error: Elements must be integer\n");
-                return ERR_VALUE;
+                exit_code = ERR_VALUE;
             }
 
-    return EXIT_SUCCESS;
+    return exit_code;
 }
-
 
 // Ввод размеров и элементов матрицы
 int input_matrix(int m[N][M], size_t *const rows, size_t *const cols)
 {
     printf("Enter number of rows:\n");
-    int error_size = input_size(rows, N);
-    if (error_size != EXIT_SUCCESS)
-        return error_size;
-
-    printf("Enter number of columns:\n");
-    error_size = input_size(cols, M);
-    if (error_size != EXIT_SUCCESS)
-        return error_size;
-    
-    if (*cols != *rows)
+    int exit_code = input_size(rows, N);
+    if (exit_code == EXIT_SUCCESS)
     {
-        printf("Error: Matrix must be square\n");
-        return ERR_SIZE;
+        printf("Enter number of columns:\n");
+        exit_code = input_size(cols, M);
+        
+        if ((*cols != *rows) && (exit_code == EXIT_SUCCESS))
+            exit_code = ERR_SIZE;
+        
+        if (exit_code == EXIT_SUCCESS)
+            exit_code = input_elements(m, *rows, *cols);
     }
 
-    printf("Enter elements:\n");
-    int error_matrix = input_elements(m, *rows, *cols);
-    if (error_matrix != EXIT_SUCCESS)
-        return error_matrix;
-
-    return EXIT_SUCCESS;
+    return exit_code;
 }
-
 
 // Вывод массива
 void print_array(int *const a, const size_t size)
@@ -79,7 +70,6 @@ void print_array(int *const a, const size_t size)
         printf("%d%s", a[i], (i == size - 1) ? "\n" : " ");
 }
 
-
 // Вывод матрицы
 void print_matrix(int m[N][M], const size_t rows, const size_t cols)
 {
@@ -87,18 +77,16 @@ void print_matrix(int m[N][M], const size_t rows, const size_t cols)
         print_array(m[i], cols);
 }
 
-
 // Обмен элементов
-void swap_gap_arrays(int *const a1, int *const a2, const size_t begin, const size_t end)
+void swap_gap_arrays(int *const arr1, int *const arr2, const size_t begin, const size_t end)
 {
     for (size_t i = begin; i < end; i++)
     {
-        int buf = a2[i];
-        a2[i] = a1[i];
-        a1[i] = buf;
+        int buf = arr2[i];
+        arr2[i] = arr1[i];
+        arr1[i] = buf;
     }
 }
-
 
 // Обмен элементов над диагоналями и под диагоналями
 void swap_elements(int m[N][M], const size_t rows, const size_t cols)
@@ -111,19 +99,20 @@ void swap_elements(int m[N][M], const size_t rows, const size_t cols)
     }
 }
 
-
 int main(void)
 {
+    int exit_code = EXIT_SUCCESS;
+    
     int matrix[N][M];
     size_t rows = 0, cols = 0;
-    int error_input = input_matrix(matrix, &rows, &cols);
-    if (error_input != EXIT_SUCCESS)
-        return error_input;
-
-    swap_elements(matrix, rows, cols);
-
-    printf("\nResult matrix:\n");
-    print_matrix(matrix, rows, cols);
-
-    return EXIT_SUCCESS;
+    
+    exit_code = input_matrix(matrix, &rows, &cols);
+    if (exit_code == EXIT_SUCCESS)
+    {
+        swap_elements(matrix, rows, cols);
+        printf("\nResult matrix:\n");
+        print_matrix(matrix, rows, cols);
+    }
+    
+    return exit_code;
 }

@@ -9,40 +9,57 @@
 #define ERR_INDEX 3
 #define CORRECT_INP_NUM 1
 
-
 // Ввод размера массива
 int input_size(size_t *const size, const size_t max_size)
 {
+    int exit_code = EXIT_SUCCESS;
+
     if (scanf("%lu", size) != CORRECT_INP_NUM)
     {
         printf("Error: Size must be integer\n");
-        return ERR_VALUE;
+        exit_code = ERR_VALUE;
     }
-
-    if ((*size > max_size) || (*size == 0))
+    
+    if (((*size > max_size) || (*size == 0)) && (exit_code == EXIT_SUCCESS))
     {
         printf("Error: Size must be greater than zero and less than or equal to ten\n");
-        return ERR_SIZE;
+        exit_code = ERR_SIZE;
     }
 
-    return EXIT_SUCCESS;
+    return exit_code;
 }
-
 
 // Ввод элементов матрицы с проверкой на корректность
 int input_elements(int m[N][M], const size_t rows, const size_t cols)
 {
+    int exit_code = EXIT_SUCCESS;
     for (size_t i = 0; i < rows; i++)
         for (size_t j = 0; j < cols; j++)
-            if (scanf("%d", &m[i][j]) != CORRECT_INP_NUM)
+            if ((scanf("%d", &m[i][j]) != CORRECT_INP_NUM) && (exit_code == EXIT_SUCCESS))
             {
                 printf("Error: Elements must be integer\n");
-                return ERR_VALUE;
+                exit_code = ERR_VALUE;
             }
 
-    return EXIT_SUCCESS;
+    return exit_code;
 }
 
+// Ввод размеров и элементов матрицы
+int input_matrix(int m[N][M], size_t *const rows, size_t *const cols)
+{
+    printf("Enter number of rows:\n");
+    int exit_code = input_size(rows, N);
+    if (exit_code == EXIT_SUCCESS)
+    {
+        printf("Enter number of columns:\n");
+        exit_code = input_size(cols, M);
+        
+        if (exit_code == EXIT_SUCCESS)
+            exit_code = input_elements(m, *rows, *cols);
+    }
+
+    return exit_code;
+}
 
 // Вывод массива
 void print_array(int *const a, const size_t size)
@@ -51,36 +68,12 @@ void print_array(int *const a, const size_t size)
         printf("%d%s", a[i], (i == size - 1) ? "\n" : " ");
 }
 
-
 // Вывод матрицы
 void print_matrix(int m[N][M], const size_t rows, const size_t cols)
 {
     for (size_t i = 0; i < rows; i++)
         print_array(m[i], cols);
 }
-
-
-// Ввод размеров и элементов матрицы
-int input_matrix(int m[N][M], size_t *const rows, size_t *const cols)
-{
-    printf("Enter number of rows:\n");
-    int error_size = input_size(rows, N);
-    if (error_size != EXIT_SUCCESS)
-        return error_size;
-
-    printf("Enter number of columns:\n");
-    error_size = input_size(cols, M);
-    if (error_size != EXIT_SUCCESS)
-        return error_size;
-
-    printf("Enter elements:\n");
-    int error_matrix = input_elements(m, *rows, *cols);
-    if (error_matrix != EXIT_SUCCESS)
-        return error_matrix;
-
-    return EXIT_SUCCESS;
-}
-
 
 // Сумма цифр числа
 int get_digit_sum(const int number)
@@ -95,7 +88,6 @@ int get_digit_sum(const int number)
 
     return sum;
 }
-
 
 // Получение номеров строки и столбца, в которых элемент с мин. суммой цифр
 void get_min_elem_index(int m[N][M], const size_t rows, const size_t cols, size_t *const ind_row, size_t *const ind_col)
@@ -115,7 +107,6 @@ void get_min_elem_index(int m[N][M], const size_t rows, const size_t cols, size_
     *ind_col = t_j;
 }
 
-
 // Удаление строки index из матрицы
 void delete_row(int m[N][M], size_t *const rows, const size_t cols, const size_t index)
 {
@@ -125,7 +116,6 @@ void delete_row(int m[N][M], size_t *const rows, const size_t cols, const size_t
     *rows = *rows - 1;
 }
 
-
 // Удаление столбца index из матрицы
 void delete_column(int m[N][M], const size_t rows, size_t *const cols, const size_t index)
 {
@@ -134,7 +124,6 @@ void delete_column(int m[N][M], const size_t rows, size_t *const cols, const siz
             m[i][j] = m[i][j + 1];
     *cols = *cols - 1;
 }
-
 
 // Удаление строки и столбца, на пересек. кот. есть элемент с мин. суммой цифр
 void delete_min_sum_elem(int m[N][M], size_t *const rows, size_t *const cols)
@@ -146,25 +135,30 @@ void delete_min_sum_elem(int m[N][M], size_t *const rows, size_t *const cols)
     delete_column(m, *rows, cols, del_col_index);
 }
 
-
 int main(void)
 {
+    int exit_code = EXIT_SUCCESS;
+    
     int matrix[N][M];
     size_t rows = 0, cols = 0;
-    int error_input = input_matrix(matrix, &rows, &cols);
-    if (error_input != EXIT_SUCCESS)
-        return error_input;
+    exit_code = input_matrix(matrix, &rows, &cols);
     
-    delete_min_sum_elem(matrix, &rows, &cols);
-
-    if ((rows == 0) || (cols == 0))
+    if (exit_code == EXIT_SUCCESS)
     {
-        printf("Error: Empty result matrix\n");
-        return ERR_SIZE;
+        delete_min_sum_elem(matrix, &rows, &cols);
+
+        if (((rows == 0) || (cols == 0)) && (exit_code == EXIT_SUCCESS))
+        {
+            printf("Error: Empty result matrix\n");
+            exit_code = ERR_INDEX;
+        }
+
+        if (exit_code != ERR_INDEX)
+        {
+            printf("\nResult matrix:\n");
+            print_matrix(matrix, rows, cols);
+        }    
     }
 
-    printf("\nResult matrix:\n");
-    print_matrix(matrix, rows, cols);
-
-    return EXIT_SUCCESS;
+    return exit_code;
 }
