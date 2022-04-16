@@ -3,6 +3,18 @@
 # --FLAGS--
 export FLAG_VAL=0
 
+# EXIT CODES
+EXIT_SUCCESS=0
+ERROR_ANSWER=1
+ERROR_MEMORY=2
+EXIT_SUCCESS_VALGRIND=3
+
+# Colors
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+LBlue='\033[1;34m'
+LGreen='\033[1;32m'
+YE='\033[2;33m'
 
 # Updates flags (ignores incorrect)
 function update_flags
@@ -38,18 +50,24 @@ function check_positive
         result=$?
 
         # Single result output
-        if [ "$result" = "0" ]; then
-            echo -e "Test $num: OK\n"
-        else
-            echo -e "Test $num: FAILED\n"
-            q_pos=$(( q_pos + 1 ))
+        q_pos=$(( q_pos + 1 ))
+        if [ $result -eq $EXIT_SUCCESS ]; then
+            echo -e "TEST $num: ${LGreen}ANSWER OK${NC}; ${NC}NO VALGRIND${NC}"
+            q_pos=$(( q_pos - 1 ))
+        elif [ $result -eq $EXIT_SUCCESS_VALGRIND ]; then
+            echo -e "TEST $num: ${LGreen}ANSWER OK${NC}; ${LGreen}MEMORY OK${NC}"
+            q_pos=$(( q_pos - 1 ))
+        elif [ $result -eq $ERROR_ANSWER ]; then
+            echo -e "TEST $num: ${RED}ANSWER ERROR${NC}; ${LGreen}MEMORY OK${NC}"
+        elif [ $result -eq $ERROR_MEMORY ]; then
+            echo -e "TEST $num: ${NC}ANSWER ...${NC}; ${RED}MEMORY ERROR${NC}"
         fi
 
         i=$(( i + 1 ))
     done
     
     # Total output
-    echo -e "Failed $q_pos POSITIVE test(s) of total $(( i - 1 ))\n"
+    echo -e "Failed $q_pos POSITIVE test(s) of total $(( i - 1 ))"
 
     return $q_pos
 }
@@ -80,18 +98,24 @@ function check_negative
         result=$?
 
         # Single result output
-        if [ "$result" = "0" ]; then
-            echo -e "TEST $num: OK\n"
-        else
-            echo -e "TEST $num: FAILED\n"
-            q_neg=$(( q_neg + 1 ))
+        q_neg=$(( q_neg + 1 ))
+        if [ $result -eq $EXIT_SUCCESS ]; then
+            echo -e "TEST $num: ${LGreen}ANSWER OK${NC}; ${NC}NO VALGRIND${NC}"
+            q_neg=$(( q_neg - 1 ))
+        elif [ $result -eq $EXIT_SUCCESS_VALGRIND ]; then
+            echo -e "TEST $num: ${LGreen}ANSWER OK${NC}; ${LGreen}MEMORY OK${NC}"
+            q_neg=$(( q_neg - 1 ))
+        elif [ $result -eq $ERROR_ANSWER ]; then
+            echo -e "TEST $num: ${RED}ANSWER ERROR${NC}; ${LGreen}MEMORY OK${NC}"
+        elif [ $result -eq $ERROR_MEMORY ]; then
+            echo -e "TEST $num: ${NC}ANSWER ...${NC}; ${RED}MEMORY ERROR${NC}"
         fi
         
         i=$(( i + 1 ))
     done
 
     # Total output
-    echo -e "Failed $q_neg NEGATIVE test(s) of total $(( i - 1 ))\n"
+    echo -e "Failed $q_neg NEGATIVE test(s) of total $(( i - 1 ))"
 
     return $q_neg
 }
@@ -115,6 +139,6 @@ pos=$?
 check_negative
 neg=$?
 
-echo -e "\nTotal: $(( pos + neg )) test(s) was(were) failed\n"
+echo -e "\nTotal: $(( pos + neg )) test(s) was(were) failed"
 
 exit $(( pos + neg ))

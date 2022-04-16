@@ -18,7 +18,7 @@ int input_size(size_t *const size, const size_t max_size)
         exit_code = ERR_VALUE;
     }
     
-    if (((*size > max_size) || (*size == 0)) && (exit_code == EXIT_SUCCESS))
+    if ((exit_code == EXIT_SUCCESS) && ((*size > max_size) || (*size == 0)))
     {
         printf("Error: Size must be greater than zero and less than or equal to ten\n");
         exit_code = ERR_SIZE;
@@ -35,7 +35,7 @@ int input_elements(int m[N][M], const size_t rows, const size_t cols)
     {
         for (size_t j = 0; j < cols; j++)
         {
-            if ((scanf("%d", &m[i][j]) != CORRECT_INP_NUM) && (exit_code == EXIT_SUCCESS))
+            if ((exit_code == EXIT_SUCCESS) && (scanf("%d", &m[i][j]) != CORRECT_INP_NUM))
             {
                 printf("Error: Elements must be integer\n");
                 exit_code = ERR_VALUE;

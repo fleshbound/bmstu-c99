@@ -2,6 +2,9 @@
 
 # Compairing integers
 
+EXIT_SUCCESS=0
+EXIT_FAILURE=1
+
 file1="$1"
 file2="$2"
 
@@ -11,7 +14,7 @@ data1="$( grep -o "$reg_check" "$file1" )"
 data2="$( grep -o "$reg_check" "$file2" )"
 
 if [ "$data1" != "$data2" ]; then
-    exit 1
-else
-    exit 0
+    exit $EXIT_FAILURE
 fi
+
+exit $EXIT_SUCCESS
