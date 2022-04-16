@@ -1,152 +1,137 @@
 #!/bin/bash
 
 # --FLAGS--
+export FLAG_VAL=0
 
-flag_val=0
-flag_silent=0
-flag_coverage=0
+# EXIT CODES
+EXIT_SUCCESS=0
+ERROR_ANSWER=1
+ERROR_MEMORY=2
+EXIT_SUCCESS_VALGRIND=3
+
+# Colors
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+LBlue='\033[1;34m'
+LGreen='\033[1;32m'
+YE='\033[2;33m'
 
 # Updates flags (ignores incorrect)
 function update_flags
 {
-	if [ "$1" = "-USE_VALGRIND" ] || [ "$2" = "-USE_VALGRIND" ] || [ "$3" = "-USE_VALGRIND" ]; then
-		flag_val=1
-	fi
-
-	if [ "$1" = "-s" ] || [ "$2" = "-s" ] || [ "$3" = "-s" ]; then
-                flag_silent=1
-        fi
-
-	if [ "$1" = "-c" ] || [ "$2" = "-c" ] || [ "$3" = "-c" ]; then
-                flag_coverage=1
-        fi
+    if [ "$1" = "-USE_VALGRIND" ]; then
+        FLAG_VAL=1
+    fi
 }
 
 # Checks positive tests and returns number of failures
 function check_positive
 {
-	if [ $flag_silent -eq 0 ]; then
-		echo -e "\n---POSITIVE-TESTS---\n"
-	fi
+    echo -e "\n---POSITIVE-TESTS---\n"
 
-	files_pos_in=$main_dir"/pos_**_in\.txt"
-	i=1
-	q_pos=0
-	num=""
-	for file in $files_pos_in; do
-		# '0' -> '00', '10' -> '10' (correct number for test file name)
-		if [ $i -lt 10 ]; then
-			num="0$i"
-		else
-			num="$i"
-		fi
-	
-		# Compairing ethalon and current output
-		if [ $flag_val -eq 1 ]; then
-			./pos_case.sh -v "$file" $main_dir/pos_"$num"_out.txt
-			result=$?
-		else
-			./pos_case.sh "$file" $main_dir/pos_"$num"_out.txt
-			result=$?
-		fi
+    files_pos_in=$( find ../data -regex "\.\./data/pos_[0-9]+_in.txt" | sort -t '\0' -n )
+    i=1
+    q_pos=0
+    num=""
+    
+    for file_stream_in in $files_pos_in; do
+        # '0' -> '00', '10' -> '10' (correct number for test file name)
+        if [ $i -lt 10 ]; then
+            num="0$i"
+        else
+            num="$i"
+        fi
+        
+        file_stream_out=$( find ../data -regextype posix-egrep -regex "\.\./data/pos_""$num""_out.txt" )
+        file_app_args=$( find ../data -regextype posix-egrep -regex "\.\./data/pos_""$num""_args.txt" )
 
-		# Single result output
-		if [ $flag_silent -eq 0 ]; then
-			if [ $result -eq 0 ]; then
-				echo -e "Test $num: OK\n"
-			else
-				echo -e "Test $num: FAILED\n"
-				q_pos=$(( q_pos + 1 ))
-			fi
-		fi
+        # Compairing ethalon and current output
+        ./pos_case.sh "$file_stream_in" "$file_stream_out" "$file_app_args"
+        result=$?
 
-		i=$(( i + 1 ))
-	done
-	
-	# Total output
-	if [ $flag_silent -eq 0 ]; then
-		echo -e "Failed $q_pos POSITIVE test(s) of total $(( i - 1 ))\n"
-	fi
+        # Single result output
+        q_pos=$(( q_pos + 1 ))
+        if [ $result -eq $EXIT_SUCCESS ]; then
+            echo -e "TEST $num: ${LGreen}ANSWER OK${NC}; ${NC}NO VALGRIND${NC}"
+            q_pos=$(( q_pos - 1 ))
+        elif [ $result -eq $EXIT_SUCCESS_VALGRIND ]; then
+            echo -e "TEST $num: ${LGreen}ANSWER OK${NC}; ${LGreen}MEMORY OK${NC}"
+            q_pos=$(( q_pos - 1 ))
+        elif [ $result -eq $ERROR_ANSWER ]; then
+            echo -e "TEST $num: ${RED}ANSWER ERROR${NC}; ${LGreen}MEMORY OK${NC}"
+        elif [ $result -eq $ERROR_MEMORY ]; then
+            echo -e "TEST $num: ${NC}ANSWER ...${NC}; ${RED}MEMORY ERROR${NC}"
+        fi
 
-	return $q_pos
+        i=$(( i + 1 ))
+    done
+    
+    # Total output
+    echo -e "Failed $q_pos POSITIVE test(s) of total $(( i - 1 ))"
+
+    return $q_pos
 }
 
 # Checks negative tests and returns number of failures
 function check_negative
 {
-	if [ $flag_silent -eq 0 ]; then
-		echo -e "\n---NEGATIVE-TESTS---\n"
-	fi
+    echo -e "\n---NEGATIVE-TESTS---\n"
 
-	files_neg_in=$main_dir"/neg_**_in\.txt"
-	i=1
-	q_neg=0
-	num=""
-	for file in $files_neg_in; do
-		# '0' -> '00', '10' -> '10' (correct number for test file name)
-		if [ $i -lt 10 ]; then
-			num="0$i"
-		else
-			num="$i"
-		fi
+    files_neg_in=$( find ../data -regex "\.\./data/neg_[0-9]*_in.txt" | sort -t '\0' -n )
+    i=1
+    q_neg=0
+    num=""
 
-		# Compairing ethalon and current output (by exit code or not)
-		if [ $flag_val -eq 1 ]; then
-			./neg_case.sh -v "$file" $main_dir/neg_"$num"_out.txt
-			result=$?
-		else
-			./neg_case.sh "$file" $main_dir/neg_"$num"_out.txt
-			result=$?
-		fi
-		
-		# Single result output
-		if [ $flag_silent -eq 0 ]; then
-			if [ $result -eq 0 ]; then
-				echo -e "TEST $num: OK\n"
-			else
-				echo -e "TEST $num: FAILED\n"
-				q_neg=$(( q_neg + 1 ))
-			fi
-		fi
-
-		i=$(( i + 1 ))
-	done
-
-	# Total output
-	if [ $flag_silent -eq 0 ]; then
-		echo -e "Failed $q_neg NEGATIVE test(s) of total $(( i - 1 ))\n"
-	fi
-
-	return $q_neg
-}
-
-# Shows current coverage by percent
-function show_coverage
-{
-	if [ $flag_coverage -eq 1 ]; then
-                ../../collect_coverage.sh ../../*.exe
-		if [ ! \( $? -eq 0 \) ]; then
-			echo "ERROR: No coverage info was found"
-			echo "NOTE: Try rerun code with build_coverage.sh script"
-		fi
+    for file_stream_in in $files_neg_in; do
+        # '0' -> '00', '10' -> '10' (correct number for test file name)
+        if [ $i -lt 10 ]; then
+            num="0$i"
+        else
+            num="$i"
         fi
+
+        file_stream_out_except=$( find ../data -regextype posix-egrep -regex "\.\./data/neg_""$num""_out.txt" )
+        file_app_args=$( find ../data -regextype posix-egrep -regex "\.\./data/neg_""$num""_args.txt" )
+
+        # Compairing ethalon and current output (by exit code or not)
+        ./neg_case.sh "$file_stream_in" "$file_stream_out_except" "$file_app_args"
+        result=$?
+
+        # Single result output
+        q_neg=$(( q_neg + 1 ))
+        if [ $result -eq $EXIT_SUCCESS ]; then
+            echo -e "TEST $num: ${LGreen}ANSWER OK${NC}; ${NC}NO VALGRIND${NC}"
+            q_neg=$(( q_neg - 1 ))
+        elif [ $result -eq $EXIT_SUCCESS_VALGRIND ]; then
+            echo -e "TEST $num: ${LGreen}ANSWER OK${NC}; ${LGreen}MEMORY OK${NC}"
+            q_neg=$(( q_neg - 1 ))
+        elif [ $result -eq $ERROR_ANSWER ]; then
+            echo -e "TEST $num: ${RED}ANSWER ERROR${NC}; ${LGreen}MEMORY OK${NC}"
+        elif [ $result -eq $ERROR_MEMORY ]; then
+            echo -e "TEST $num: ${NC}ANSWER ...${NC}; ${RED}MEMORY ERROR${NC}"
+        fi
+        
+        i=$(( i + 1 ))
+    done
+
+    # Total output
+    echo -e "Failed $q_neg NEGATIVE test(s) of total $(( i - 1 ))"
+
+    return $q_neg
 }
 
 # ---------------
 # ---MAIN-CODE---
 # ---v-v-v-v-v---
 
-# cd "/func_tests/scripts/"
-main_dir="../data"
-
-if [ ! \( -f ../../*.exe \) ]; then
-	echo "ERROR: No executable file(s) was(were) found"
-	echo "NOTE: Try running a build script in one of parental directories"
-	echo "Quitting..."
-	exit 100
+if [ ! \( -f ../../app.exe \) ]; then
+    echo "ERROR: No executable file(s) was(were) found"
+    echo "NOTE: Try running a build script in one of parental directories"
+    echo "Quitting..."
+    exit 100
 fi
 
-update_flags "$1" "$2" "$3"
+update_flags "$1"
 
 check_positive
 pos=$?
@@ -154,8 +139,6 @@ pos=$?
 check_negative
 neg=$?
 
-show_coverage
-
-echo -e "\nTotal: $(( pos + neg )) test(s) was(were) failed\n"
+echo -e "\nTotal: $(( pos + neg )) test(s) was(were) failed"
 
 exit $(( pos + neg ))
