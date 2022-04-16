@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define N 10
-#define M 10
+#define N_ROWS_MAX 10
+#define M_COLS_MAX 10
 #define ERR_VALUE 1
 #define ERR_SIZE 2
 #define ERR_INDEX 3
@@ -30,7 +30,7 @@ int input_size(size_t *const size, const size_t max_size)
 }
 
 // Ввод элементов матрицы с проверкой на корректность
-int input_elements(int m[N][M], const size_t rows, const size_t cols)
+int input_elements(int m[N_ROWS_MAX][M_COLS_MAX], const size_t rows, const size_t cols)
 {
     int exit_code = EXIT_SUCCESS;
     for (size_t i = 0; i < rows; i++)
@@ -45,14 +45,14 @@ int input_elements(int m[N][M], const size_t rows, const size_t cols)
 }
 
 // Ввод размеров и элементов матрицы
-int input_matrix(int m[N][M], size_t *const rows, size_t *const cols)
+int input_matrix(int m[N_ROWS_MAX][M_COLS_MAX], size_t *const rows, size_t *const cols)
 {
     printf("Enter number of rows:\n");
-    int exit_code = input_size(rows, N);
+    int exit_code = input_size(rows, N_ROWS_MAX);
     if (exit_code == EXIT_SUCCESS)
     {
         printf("Enter number of columns:\n");
-        exit_code = input_size(cols, M);
+        exit_code = input_size(cols, M_COLS_MAX);
         
         if (exit_code == EXIT_SUCCESS)
             exit_code = input_elements(m, *rows, *cols);
@@ -69,7 +69,7 @@ void print_array(int *const a, const size_t size)
 }
 
 // Вывод матрицы
-void print_matrix(int m[N][M], const size_t rows, const size_t cols)
+void print_matrix(int m[N_ROWS_MAX][M_COLS_MAX], const size_t rows, const size_t cols)
 {
     for (size_t i = 0; i < rows; i++)
         print_array(m[i], cols);
@@ -90,7 +90,7 @@ int get_digit_sum(const int number)
 }
 
 // Получение номеров строки и столбца, в которых элемент с мин. суммой цифр
-void get_min_elem_index(int m[N][M], const size_t rows, const size_t cols, size_t *const ind_row, size_t *const ind_col)
+void get_min_elem_index(int m[N_ROWS_MAX][M_COLS_MAX], const size_t rows, const size_t cols, size_t *const ind_row, size_t *const ind_col)
 {
     int min_sum = 0, t_i = 0, t_j = 0;
 
@@ -108,7 +108,7 @@ void get_min_elem_index(int m[N][M], const size_t rows, const size_t cols, size_
 }
 
 // Удаление строки index из матрицы
-void delete_row(int m[N][M], size_t *const rows, const size_t cols, const size_t index)
+void delete_row(int m[N_ROWS_MAX][M_COLS_MAX], size_t *const rows, const size_t cols, const size_t index)
 {
     for (size_t j = 0; j < cols; j++)
         for (size_t i = index; i < *rows - 1; i++)
@@ -117,7 +117,7 @@ void delete_row(int m[N][M], size_t *const rows, const size_t cols, const size_t
 }
 
 // Удаление столбца index из матрицы
-void delete_column(int m[N][M], const size_t rows, size_t *const cols, const size_t index)
+void delete_column(int m[N_ROWS_MAX][M_COLS_MAX], const size_t rows, size_t *const cols, const size_t index)
 {
     for (size_t i = 0; i < rows; i++)
         for (size_t j = index; j < *cols - 1; j++)
@@ -126,7 +126,7 @@ void delete_column(int m[N][M], const size_t rows, size_t *const cols, const siz
 }
 
 // Удаление строки и столбца, на пересек. кот. есть элемент с мин. суммой цифр
-void delete_min_sum_elem(int m[N][M], size_t *const rows, size_t *const cols)
+void delete_min_sum_elem(int m[N_ROWS_MAX][M_COLS_MAX], size_t *const rows, size_t *const cols)
 {
     size_t del_row_index = 0, del_col_index = 0;
     get_min_elem_index(m, *rows, *cols, &del_row_index, &del_col_index);
@@ -139,7 +139,7 @@ int main(void)
 {
     int exit_code = EXIT_SUCCESS;
     
-    int matrix[N][M];
+    int matrix[N_ROWS_MAX][M_COLS_MAX];
     size_t rows = 0, cols = 0;
     exit_code = input_matrix(matrix, &rows, &cols);
     
