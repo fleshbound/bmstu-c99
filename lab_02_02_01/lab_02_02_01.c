@@ -8,7 +8,6 @@
 #define ERR_NONE 11
 #define CORRECT_INPUT_NUM 1
 
-
 // Ввод массива с проверкой на корректность
 int input_array(int *const a, const size_t size)
 {
@@ -31,7 +30,6 @@ int input_array(int *const a, const size_t size)
     return EXIT_SUCCESS;
 }
 
-
 // Проверка на простоту числа
 int is_prime(const int number)
 {
@@ -44,7 +42,6 @@ int is_prime(const int number)
     
     return 1;
 }
-
 
 // Копирование простых чисел из a в b
 int insert_primes(int *const b, const int *a, const size_t prime_count, const size_t size)
@@ -68,7 +65,6 @@ int insert_primes(int *const b, const int *a, const size_t prime_count, const si
     return EXIT_SUCCESS;
 }
 
-
 // Подсчет количества простых чисел
 int count_primes(const int *a, const size_t size)
 {
@@ -81,14 +77,12 @@ int count_primes(const int *a, const size_t size)
     return q;
 }
 
-
 // Вывод массива
 void print_array(const int *a, const size_t n)
 {
     for (int i = 0; i < n; i++)
         printf("%d ", a[i]);
 }
-
 
 int get_size(size_t *const size)
 {
@@ -112,7 +106,6 @@ int get_size(size_t *const size)
     *size = inp_s;
     return EXIT_SUCCESS;
 }
-
 
 int main(void)
 {

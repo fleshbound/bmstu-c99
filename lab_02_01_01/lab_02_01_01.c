@@ -8,7 +8,6 @@
 #define ERR_MULTI 3
 #define CORRECT_INPUT_NUM 1
 
-
 // Ввод массива
 int input_array(int *const arr, const size_t size)
 {
@@ -31,7 +30,6 @@ int input_array(int *const arr, const size_t size)
     return EXIT_SUCCESS;
 }
 
-
 int get_odd_multi(const int *a, const size_t size, int *const multi)
 {
     int curr_multi = 1;
@@ -53,7 +51,6 @@ int get_odd_multi(const int *a, const size_t size, int *const multi)
     *multi = curr_multi;    
     return EXIT_SUCCESS;
 }
-
 
 // Ввод размера массива
 int get_size(size_t *const size)
@@ -78,7 +75,6 @@ int get_size(size_t *const size)
     *size = inp_s;
     return EXIT_SUCCESS;
 }
-
 
 int main(void)
 {

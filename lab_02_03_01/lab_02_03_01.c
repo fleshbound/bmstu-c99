@@ -9,7 +9,6 @@
 #define ERR_NONE 101
 #define NUMBER_OF_INPUT_INT 1
 
-
 // Вставка элемента в массив на позицию pos
 void insert_element(int *const a, const size_t size, const size_t pos, const int element)
 {
@@ -17,7 +16,6 @@ void insert_element(int *const a, const size_t size, const size_t pos, const int
         a[i] = a[i - 1];
     a[pos] = element;
 }
-
 
 // Вставка чисел Фибоначчи в массив
 int insert_fibo(int *const a, const size_t size)
@@ -44,7 +42,6 @@ int insert_fibo(int *const a, const size_t size)
     return curr_size;
 }
 
-
 // Ввод массива с проверкой на корректность
 int input_array(int *const a, const size_t size)
 {
@@ -67,7 +64,6 @@ int input_array(int *const a, const size_t size)
     
     return EXIT_SUCCESS;
 }
-
 
 // Ввод размера массива
 int get_size(size_t *const size)
@@ -92,7 +88,6 @@ int get_size(size_t *const size)
     *size = n;
     return EXIT_SUCCESS;
 }
-
 
 // Вывод массива
 void print_array(const int *a, const size_t size)

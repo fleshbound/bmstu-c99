@@ -31,7 +31,6 @@ int get_size(size_t *const size)
     return EXIT_SUCCESS;
 }
 
-
 // Ввод массива
 int input_array(int *const p_begin, const int *const p_end)
 {
@@ -43,7 +42,7 @@ int input_array(int *const p_begin, const int *const p_end)
         int element;
         int check = scanf("%d", &element);
 
-        if (check != 1)
+        if (check != CORRECT_INPUT_NUM)
         {
             printf("Error: Elements must be integer\n");
             return ERR_VALUE;
@@ -56,7 +55,6 @@ int input_array(int *const p_begin, const int *const p_end)
     return EXIT_SUCCESS;
 }
 
-
 // Возвращает минимум из пары целых чисел
 int get_min(const int a, const int b)
 {
@@ -64,7 +62,6 @@ int get_min(const int a, const int b)
         return a;
     return b;
 }
-
 
 // Возвращает минимальное количество положительных и отрицательных
 // элементов, из которых будет складываться сумма
