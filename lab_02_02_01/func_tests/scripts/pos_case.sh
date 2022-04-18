@@ -24,20 +24,21 @@ if [ ! \( -z "$file_app_args"  \) ]; then
 fi
 
 touch $file_stream_out_current
-{
-    ../../app.exe "${app_args[@]}" < "$file_stream_in"
-    res_code=$?
-} > $file_stream_out_current
-
 error_memory=0
 if [ "$FLAG_VAL" = "1" ]; then
     {
         valgrind --tool=memcheck --log-file=log.txt --quiet ../../app.exe "${app_args[@]}" < "$file_stream_in"
-    } > /dev/null 2>&1
+        res_code=$?
+    } > $file_stream_out_current
 
     if [ -s "log.txt" ]; then
         error_memory=1
     fi
+else
+    {
+        ../../app.exe "${app_args[@]}" < "$file_stream_in"
+        res_code=$?
+    } > $file_stream_out_current
 fi
 
 error_answer=0
