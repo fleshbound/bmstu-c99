@@ -32,14 +32,15 @@ int input_size(size_t *const size, const size_t max_size)
 int input_elements(int m[N_ROWS_MAX][M_COLS_MAX], const size_t rows, const size_t cols)
 {
     int exit_code = EXIT_SUCCESS;
-    for (size_t i = 0; i < rows; i++)
-        for (size_t j = 0; j < cols; j++)
-            if ((scanf("%d", &m[i][j]) != CORRECT_INP_NUM) && (exit_code == EXIT_SUCCESS))
+
+    for (size_t i = 0; (i < rows) && (exit_code == EXIT_SUCCESS); i++)
+        for (size_t j = 0; (j < cols) && (exit_code == EXIT_SUCCESS); j++)
+            if (scanf("%d", &m[i][j]) != CORRECT_INP_NUM)
             {
                 printf("Error: Elements must be integer\n");
                 exit_code = ERR_VALUE;
             }
-            
+
     return exit_code;
 }
 
@@ -48,10 +49,12 @@ int input_matrix(int m[N_ROWS_MAX][M_COLS_MAX], size_t *const rows, size_t *cons
 {
     printf("Enter number of rows:\n");
     int exit_code = input_size(rows, N_ROWS_MAX);
+
     if (exit_code == EXIT_SUCCESS)
     {
         printf("Enter number of columns:\n");
         exit_code = input_size(cols, M_COLS_MAX);
+
         if (exit_code == EXIT_SUCCESS)
             exit_code = input_elements(m, *rows, *cols);
     }
@@ -92,10 +95,23 @@ void copy_rows_second_to_first(const size_t size, int *const first, const int *s
         first[j] = second[j];
 }
 
+// "Безопасная" вставка строки index_from на index_to (с сохранением относительного положения)
+void insert_safely(int m[N_ROWS_MAX][M_COLS_MAX], const size_t cols, const size_t index_from, const size_t index_to)
+{
+    int buf[M_COLS_MAX];
+    copy_rows_second_to_first(cols, buf, m[index_from]);
+
+    for (size_t k = index_from; k > index_to; k--)
+        copy_rows_second_to_first(cols, m[k], m[k - 1]);
+
+    copy_rows_second_to_first(cols, m[index_to], buf);
+}
+
 // Сортировка строк по убыванию максимумов
 void sort_matrix_by_max(int m[N_ROWS_MAX][M_COLS_MAX], const size_t rows, const size_t cols)
 {
     int sorted = 1;
+
     for (size_t i = 0; i < rows - 1; i++)
     {
         size_t ind_max = i;
@@ -107,13 +123,7 @@ void sort_matrix_by_max(int m[N_ROWS_MAX][M_COLS_MAX], const size_t rows, const 
             }
 
         if (sorted == 0)
-        {
-            int buf[M_COLS_MAX];
-            copy_rows_second_to_first(cols, buf, m[ind_max]);
-            for (size_t k = ind_max; k > i; k--)
-                copy_rows_second_to_first(cols, m[k], m[k - 1]);
-            copy_rows_second_to_first(cols, m[i], buf);
-        }
+            insert_safely(m, cols, ind_max, i);
     }
 }
 
@@ -124,6 +134,7 @@ int main(void)
     int matrix[N_ROWS_MAX][M_COLS_MAX];
     size_t rows = 0, cols = 0;
     exit_code = input_matrix(matrix, &rows, &cols);
+
     if (exit_code == EXIT_SUCCESS)
     {
         sort_matrix_by_max(matrix, rows, cols);

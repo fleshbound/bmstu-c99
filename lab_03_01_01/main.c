@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 #define N_ROWS_MAX 10
 #define M_COLS_MAX 10
@@ -19,7 +18,7 @@ int input_size(size_t *const size, const size_t max_size)
         exit_code = ERR_VALUE;
     }
     
-    if (((*size > max_size) || (*size == 0)) && (exit_code == EXIT_SUCCESS))
+    if ((exit_code == EXIT_SUCCESS) && ((*size > max_size) || (*size == 0)))
     {
         printf("Error: Size must be greater than zero and less than or equal to ten\n");
         exit_code = ERR_SIZE;
@@ -32,9 +31,10 @@ int input_size(size_t *const size, const size_t max_size)
 int input_elements(int m[N_ROWS_MAX][M_COLS_MAX], const size_t rows, const size_t cols)
 {
     int exit_code = EXIT_SUCCESS;
-    for (size_t i = 0; i < rows; i++)
-        for (size_t j = 0; j < cols; j++)
-            if ((scanf("%d", &m[i][j]) != CORRECT_INP_NUM) && (exit_code == EXIT_SUCCESS))
+
+    for (size_t i = 0; (i < rows) && (exit_code == EXIT_SUCCESS); i++)
+        for (size_t j = 0; (j < cols) && (exit_code == EXIT_SUCCESS); j++)
+            if (scanf("%d", &m[i][j]) != CORRECT_INP_NUM)
             {
                 printf("Error: Elements must be integer\n");
                 exit_code = ERR_VALUE;
@@ -48,71 +48,67 @@ int input_matrix(int m[N_ROWS_MAX][M_COLS_MAX], size_t *const rows, size_t *cons
 {
     printf("Enter number of rows:\n");
     int exit_code = input_size(rows, N_ROWS_MAX);
+
     if (exit_code == EXIT_SUCCESS)
     {
         printf("Enter number of columns:\n");
         exit_code = input_size(cols, M_COLS_MAX);
-        
-        if ((*cols != *rows) && (exit_code == EXIT_SUCCESS))
-            exit_code = ERR_SIZE;
-        
-        if (exit_code == EXIT_SUCCESS)
+    
+    	if (exit_code == EXIT_SUCCESS)
             exit_code = input_elements(m, *rows, *cols);
     }
 
     return exit_code;
 }
 
+// Проверка массива на симметричность
+int is_symmetric(const int *a, const size_t size)
+{
+    size_t middle = size / 2;
+    int symm_flag = 1;
+
+    for (size_t i = 0; i < middle; i++)
+        if (a[i] != a[size - i - 1])
+            symm_flag = 0;
+
+    return symm_flag;
+}
+
+// Заполнение массива матрицей с учетом симметрии строки index
+void fill_array(int m[N_ROWS_MAX][M_COLS_MAX], int *const a, const size_t rows, const size_t cols)
+{
+    for (size_t i = 0; i < rows; i++)
+    {
+        a[i] = 0;
+    
+    	if (is_symmetric(m[i], cols))
+            a[i] = 1;
+    }
+}
+
 // Вывод массива
 void print_array(int *const a, const size_t size)
 {
-    for (size_t i = 0; i < size; i++)
+    for (size_t i = 0; i < size; i++) 
         printf("%d%s", a[i], (i == size - 1) ? "\n" : " ");
-}
-
-// Вывод матрицы
-void print_matrix(int m[N_ROWS_MAX][M_COLS_MAX], const size_t rows, const size_t cols)
-{
-    for (size_t i = 0; i < rows; i++)
-        print_array(m[i], cols);
-}
-
-// Обмен элементов
-void swap_gap_arrays(int *const arr1, int *const arr2, const size_t begin, const size_t end)
-{
-    for (size_t i = begin; i < end; i++)
-    {
-        int buf = arr2[i];
-        arr2[i] = arr1[i];
-        arr1[i] = buf;
-    }
-}
-
-// Обмен элементов над диагоналями и под диагоналями
-void swap_elements(int m[N_ROWS_MAX][M_COLS_MAX], const size_t rows, const size_t cols)
-{
-    size_t middle = rows / 2;
-    for (size_t i = 0; i < middle; i++)
-    {
-        size_t curr_begin = i, curr_end = cols - i;
-        swap_gap_arrays(m[i], m[rows - i - 1], curr_begin, curr_end); 
-    }
 }
 
 int main(void)
 {
     int exit_code = EXIT_SUCCESS;
-    
+
     int matrix[N_ROWS_MAX][M_COLS_MAX];
-    size_t rows = 0, cols = 0;
-    
+    size_t rows, cols;
+
     exit_code = input_matrix(matrix, &rows, &cols);
+    
     if (exit_code == EXIT_SUCCESS)
     {
-        swap_elements(matrix, rows, cols);
-        printf("\nResult matrix:\n");
-        print_matrix(matrix, rows, cols);
+        int array[M_COLS_MAX];
+        fill_array(matrix, array, rows, cols);
+        printf("\nResult array: ");
+        print_array(array, rows);
     }
-    
+
     return exit_code;
 }

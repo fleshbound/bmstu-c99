@@ -65,6 +65,7 @@ int input_matrix(int m[N_ROWS_MAX][M_COLS_MAX], size_t *const rows, size_t *cons
 {
     printf("Enter number of rows:\n");
     int exit_code = input_size(rows, N_ROWS_MAX);
+
     if (exit_code == EXIT_SUCCESS)
     {
         printf("Enter number of columns:\n");
@@ -100,7 +101,9 @@ int main(void)
     
     int matrix[N_ROWS_MAX][M_COLS_MAX];
     size_t rows = 0, cols = 0;
+
     exit_code = input_matrix(matrix, &rows, &cols);
+
     if (exit_code == EXIT_SUCCESS)
     {
         printf("\nResult matrix:\n");

@@ -16,6 +16,7 @@ fi
 declare -a app_args=()
 if [ ! \( -z "$file_app_args"  \) ]; then
     mapfile app_args < "$file_app_args"
+fi
 
 error_memory=0
 if [ "$FLAG_VAL" = "1" ]; then
