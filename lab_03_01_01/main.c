@@ -54,7 +54,7 @@ int input_matrix(int m[N_ROWS_MAX][M_COLS_MAX], size_t *const rows, size_t *cons
         printf("Enter number of columns:\n");
         exit_code = input_size(cols, M_COLS_MAX);
     
-    	if (exit_code == EXIT_SUCCESS)
+        if (exit_code == EXIT_SUCCESS)
             exit_code = input_elements(m, *rows, *cols);
     }
 
@@ -81,7 +81,7 @@ void fill_array(int m[N_ROWS_MAX][M_COLS_MAX], int *const a, const size_t rows, 
     {
         a[i] = 0;
     
-    	if (is_symmetric(m[i], cols))
+        if (is_symmetric(m[i], cols))
             a[i] = 1;
     }
 }
