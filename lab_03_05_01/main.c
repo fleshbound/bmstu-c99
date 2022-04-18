@@ -56,7 +56,7 @@ int input_matrix(int m[N_ROWS_MAX][M_COLS_MAX], size_t *const rows, size_t *cons
         printf("Enter number of columns:\n");
         exit_code = input_size(cols, M_COLS_MAX);
 
-    if (exit_code == EXIT_SUCCESS)
+        if (exit_code == EXIT_SUCCESS)
             exit_code = input_elements(m, *rows, *cols);
     }
 
@@ -157,7 +157,7 @@ int main(void)
         size_t size = 0;
         exit_code = fill_array(matrix, rows, cols, array, &size);
 
-    if (exit_code == EXIT_SUCCESS)
+        if (exit_code == EXIT_SUCCESS)
         {
             int shift_q = 3;
             shift_array(array, size, shift_q);
