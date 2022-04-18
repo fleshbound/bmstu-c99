@@ -16,22 +16,22 @@ fi
 declare -a app_args=()
 if [ ! \( -z "$file_app_args"  \) ]; then
     mapfile app_args < "$file_app_args"
-fi
-
-{
-    ../../app.exe "${app_args[@]}" < "$file_stream_in"
-    res_code=$?
-} > /dev/null
 
 error_memory=0
 if [ "$FLAG_VAL" = "1" ]; then
     {
         valgrind --tool=memcheck --log-file=log.txt --quiet ../../app.exe "${app_args[@]}" < "$file_stream_in"
+        res_code=$?
     } > /dev/null 2>&1
 
     if [ -s "log.txt" ]; then
         error_memory=1
     fi
+else
+    {
+        ../../app.exe "${app_args[@]}" < "$file_stream_in"
+        res_code=$?
+    } > /dev/null
 fi
 
 error_answer=0
