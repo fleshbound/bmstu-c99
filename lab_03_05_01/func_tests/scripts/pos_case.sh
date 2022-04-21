@@ -4,6 +4,7 @@ EXIT_SUCCESS=0
 ERROR_ANSWER=1
 ERROR_MEMORY=2
 EXIT_SUCCESS_VALGRIND=3
+ERROR_MEMORY_ANSWER=4
 
 ERROR_NONE=255
 
@@ -59,6 +60,8 @@ elif [ $error_answer -eq 0 ] && [ $error_memory -eq 0 ]; then
     exit $EXIT_SUCCESS
 elif [ $error_answer -ne 0 ] && [ $error_memory -eq 0 ]; then
     exit $ERROR_ANSWER
-elif [ $error_memory -ne 0 ]; then
+elif [ $error_answer -eq 0 ] && [ $error_memory -ne 0 ]; then
     exit $ERROR_MEMORY
+elif [ $error_answer -ne 0 ] && [ $error_memory -ne 0 ]; then
+    exit $ERROR_MEMORY_ANSWER
 fi
