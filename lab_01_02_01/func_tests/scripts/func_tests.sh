@@ -57,7 +57,7 @@ function check_positive
             echo -e "TEST $num: ${LGreen}ANSWER OK${NC}; ${LGreen}MEMORY OK${NC}"
             q_pos=$(( q_pos - 1 ))
         elif [ $result -eq $ERROR_ANSWER ]; then
-            if [ "$FLAG_VAL" = "1" ];
+            if [ "$FLAG_VAL" = "1" ]; then
                 echo -e "TEST $num: ${RED}ANSWER ERROR${NC}; ${LGreen}MEMORY OK${NC}"
             else
                 echo -e "TEST $num: ${RED}ANSWER ERROR${NC}; ${NC}NO VALGRIND${NC}"
@@ -111,7 +111,7 @@ function check_negative
             echo -e "TEST $num: ${LGreen}ANSWER OK${NC}; ${LGreen}MEMORY OK${NC}"
             q_neg=$(( q_neg - 1 ))
         elif [ $result -eq $ERROR_ANSWER ]; then
-            if [ "$FLAG_VAL" = "1" ]; 
+            if [ "$FLAG_VAL" = "1" ]; then
                 echo -e "TEST $num: ${RED}ANSWER ERROR${NC}; ${LGreen}MEMORY OK${NC}"
             else
                 echo -e "TEST $num: ${RED}ANSWER ERROR${NC}; ${NC}NO VALGRIND${NC}"
