@@ -104,7 +104,7 @@ int is_equal_strrchr(const char *str, int symbol)
 }
 
 // Проверка положения терминирующего нуля в пустой строке
-int getP_TZeroEmpty_NotNull(void)
+int getp_Tzeroempty_notnull(void)
 {
     char symbol = '\0';
     char str[STR_MAX_LEN] = "";
@@ -112,7 +112,7 @@ int getP_TZeroEmpty_NotNull(void)
 }
 
 // Проверка положения терминирующего нуля в непустой строке
-int getP_TZeroNEmpty_NotNull(void)
+int getp_Tzeronempty_notnull(void)
 {
     char symbol = '\0';
     char str[STR_MAX_LEN] = "abc";
@@ -121,7 +121,7 @@ int getP_TZeroNEmpty_NotNull(void)
 }
 
 // Проверка положения символа, который отсутствует
-int getP_SymNonEmpty_Null(void)
+int getp_symnonempty_n(void)
 {
     char symbol = '1';
     char str[STR_MAX_LEN] = "2345";
@@ -130,7 +130,7 @@ int getP_SymNonEmpty_Null(void)
 }
 
 // Проверка положения символа, который присутствует
-int getP_SymNonEmpty_NotNull(void)
+int getp_symnonempty_notnull(void)
 {   
     char symbol = '1';
     char str[STR_MAX_LEN] = "21345";
@@ -139,7 +139,7 @@ int getP_SymNonEmpty_NotNull(void)
 }
 
 // Проверка положения символа из второй строки (обе пустые)
-int getP_SymEmptyEmpty_Null(void)
+int getp_symemptyempty_n(void)
 {
     char str1[STR_MAX_LEN] = "";
     char str2[STR_MAX_LEN] = "";
@@ -148,7 +148,7 @@ int getP_SymEmptyEmpty_Null(void)
 }
 
 // Проверка положения символа из второй непустой строки в пустой
-int getP_SymNEmptyEmpty_Null(void)
+int getp_symnemptyempty_n(void)
 {
     char str1[STR_MAX_LEN] = "";
     char str2[STR_MAX_LEN] = "01";
@@ -156,7 +156,7 @@ int getP_SymNEmptyEmpty_Null(void)
 }
 
 // Проверка положения символа из второй пустой строки
-int getP_SymEmptyNEmpty_Null(void)
+int getp_symemptynempty_n(void)
 {
     char str1[STR_MAX_LEN] = "012345";
     char str2[STR_MAX_LEN] = "";
@@ -164,7 +164,7 @@ int getP_SymEmptyNEmpty_Null(void)
 }
 
 // Проверка положения символа из второй строки (отсуствует)
-int getP_StrNonEmpty_Null(void)
+int getp_strnonempty_n(void)
 {
     char str1[STR_MAX_LEN] = "012345";
     char str2[STR_MAX_LEN] = "78";
@@ -172,7 +172,7 @@ int getP_StrNonEmpty_Null(void)
 }
 
 // Проверка положения символа из второй строки (присутствует)
-int getP_StrNonEmpty_NotNull(void)
+int getp_strnonempty_notnull(void)
 {
     char str1[STR_MAX_LEN] = "7890123";
     char str2[STR_MAX_LEN] = "02";
@@ -180,7 +180,7 @@ int getP_StrNonEmpty_NotNull(void)
 }
 
 // Длина символов пустой в пустой
-int getL_EmptyInEmpty_Zero(void)
+int getl_emptyinempty_zero(void)
 {
     char str1[STR_MAX_LEN] = "";
     char str2[STR_MAX_LEN] = "";
@@ -188,7 +188,7 @@ int getL_EmptyInEmpty_Zero(void)
 }
 
 // Длина символов пустой в непустой
-int getL_EmptyInNonEmpty_Zero(void)
+int getl_emptyinnonempty_zero(void)
 {
     char str1[STR_MAX_LEN] = "01234";
     char str2[STR_MAX_LEN] = "";
@@ -196,7 +196,7 @@ int getL_EmptyInNonEmpty_Zero(void)
 }
 
 // Длина символов непустой в пустой
-int getL_NonEmptyInEmpty_Zero(void)
+int getl_nonemptyinempty_zero(void)
 {
     char str1[STR_MAX_LEN] = "";
     char str2[STR_MAX_LEN] = "01234";
@@ -204,7 +204,7 @@ int getL_NonEmptyInEmpty_Zero(void)
 }
 
 // Длина символов непустой в непустой (отсутствуют)
-int getL_NonEmpty_Zero(void)
+int getl_nonempty_zero(void)
 {
     char str1[STR_MAX_LEN] = "7895";
     char str2[STR_MAX_LEN] = "01234";
@@ -212,42 +212,42 @@ int getL_NonEmpty_Zero(void)
 }
 
 // Длина символов непустой в непустой (присутствуют)
-int getL_NonEmpty_NotZero(void)
+int getl_nonempty_notzero(void)
 {
     char str1[STR_MAX_LEN] = "42130878";
     char str2[STR_MAX_LEN] = "01234";
     return is_equal_strspn(str1, str2);
 }
 
-int getLB_SymEmptyEmpty_Zero(void)
+int getlb_symemptyempty_zero(void)
 {
     char str1[STR_MAX_LEN] = "";
     char str2[STR_MAX_LEN] = "";
     return is_equal_strcspn(str1, str2);
 }
 
-int getLB_SymEmptyNonEmpty_Zero(void)
+int getlb_symemptynonempty_zero(void)
 {
     char str1[STR_MAX_LEN] = "13224";
     char str2[STR_MAX_LEN] = "";
     return is_equal_strcspn(str1, str2);
 }
 
-int getLB_SymNonEmptyEmpty_Zero(void)
+int getlb_symnonemptyempty_zero(void)
 {
     char str1[STR_MAX_LEN] = "";
     char str2[STR_MAX_LEN] = "324234";
     return is_equal_strcspn(str1, str2);
 }
 
-int getLB_SymNonEmpty_Zero(void)
+int getlb_symnonempty_zero(void)
 {
     char str1[STR_MAX_LEN] = "123456";
     char str2[STR_MAX_LEN] = "zxcvb";
     return is_equal_strcspn(str1, str2);
 }
 
-int getLB_SymNonEmpty_NotZero(void)
+int getlb_symnonempty_notzero(void)
 {
     char str1[STR_MAX_LEN] = "abcdf";
     char str2[STR_MAX_LEN] = "f324";
@@ -257,43 +257,43 @@ int getLB_SymNonEmpty_NotZero(void)
 int test_strpbrk(void)
 {
     int count_failed = 0;
-    count_failed = count_failed + getP_SymEmptyEmpty_Null();
-    count_failed = count_failed + getP_SymNEmptyEmpty_Null();
-    count_failed = count_failed + getP_SymEmptyNEmpty_Null();
-    count_failed = count_failed + getP_StrNonEmpty_Null();
-    count_failed = count_failed + getP_StrNonEmpty_NotNull();
+    count_failed = count_failed + getp_symemptyempty_null();
+    count_failed = count_failed + getp_symnemptyempty_null();
+    count_failed = count_failed + getp_symemptynempty_null();
+    count_failed = count_failed + getp_strnonempty_null();
+    count_failed = count_failed + getp_strnonempty_notnull();
     return count_failed;
 }
 
 int test_strspn(void)
 {
     int count_failed = 0;
-    count_failed = count_failed + getL_EmptyInEmpty_Zero();
-    count_failed = count_failed + getL_EmptyInNonEmpty_Zero();
-    count_failed = count_failed + getL_NonEmptyInEmpty_Zero();
-    count_failed = count_failed + getL_NonEmpty_Zero();
-    count_failed = count_failed + getL_NonEmpty_NotZero();
+    count_failed = count_failed + getl_emptyinempty_zero();
+    count_failed = count_failed + getl_emptyinnonempty_zero();
+    count_failed = count_failed + getl_nonemptyinempty_zero();
+    count_failed = count_failed + getl_nonempty_zero();
+    count_failed = count_failed + getl_nonempty_notzero();
     return count_failed;
 }
 
 int test_strcspn(void)
 {
     int count_failed = 0;
-    count_failed = count_failed + getLB_SymEmptyEmpty_Zero();
-    count_failed = count_failed + getLB_SymEmptyNonEmpty_Zero();    
-    count_failed = count_failed + getLB_SymNonEmptyEmpty_Zero();    
-    count_failed = count_failed + getLB_SymNonEmpty_Zero();    
-    count_failed = count_failed + getLB_SymNonEmpty_NotZero();    
+    count_failed = count_failed + getlb_symemptyempty_zero();
+    count_failed = count_failed + getlb_symemptynonempty_zero();    
+    count_failed = count_failed + getlb_symnonemptyempty_zero();    
+    count_failed = count_failed + getlb_symnonempty_zero();    
+    count_failed = count_failed + getlb_symnonempty_notzero();    
     return count_failed;
 }
 
 int test_strchr_strrchr(void)
 {
     int count_failed = 0;
-    count_failed = count_failed + getP_TZeroEmpty_NotNull();
-    count_failed = count_failed + getP_TZeroNEmpty_NotNull();
-    count_failed = count_failed + getP_SymNonEmpty_Null();
-    count_failed = count_failed + getP_SymNonEmpty_NotNull();
+    count_failed = count_failed + getp_Tzeroempty_notnull();
+    count_failed = count_failed + getp_Tzeronempty_notnull();
+    count_failed = count_failed + getp_symnonempty_null();
+    count_failed = count_failed + getp_symnonempty_notnull();
     return count_failed;
 }
 
