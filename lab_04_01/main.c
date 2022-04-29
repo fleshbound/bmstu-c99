@@ -291,7 +291,7 @@ int test_strchr_strrchr(void)
 {
     int count_failed = 0;
     count_failed = count_failed + GetP_TZeroEmpty_NotNull();
-    count_failed = count_failed + GetP_TZeroNEmpty_NotNull(); ###
+    count_failed = count_failed + GetP_TZeroNEmpty_NotNull();
     count_failed = count_failed + GetP_SymNonEmpty_Null();
     count_failed = count_failed + GetP_SymNonEmpty_NotNull();
     return count_failed;
