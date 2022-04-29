@@ -5,7 +5,7 @@
 #define STR_MAX_LEN 256
 
 // Указатель на первый элемент str1, равный элементу из str2 (без нулевых символов)
-char * my_strpbrk(const char *str1, const char *str2)
+char *my_strpbrk(const char *str1, const char *str2)
 {
     char *result_p = NULL;
     
@@ -42,7 +42,7 @@ size_t my_strcspn(const char *str1, const char *str2)
 }
 
 // Указатель на первое вхождение указанного символа (с нулевыми символами)
-char * my_strchr(const char *str, int symbol)
+char *my_strchr(const char *str, int symbol)
 {
     char *result_p = NULL;
 
@@ -58,7 +58,7 @@ char * my_strchr(const char *str, int symbol)
 }
 
 // Указатель на последнее вхождение указанного символа (с нулевыми символами)
-char * my_strrchr(const char *str, int symbol)
+char *my_strrchr(const char *str, int symbol)
 {
     char *result_p = NULL;
 
