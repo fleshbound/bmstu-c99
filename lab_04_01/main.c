@@ -252,7 +252,7 @@ int getlb_symnonempty_notzero(void)
 
 int test_strpbrk(void)
 {
-    
+    int count_failed = 0;
     count_failed = count_failed + getp_symemptyempty_null();
     count_failed = count_failed + getp_symnemptyempty_null();
     count_failed = count_failed + getp_symemptynempty_null();
@@ -263,7 +263,7 @@ int test_strpbrk(void)
 
 int test_strspn(void)
 {
-    
+    int count_failed = 0;
     count_failed = count_failed + getl_emptyinempty_zero();
     count_failed = count_failed + getl_emptyinnonempty_zero();
     count_failed = count_failed + getl_nonemptyinempty_zero();
@@ -274,7 +274,7 @@ int test_strspn(void)
 
 int test_strcspn(void)
 {
-    
+    int count_failed = 0;
     count_failed = count_failed + getlb_symemptyempty_zero();
     count_failed = count_failed + getlb_symemptynonempty_zero();    
     count_failed = count_failed + getlb_symnonemptyempty_zero();    
@@ -285,7 +285,7 @@ int test_strcspn(void)
 
 int test_strchr_strrchr(void)
 {
-    
+    int count_failed = 0;
     count_failed = count_failed + getp_tzeroempty_notnull();
     count_failed = count_failed + getp_tzeronempty_notnull();
     count_failed = count_failed + getp_symnonempty_null();
