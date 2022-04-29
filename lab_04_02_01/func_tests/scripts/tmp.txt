@@ -1,0 +1,2 @@
+Enter string:
+Result: 10 12 48 49 58
