@@ -12,7 +12,7 @@ char * my_strpbrk(const char *str1, const char *str2)
     for (size_t i = 0; (i < strlen(str1)) && (result_p == NULL); i++)
         for (size_t j = 0; (j < strlen(str2)) && (result_p == NULL); j++)
             if (str1[i] == str2[j])
-                result_p = (char *)str1 + i;
+                result_p = (char *) str1 + i;
 
     return result_p;
 }
@@ -51,7 +51,7 @@ char * my_strchr(const char *str, int symbol)
         char curr_symb = symbol;
 
         if (str[i] == curr_symb)
-            result_p = (char *)str + i;
+            result_p = (char *) str + i;
     }
 
     return result_p;
@@ -104,7 +104,7 @@ int is_equal_strrchr(const char *str, int symbol)
 }
 
 // Проверка положения терминирующего нуля в пустой строке
-int getp_Tzeroempty_notnull(void)
+int getp_tzeroempty_notnull(void)
 {
     char symbol = '\0';
     char str[STR_MAX_LEN] = "";
@@ -112,7 +112,7 @@ int getp_Tzeroempty_notnull(void)
 }
 
 // Проверка положения терминирующего нуля в непустой строке
-int getp_Tzeronempty_notnull(void)
+int getp_tzeronempty_notnull(void)
 {
     char symbol = '\0';
     char str[STR_MAX_LEN] = "abc";
@@ -121,7 +121,7 @@ int getp_Tzeronempty_notnull(void)
 }
 
 // Проверка положения символа, который отсутствует
-int getp_symnonempty_n(void)
+int getp_symnonempty_null(void)
 {
     char symbol = '1';
     char str[STR_MAX_LEN] = "2345";
@@ -139,7 +139,7 @@ int getp_symnonempty_notnull(void)
 }
 
 // Проверка положения символа из второй строки (обе пустые)
-int getp_symemptyempty_n(void)
+int getp_symemptyempty_null(void)
 {
     char str1[STR_MAX_LEN] = "";
     char str2[STR_MAX_LEN] = "";
@@ -148,7 +148,7 @@ int getp_symemptyempty_n(void)
 }
 
 // Проверка положения символа из второй непустой строки в пустой
-int getp_symnemptyempty_n(void)
+int getp_symnemptyempty_null(void)
 {
     char str1[STR_MAX_LEN] = "";
     char str2[STR_MAX_LEN] = "01";
@@ -156,7 +156,7 @@ int getp_symnemptyempty_n(void)
 }
 
 // Проверка положения символа из второй пустой строки
-int getp_symemptynempty_n(void)
+int getp_symemptynempty_null(void)
 {
     char str1[STR_MAX_LEN] = "012345";
     char str2[STR_MAX_LEN] = "";
@@ -164,7 +164,7 @@ int getp_symemptynempty_n(void)
 }
 
 // Проверка положения символа из второй строки (отсуствует)
-int getp_strnonempty_n(void)
+int getp_strnonempty_null(void)
 {
     char str1[STR_MAX_LEN] = "012345";
     char str2[STR_MAX_LEN] = "78";
@@ -290,8 +290,8 @@ int test_strcspn(void)
 int test_strchr_strrchr(void)
 {
     int count_failed = 0;
-    count_failed = count_failed + getp_Tzeroempty_notnull();
-    count_failed = count_failed + getp_Tzeronempty_notnull();
+    count_failed = count_failed + getp_tzeroempty_notnull();
+    count_failed = count_failed + getp_tzeronempty_notnull();
     count_failed = count_failed + getp_symnonempty_null();
     count_failed = count_failed + getp_symnonempty_notnull();
     return count_failed;
