@@ -45,9 +45,38 @@ void sort_words(char words[][WORD_MAX_LEN], const size_t size)
                 swap_words(words[j - 1], words[j]);
 }
 
+int is_equal_words(char *const wrd1, char *const wrd2)
+{
+    if (strlen(wrd1) != strlen(wrd2))
+        return 0;
+
+    for (size_t i = 0; i < strlen(wrd1); i++)
+        if (wrd1[i] != wrd2[i])
+            return 0;
+
+    return 1;
+}
+
+int is_in_array(char words[][WORD_MAX_LEN], const size_t size, char *const wrd)
+{
+    for (size_t i = 0; i < size; i++)
+        if (is_equal_words(wrd, words[i]))
+            return 1;
+
+    return 0;
+}
+
+void add_word(char words[][WORD_MAX_LEN], char *const wrd, const size_t index)
+{
+    for (size_t i = 0; i < strlen(wrd) + 1; i++)
+        words[index][i] = wrd[i];
+}
+
+// ДОБАВИТЬ СЛОВО НОРМАЛЬНО СБРОС СЛЛОВА
 int get_words(char *const str, char words[][WORD_MAX_LEN], size_t *const word_len)
 {
-    char curr_symb = '\0';
+    char curr_symb = '0';
+    char curr_word[WORD_MAX_LEN] = "";
     size_t curr_wsize = 0, curr_word_ind = 0, curr_symb_ind = 0;
 
     for (size_t i = 0; i < strlen(str) + 1; i++)
@@ -60,19 +89,26 @@ int get_words(char *const str, char words[][WORD_MAX_LEN], size_t *const word_le
             if (curr_symb != '\0')
             {
                 curr_symb = '\0';
-                words[curr_word_ind][curr_symb_ind + 1] = curr_symb;
+                curr_word[curr_symb_ind] = curr_symb;
+    
+                if (! is_in_array(words, curr_word_ind + 1, curr_word))
+                {
+                    add_word(words, curr_word, curr_word_ind);
+                    curr_word_ind++;
+                }
+                
                 curr_wsize = 0;
-                curr_word_ind++;
                 curr_symb_ind = 0;
+                curr_word[0] = '\0';
             }
         }
         else
         {
             curr_symb = str[i];
-            words[curr_word_ind][curr_symb_ind] = curr_symb;
+            curr_word[curr_symb_ind] = curr_symb;
             curr_symb_ind++;
-            curr_wsize++; 
-       	}
+            curr_wsize++;
+        }
     }
 
     if (curr_word_ind == 0)
