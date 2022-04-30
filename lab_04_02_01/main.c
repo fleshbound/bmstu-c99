@@ -12,12 +12,17 @@
 int is_first_bigger(char *const str1, char *const str2)
 {
     size_t min_len = (strlen(str1) > strlen(str2)) ? strlen(str2) : strlen(str1);
+    int is_eq = 1;
 
     for (size_t i = 0; i < min_len; i++)
+    {
         if (str1[i] > str2[i])
             return 1;
+    	if (str1[i] != str2[i])
+            is_eq = 0;
+    }
 
-    if (strlen(str1) > strlen(str2))
+    if ((strlen(str1) > strlen(str2)) && is_eq)
         return 1;
 
     return 0;
@@ -72,7 +77,6 @@ void add_word(char words[][WORD_MAX_LEN], char *const wrd, const size_t index)
         words[index][i] = wrd[i];
 }
 
-// ДОБАВИТЬ СЛОВО НОРМАЛЬНО СБРОС СЛЛОВА
 int get_words(char *const str, char words[][WORD_MAX_LEN], size_t *const word_len)
 {
     char curr_symb = '0';
