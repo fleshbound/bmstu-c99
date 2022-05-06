@@ -1,2 +1,0 @@
-Enter string:
-Result: a aa b bb c cc ccc d ddd

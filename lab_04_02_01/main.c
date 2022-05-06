@@ -3,28 +3,36 @@
 #include <string.h>
 #include <ctype.h>
 
-#define STR_LEN_MAX 256
-#define WORD_MAX_LEN 16
+#define STR_LEN_MAX 257
+#define WORD_MAX_LEN 17
 #define WORD_MAX_COUNT 128
+
 #define ERROR_INPUT 1
 #define ERROR_WORD 2
+#define ERROR_ASCII 3
 
 int is_first_bigger(char *const str1, char *const str2)
 {
-    size_t min_len = (strlen(str1) > strlen(str2)) ? strlen(str2) : strlen(str1);
-    int is_eq = 1;
+    size_t i = 0;
 
-    for (size_t i = 0; i < min_len; i++)
-    {
-        if (str1[i] > str2[i])
-            return 1;
-    	if (str1[i] != str2[i])
-            is_eq = 0;
-    }
+    while ((str1[i] == str2[i]) && (str1[i] != '\0') && (str2[i] != '\0'))
+        i++;
 
-    if ((strlen(str1) > strlen(str2)) && is_eq)
+    // Вторая строка совпадает с частью первой
+    if ((str1[i] != '\0') && (str2[i] == '\0'))
         return 1;
 
+    // Первая строка совпадает с частью второй
+    if ((str1[i] == '\0') && (str2[i] != '\0'))
+        return 0;
+
+    // Строки равны
+    if ((str1[i] == '\0') && (str2[i] == '\0'))
+        return 0;
+
+    if (str1[i] > str2[i])
+        return 1;
+    
     return 0;
 }
 
@@ -85,7 +93,7 @@ int get_words(char *const str, char words[][WORD_MAX_LEN], size_t *const word_le
 
     for (size_t i = 0; i < strlen(str) + 1; i++)
     {
-        if (curr_wsize == WORD_MAX_LEN)
+        if (curr_wsize == WORD_MAX_LEN - 1)
             return ERROR_WORD;
 
         if (isspace(str[i]) || ispunct(str[i]))
@@ -123,6 +131,16 @@ int get_words(char *const str, char words[][WORD_MAX_LEN], size_t *const word_le
     return EXIT_SUCCESS;
 }
 
+int is_ascii_str(char *const str)
+{
+    for (size_t i = 0; i < strlen(str) - 1; i++)
+        if (! isprint(str[i]))
+            return 0;
+
+    return 1;
+}
+
+
 int get_string(char *const str, const size_t size)
 {
     printf("Enter string:\n");
@@ -130,6 +148,9 @@ int get_string(char *const str, const size_t size)
     
     if ((error_p == NULL) || (strlen(str) == 0))
         return ERROR_INPUT;
+
+    if (! is_ascii_str(str))
+        return ERROR_ASCII;
     
     return EXIT_SUCCESS;
 }
