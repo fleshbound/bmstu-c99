@@ -26,7 +26,7 @@ int get_string(char *const str, const size_t size)
     printf("Enter string:\n");
     char *error_p = fgets(str, size, stdin);
 
-    if ((error_p == NULL) || (strlen(str) == 0))
+    if ((error_p == NULL) || (strlen(str) == 0) || (str[strlen(str) - 1] != '\n'))
         return ERROR_INPUT;
 
     if (! is_ascii_str(str))
@@ -43,7 +43,7 @@ void insert_word_in_array(char words[][WORD_MAX_LEN], char *const str, const siz
 
 int get_words(char *const str, char words[][WORD_MAX_LEN], size_t *const w_count)
 {
-    char sep[10] = " ,;:-.!?";
+    char sep[] = " ,;:-.!?\n";
     char *curr_word = strtok(str, sep);
     size_t i = 0;
 
@@ -56,8 +56,6 @@ int get_words(char *const str, char words[][WORD_MAX_LEN], size_t *const w_count
         curr_word = strtok(NULL, sep);
         i++;
     }
-
-    words[i - 1][strlen(words[i - 1]) - 1] = '\0';
 
     *w_count = i;
 

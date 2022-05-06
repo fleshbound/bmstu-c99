@@ -140,13 +140,12 @@ int is_ascii_str(char *const str)
     return 1;
 }
 
-
 int get_string(char *const str, const size_t size)
 {
     printf("Enter string:\n");
     char *error_p = fgets(str, size, stdin);
     
-    if ((error_p == NULL) || (strlen(str) == 0))
+    if ((error_p == NULL) || (strlen(str) == 0) || (str[strlen(str) - 1] != '\n'))
         return ERROR_INPUT;
 
     if (! is_ascii_str(str))
