@@ -37,8 +37,10 @@ int get_string(char *const str, const size_t size)
 
 void insert_word_in_array(char words[][WORD_MAX_LEN], char *const str, const size_t index)
 {
-    for (size_t i = 0; i < strlen(str) + 1; i++)
+    for (size_t i = 0; i < strlen(str); i++)
         words[index][i] = str[i];
+
+    words[index][strlen(str)] = '\0';
 }
 
 int get_words(char *const str, char words[][WORD_MAX_LEN], size_t *const w_count)
@@ -52,9 +54,12 @@ int get_words(char *const str, char words[][WORD_MAX_LEN], size_t *const w_count
         if (strlen(curr_word) > WORD_MAX_LEN - 1)
             return ERROR_WORD;
         
-        insert_word_in_array(words, curr_word, i);
-        curr_word = strtok(NULL, sep);
-        i++;
+        if (strlen(curr_word) > 0)
+        {
+            insert_word_in_array(words, curr_word, i);
+            curr_word = strtok(NULL, sep);
+            i++;
+        }
     }
 
     *w_count = i;
@@ -94,6 +99,7 @@ int fill_new_str(char *const new_str, char w_arr[][WORD_MAX_LEN], const size_t w
     for (int i = w_count - 2; i >= 0; i--)
         if (strcmp(w_arr[w_count - 1], w_arr[i]))
         {
+            new_word[0] = '\0';
             unique_letters_to_first(new_word, w_arr[i]);
             ins_index = add_word_in_str(new_str, new_word, ins_index);
         }
