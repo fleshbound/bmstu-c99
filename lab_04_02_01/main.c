@@ -165,7 +165,7 @@ int main(void)
 {
     char str[STR_LEN_MAX];
     
-    int inp_error = get_string(str, STR_LEN_MAX);
+    int inp_error = get_string(str, STR_LEN_MAX - 1);
 
     if (inp_error != EXIT_SUCCESS)
         return inp_error;
