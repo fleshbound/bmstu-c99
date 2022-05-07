@@ -91,6 +91,12 @@ void unique_letters_to_first(char *const new_word, char *const old_word)
     new_word[j] = '\0';
 }
 
+void clear_word(char *const word, const size_t size)
+{
+    for (size_t i = 0; i < size; i++)
+        word[i] = '\0';
+}
+
 int fill_new_str(char *const new_str, char w_arr[][WORD_MAX_LEN], const size_t w_count)
 {
     size_t ins_index = 0;
@@ -99,7 +105,7 @@ int fill_new_str(char *const new_str, char w_arr[][WORD_MAX_LEN], const size_t w
     for (int i = w_count - 2; i >= 0; i--)
         if (strcmp(w_arr[w_count - 1], w_arr[i]))
         {
-            new_word[0] = '\0';
+            clear_word(new_word, WORD_MAX_LEN);
             unique_letters_to_first(new_word, w_arr[i]);
             ins_index = add_word_in_str(new_str, new_word, ins_index);
         }
