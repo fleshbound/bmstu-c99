@@ -98,6 +98,9 @@ int is_float_numb(char *const str)
     if (strlen(str) == 0)
         return FALSE;
 
+    if ((strlen(str) == 1) && (! isdigit(str[0])))
+        return FALSE;
+
     size_t i = 0;
     char correct_first[] = "0123456789.-+";
 
