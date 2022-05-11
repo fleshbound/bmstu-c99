@@ -83,12 +83,20 @@ int is_exppart(char *const str, char *const end)
     if ((*beg == '+') || (*beg == '-'))
         beg = beg + 1;
 
+    int has_digit = 0;
+
     while (beg <= end)
     {
         if (! isdigit(*beg))
             return FALSE;
+        else
+            has_digit = 1;
+
         beg = beg + 1;
     }
+
+    if (! has_digit)
+        return FALSE;
 
     return TRUE;
 }
