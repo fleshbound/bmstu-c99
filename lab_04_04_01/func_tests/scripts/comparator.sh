@@ -8,7 +8,7 @@ EXIT_FAILURE=1
 file1="$1"
 file2="$2"
 
-reg_check="*"
+reg_check="^.*$"
 
 data1="$( grep -o "$reg_check" "$file1" )"
 data2="$( grep -o "$reg_check" "$file2" )"

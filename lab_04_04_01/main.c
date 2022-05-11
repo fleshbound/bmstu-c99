@@ -69,13 +69,16 @@ int is_exppart(char *const str, char *const end)
 {
     char *beg = str;
 
-    if (beg >= end)
+    if (beg > end)
         return TRUE;
 
     if ((*beg != 'e') && (*beg != 'E'))
         return FALSE;
 
     beg = beg + 1;
+
+    if (beg > end)
+        return FALSE;
 
     if ((*beg == '+') || (*beg == '-'))
         beg = beg + 1;
@@ -117,6 +120,8 @@ int is_float_numb(char *const str)
         while (isdigit(str[i]))
             i++;
     }
+
+    
 
     if (is_exppart(str + i, str + strlen(str) - 1))
         return TRUE;
