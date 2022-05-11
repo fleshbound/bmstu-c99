@@ -107,21 +107,24 @@ int is_float_numb(char *const str)
     if ((str[i] == '+') || (str[i] == '-'))
         i++;
 
+    int has_dot = 0;
+
     if (str[i] == '.')
+    {
         i++;
+        has_dot = 1;
+    }
 
     while (isdigit(str[i]))
         i++;
 
-    if (str[i] == '.')
+    if ((str[i] == '.') && (! has_dot))
     {
         i++;
 
         while (isdigit(str[i]))
             i++;
     }
-
-    
 
     if (is_exppart(str + i, str + strlen(str) - 1))
         return TRUE;
