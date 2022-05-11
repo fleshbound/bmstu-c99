@@ -48,7 +48,7 @@ char *strip_str(char *const str)
 
 int get_string(char *const str, const size_t max_size)
 {
-    printf("Enter string:\n");
+//    printf("Enter string:\n");
     char *error_p = fgets(str, max_size, stdin);
 
     if ((error_p == NULL) || (str[strlen(str) - 1] != '\n'))
