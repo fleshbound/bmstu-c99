@@ -15,15 +15,6 @@
 #define TRUE 1
 #define FALSE 0
 
-int is_ascii_str(char *const str)
-{
-    for (size_t i = 0; i < strlen(str) - 1; i++)
-        if (! isprint(str[i]))
-            return FALSE;
-
-    return TRUE;
-}
-
 char *strip_str(char *const str)
 {
     char *end = str + strlen(str) - 1;
@@ -47,8 +38,8 @@ int get_string(char *const str, const size_t max_size)
     if ((error_p == NULL) || (str[strlen(str) - 1] != '\n'))
         return ERROR_INPUT;
 
-    if (strlen(str) == 1)
-        return ERROR_EMPTY;
+    //if (strlen(str) == 1)
+    //    return ERROR_EMPTY;
 
     //if (! is_ascii_str(str))
     //    return ERROR_ASCII;
