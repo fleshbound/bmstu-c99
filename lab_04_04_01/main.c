@@ -38,12 +38,6 @@ int get_string(char *const str, const size_t max_size)
     if ((error_p == NULL) || (str[strlen(str) - 1] != '\n'))
         return ERROR_INPUT;
 
-    //if (strlen(str) == 1)
-    //    return ERROR_EMPTY;
-
-    //if (! is_ascii_str(str))
-    //    return ERROR_ASCII;
-
     return EXIT_SUCCESS;
 }
 
@@ -71,7 +65,7 @@ int is_exppart(char *const str, char *const end)
 
     while (beg <= end)
     {
-        if (! isdigit(*beg))
+        if (!isdigit(*beg))
             return FALSE;
         else
             has_digit = 1;
@@ -79,7 +73,7 @@ int is_exppart(char *const str, char *const end)
         beg = beg + 1;
     }
 
-    if (! has_digit)
+    if (!has_digit)
         return FALSE;
 
     return TRUE;
@@ -90,7 +84,7 @@ int is_float_numb(char *const str)
     if (strlen(str) == 0)
         return FALSE;
 
-    if ((strlen(str) == 1) && (! isdigit(str[0])))
+    if ((strlen(str) == 1) && (!isdigit(str[0])))
         return FALSE;
 
     size_t i = 0;
@@ -118,7 +112,7 @@ int is_float_numb(char *const str)
         i++;
     }
 
-    if ((str[i] == '.') && (! has_dot))
+    if ((str[i] == '.') && (!has_dot))
     {
         i++;
 
@@ -129,13 +123,21 @@ int is_float_numb(char *const str)
         }
     }
 
-    if (! has_digit)
+    if (!has_digit)
         return FALSE;
 
     if (is_exppart(str + i, str + strlen(str) - 1))
         return TRUE;
 
     return FALSE;
+}
+
+void print_result(const int cond)
+{
+    if (cond)
+        printf("%s\n", "YES");
+    else
+        printf("%s\n", "NO");
 }
 
 int main(void)
@@ -148,12 +150,7 @@ int main(void)
 
     char *strp = strip_str(str);
 
-  //  printf("-%s-\n", strp);
-
-    if (is_float_numb(strp))
-        printf("%s\n", "YES");
-    else
-        printf("%s\n", "NO");
+    print_result(is_float_numb(strp));
 
     return EXIT_SUCCESS;
 }

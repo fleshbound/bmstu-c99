@@ -12,13 +12,16 @@
 #define ERROR_ASCII 3
 #define ERROR_EMPTY 4
 
+#define TRUE 1
+#define FALSE 0
+
 int is_ascii_str(char *const str)
 {
     for (size_t i = 0; i < strlen(str) - 1; i++)
-        if (! isprint(str[i]))
-            return 0;
+        if (!isprint(str[i]))
+            return FALSE;
 
-    return 1;
+    return TRUE;
 }
 
 int get_string(char *const str, const size_t size)
@@ -29,7 +32,7 @@ int get_string(char *const str, const size_t size)
     if ((error_p == NULL) || (strlen(str) == 0) || (str[strlen(str) - 1] != '\n'))
         return ERROR_INPUT;
 
-    if (! is_ascii_str(str))
+    if (!is_ascii_str(str))
         return ERROR_ASCII;
 
     return EXIT_SUCCESS;
@@ -118,6 +121,11 @@ int fill_new_str(char *const new_str, char w_arr[][WORD_MAX_LEN], const size_t w
     return EXIT_SUCCESS;
 }
 
+void print_result(char *res)
+{    
+    printf("Result: %s\n", res);
+}
+
 int main(void)
 {
     char str[STR_MAX_LEN] = "";
@@ -139,7 +147,7 @@ int main(void)
     if (fill_error != EXIT_SUCCESS)
         return fill_error;
 
-    printf("Result: %s\n", new_str);
+    print_result(new_str);
 
     return EXIT_SUCCESS;
 }

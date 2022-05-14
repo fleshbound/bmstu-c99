@@ -3,13 +3,16 @@
 #include <string.h>
 #include <ctype.h>
 
-#define STR_LEN_MAX 257
-#define WORD_MAX_LEN 17
+#define STR_LEN 257
+#define WORD_LEN 17
 #define WORD_MAX_COUNT 128
 
 #define ERROR_INPUT 1
 #define ERROR_WORD 2
 #define ERROR_ASCII 3
+
+#define TRUE 1
+#define FALSE 0
 
 int is_first_bigger(char *const str1, char *const str2)
 {
@@ -20,20 +23,27 @@ int is_first_bigger(char *const str1, char *const str2)
 
     // Вторая строка совпадает с частью первой
     if ((str1[i] != '\0') && (str2[i] == '\0'))
-        return 1;
+        return TRUE;
 
     // Первая строка совпадает с частью второй
     if ((str1[i] == '\0') && (str2[i] != '\0'))
-        return 0;
+        return FALSE;
 
     // Строки равны
     if ((str1[i] == '\0') && (str2[i] == '\0'))
-        return 0;
+        return FALSE;
 
     if (str1[i] > str2[i])
-        return 1;
+        return TRUE;
     
-    return 0;
+    return FALSE;
+}
+
+void swap_symbs(char *wrd1, char *wrd2, const size_t ind)
+{
+    char buf = wrd1[ind];
+    wrd1[ind] = wrd2[ind];
+    wrd2[ind] = buf;
 }
 
 void swap_words(char *wrd1, char *wrd2)
@@ -43,14 +53,10 @@ void swap_words(char *wrd1, char *wrd2)
     size_t max_len = strlen(max_wrd);
 
     for (size_t i = 0; i < max_len; i++)
-    {
-        char buf = max_wrd[i];
-        max_wrd[i] = min_wrd[i];
-        min_wrd[i] = buf;
-    }
+        swap_symbs(max_wrd, min_wrd, i);
 }
 
-void sort_words(char words[][WORD_MAX_LEN], const size_t size)
+void sort_words(char words[][WORD_LEN], const size_t size)
 {
     for (size_t i = 0; i < size; i++)
         for (size_t j = size - 1; j > i - 1; j--)
@@ -61,39 +67,48 @@ void sort_words(char words[][WORD_MAX_LEN], const size_t size)
 int is_equal_words(char *const wrd1, char *const wrd2)
 {
     if (strlen(wrd1) != strlen(wrd2))
-        return 0;
+        return FALSE;
 
     for (size_t i = 0; i < strlen(wrd1); i++)
         if (wrd1[i] != wrd2[i])
-            return 0;
+            return FALSE;
 
-    return 1;
+    return TRUE;
 }
 
-int is_in_array(char words[][WORD_MAX_LEN], const size_t size, char *const wrd)
+int is_in_array(char words[][WORD_LEN], const size_t size, char *const wrd)
 {
     for (size_t i = 0; i < size; i++)
         if (is_equal_words(wrd, words[i]))
-            return 1;
+            return TRUE;
 
-    return 0;
+    return FALSE;
 }
 
-void add_word(char words[][WORD_MAX_LEN], char *const wrd, const size_t index)
+void add_word(char words[][WORD_LEN], char *const wrd, const size_t index)
 {
     for (size_t i = 0; i < strlen(wrd) + 1; i++)
         words[index][i] = wrd[i];
 }
 
-int get_words(char *const str, char words[][WORD_MAX_LEN], size_t *const word_len)
+void add_checked(char words[][WORD_LEN], size_t *const w_ind, char *const wrd)
+{
+    if (!is_in_array(words, *w_ind + 1, wrd))
+        {
+            add_word(words, wrd, *w_ind);
+            *w_ind = *w_ind + 1;
+        }
+}
+
+int get_words(char *const str, char words[][WORD_LEN], size_t *const word_len)
 {
     char curr_symb = '0';
-    char curr_word[WORD_MAX_LEN] = "";
+    char curr_word[WORD_LEN] = "";
     size_t curr_wsize = 0, curr_word_ind = 0, curr_symb_ind = 0;
 
     for (size_t i = 0; i < strlen(str) + 1; i++)
     {
-        if (curr_wsize == WORD_MAX_LEN - 1)
+        if (curr_wsize == WORD_LEN - 1)
             return ERROR_WORD;
 
         if (isspace(str[i]) || ispunct(str[i]))
@@ -102,13 +117,9 @@ int get_words(char *const str, char words[][WORD_MAX_LEN], size_t *const word_le
             {
                 curr_symb = '\0';
                 curr_word[curr_symb_ind] = curr_symb;
-    
-                if (! is_in_array(words, curr_word_ind + 1, curr_word))
-                {
-                    add_word(words, curr_word, curr_word_ind);
-                    curr_word_ind++;
-                }
-                
+
+                add_checked(words, &curr_word_ind, curr_word);
+
                 curr_wsize = 0;
                 curr_symb_ind = 0;
                 curr_word[0] = '\0';
@@ -134,7 +145,7 @@ int get_words(char *const str, char words[][WORD_MAX_LEN], size_t *const word_le
 int is_ascii_str(char *const str)
 {
     for (size_t i = 0; i < strlen(str) - 1; i++)
-        if (! isprint(str[i]))
+        if (!isprint(str[i]))
             return 0;
 
     return 1;
@@ -148,28 +159,30 @@ int get_string(char *const str, const size_t size)
     if ((error_p == NULL) || (strlen(str) == 0) || (str[strlen(str) - 1] != '\n'))
         return ERROR_INPUT;
 
-    if (! is_ascii_str(str))
+    if (!is_ascii_str(str))
         return ERROR_ASCII;
     
     return EXIT_SUCCESS;
 }
 
-void print_words(char words[][WORD_MAX_LEN], const size_t size)
+void print_words(char words[][WORD_LEN], const size_t size)
 {
+    printf("Result: ");
+
     for (size_t i = 0; i < size; i++)
         printf("%s%c", words[i], (i == size - 1) ? '\n' : ' ');
 }
 
 int main(void)
 {
-    char str[STR_LEN_MAX];
+    char str[STR_LEN];
     
-    int inp_error = get_string(str, STR_LEN_MAX - 1);
+    int inp_error = get_string(str, STR_LEN - 1);
 
     if (inp_error != EXIT_SUCCESS)
         return inp_error;
 
-    char words[WORD_MAX_COUNT][WORD_MAX_LEN] = { "" };
+    char words[WORD_MAX_COUNT][WORD_LEN] = { "" };
     size_t words_count = 0;
     int word_error = get_words(str, words, &words_count);
 
@@ -177,7 +190,6 @@ int main(void)
         return word_error;
 
     sort_words(words, words_count);
-    printf("Result: ");
     print_words(words, words_count);
     
     return EXIT_SUCCESS;
