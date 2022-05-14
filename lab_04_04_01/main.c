@@ -157,7 +157,7 @@ int main(void)
 
     char *strp = strip_str(str);
 
-    printf("-%s-\n", strp);
+  //  printf("-%s-\n", strp);
 
     if (is_float_numb(strp))
         printf("%s\n", "YES");
