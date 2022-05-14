@@ -94,10 +94,10 @@ void add_word(char words[][WORD_LEN], char *const wrd, const size_t index)
 void add_checked(char words[][WORD_LEN], size_t *const w_ind, char *const wrd)
 {
     if (!is_in_array(words, *w_ind + 1, wrd))
-        {
-            add_word(words, wrd, *w_ind);
-            *w_ind = *w_ind + 1;
-        }
+    {
+        add_word(words, wrd, *w_ind);
+        *w_ind = *w_ind + 1;
+    }
 }
 
 int get_words(char *const str, char words[][WORD_LEN], size_t *const word_len)
