@@ -24,12 +24,6 @@ int is_ascii_str(char *const str)
     return TRUE;
 }
 
-void delete_sym(char *const str, const size_t index)
-{
-    for (size_t i = index; i < strlen(str); i++)
-        str[i] = str[i + 1];
-}
-
 char *strip_str(char *const str)
 {
     char *end = str + strlen(str) - 1;
@@ -48,7 +42,6 @@ char *strip_str(char *const str)
 
 int get_string(char *const str, const size_t max_size)
 {
-//    printf("Enter string:\n");
     char *error_p = fgets(str, max_size, stdin);
 
     if ((error_p == NULL) || (str[strlen(str) - 1] != '\n'))
@@ -57,8 +50,8 @@ int get_string(char *const str, const size_t max_size)
     if (strlen(str) == 1)
         return ERROR_EMPTY;
 
-    if (! is_ascii_str(str))
-        return ERROR_ASCII;
+    //if (! is_ascii_str(str))
+    //    return ERROR_ASCII;
 
     return EXIT_SUCCESS;
 }
@@ -163,6 +156,8 @@ int main(void)
         return input_error;
 
     char *strp = strip_str(str);
+
+    printf("-%s-\n", strp);
 
     if (is_float_numb(strp))
         printf("%s\n", "YES");
