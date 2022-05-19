@@ -10,7 +10,7 @@ if [ -z "$files" ]; then
     exit $ERR_EXIST
 fi
 
-gcc -std=c99 -Wall -Werror -Wextra -Wfloat-equal -Wfloat-conversion -Wvla -O3 -g0 -c "$files"
+gcc -std=c99 -Wall -Werror -Wextra -Wfloat-equal -Wfloat-conversion -Wvla -O3 -g0 -c main.c
 gcc -o app.exe ./*.o -lm
 
 if [ -s app.exe ]; then
