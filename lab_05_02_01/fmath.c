@@ -19,7 +19,7 @@ int fget_min_max(FILE *f, double *const min, double *const max)
     {
         if (fscanf(f, "%lf", &num) == 1)
         {
-	    	if (num >= curr_max)
+            if (num >= curr_max)
                 curr_max = num;
             else if (num <= curr_min)
                 curr_min = num;
