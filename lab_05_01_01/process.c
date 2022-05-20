@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "process.h"
-
-#define ERR_EMPTY -1
-#define ERR_NOT_ENOUGH -2
+#include "errors.h"
 
 void swap_int(int *const a, int *const b)
 {

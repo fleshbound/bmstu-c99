@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include "fileio.h"
 
-#define ERR_IO 1
-
 void finput_int(FILE *f)
 {
     rewind(f);

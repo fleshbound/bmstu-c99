@@ -3,6 +3,7 @@
 
 #include "process.h"
 #include "fileio.h"
+#include "errors.h"
 
 int main(void)
 {
