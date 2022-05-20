@@ -47,7 +47,7 @@ function check_positive
         # Compairing ethalon and current output
         ./pos_case.sh "$file_stream_in" "$file_stream_out" "$file_app_args"
         result=$?
-
+	
         # Single result output
         q_pos=$(( q_pos + 1 ))
         if [ $result -eq $EXIT_SUCCESS ]; then
