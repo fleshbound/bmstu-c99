@@ -21,7 +21,9 @@ fi
 
 declare -a app_args=()
 if [ ! \( -z "$file_app_args"  \) ]; then
-    mapfile app_args < "$file_app_args"
+    argstr=$( grep -v "^$" "$file_app_args" )
+    app_args=($argstr)
+    #echo "${app_args[@]}"
 fi
 
 touch $file_stream_out_current
@@ -36,10 +38,9 @@ if [ "$FLAG_VAL" = "1" ]; then
         error_memory=1
     fi
 else
-    {
-        ../../app.exe "${app_args[@]}" < "$file_stream_in"
-        res_code=$?
-    } > $file_stream_out_current
+    ../../app.exe "${app_args[@]}" <"$file_stream_in" >"$file_stream_out_current"
+    res_code=$?
+    #echo "$res_code"
 fi
 
 error_answer=0
