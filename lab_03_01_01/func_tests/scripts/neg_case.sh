@@ -16,7 +16,9 @@ fi
 
 declare -a app_args=()
 if [ ! \( -z "$file_app_args"  \) ]; then
-    mapfile app_args < "$file_app_args"
+    argstr=$( grep -v "^$" "$file_app_args" )
+    app_args=($argstr)
+    #echo "${app_args[@]}"
 fi
 
 error_memory=0
