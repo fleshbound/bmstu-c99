@@ -18,12 +18,18 @@ int main(int argc, char *argv[])
 
     if (!strcmp(argv[1], "c"))
         err_code = fmake_bin(argv[2]);
+    else
+        err_code = ERR_ARGS;
 
     if (!strcmp(argv[1], "p"))
         err_code = fprint_bin(argv[2]);
+    else
+        err_code = ERR_ARGS;
 
     if (!strcmp(argv[1], "s"))
         err_code = fsort_bin(argv[2]);
+    else
+        err_code = ERR_ARGS;
 
     return err_code;
 }
