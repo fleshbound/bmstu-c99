@@ -21,6 +21,9 @@ int init_rand_bin(FILE *fb)
             return ERR_WRITE;
     }
 
+    if (ferror(fb))
+        return ERR_IO;
+
     return EXIT_SUCCESS;
 }
 
@@ -39,6 +42,9 @@ int fmake_bin(const char *file_name)
 
     fclose(fb);
 
+    if (ferror(fb))
+        return ERR_IO;
+
     printf("File %s was created\n", file_name);
 
     return EXIT_SUCCESS;
@@ -55,6 +61,9 @@ int fget_length(const char *file_name, size_t *const len)
     long int size = ftell(fb);
 
     fclose(fb);
+
+    if (ferror(fb))
+        return ERR_IO;
 
     if (size == -1L)
         return ERR_IO;
@@ -93,6 +102,9 @@ int fprint_bin(const char *file_name)
 
     fclose(fb);
 
+    if (ferror(fb))
+        return ERR_IO;
+
     return EXIT_SUCCESS;
 }
 
@@ -109,6 +121,9 @@ int get_number_by_pos(const char *file_name, const long int pos, int *const num)
         return ERR_READ;
 
     fclose(fb);
+
+    if (ferror(fb))
+        return ERR_IO;
     
     return EXIT_SUCCESS;
 }
@@ -126,6 +141,9 @@ int put_number_by_pos(const char *file_name, const long int pos, const int *cons
         return ERR_WRITE;
 
     fclose(fb);
+
+    if (ferror(fb))
+        return ERR_IO;
 
     return EXIT_SUCCESS;
 }
