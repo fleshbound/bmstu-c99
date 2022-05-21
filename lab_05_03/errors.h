@@ -8,6 +8,7 @@
 #define ERR_READ 3
 #define ERR_WRITE 4
 #define ERR_DATA 5
+#define ERR_PATH 6
 
 void show_err(const int code);
 

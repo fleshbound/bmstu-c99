@@ -7,12 +7,16 @@
 #include "errors.h"
 #include "fbin.h"
 
+#define MAX_PATH 260
 #define ARG_COUNT 3
 
 int main(int argc, char *argv[])
 {
     if (argc != ARG_COUNT)
+    {
+        show_err(ERR_ARGS);
         return ERR_ARGS;
+    }
 
     int err_code = EXIT_SUCCESS;
     int not_c_key = strcmp(argv[1], "c");
@@ -21,6 +25,11 @@ int main(int argc, char *argv[])
 
     if (not_c_key && not_p_key && not_s_key)
         err_code = ERR_ARGS;
+    else if (strlen(argv[2]) > MAX_PATH)
+    {
+        show_err(ERR_PATH);
+        return ERR_PATH;
+    }
 
     if (!not_c_key)
         err_code = fmake_bin(argv[2]);

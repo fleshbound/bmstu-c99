@@ -21,4 +21,7 @@ void show_err(const int code)
 
     if (code == ERR_DATA)
         printf("File consists of invalid data (only ints were excepted)\n");
+
+    if (code == ERR_PATH)
+        printf("File's path is too long\n");
 }
