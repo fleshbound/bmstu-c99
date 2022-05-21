@@ -15,21 +15,21 @@ int main(int argc, char *argv[])
         return ERR_ARGS;
 
     int err_code = EXIT_SUCCESS;
+    int not_c_key = strcmp(argv[1], "c");
+    int not_p_key = strcmp(argv[1], "p");
+    int not_s_key = strcmp(argv[1], "s");
 
-    if (!strcmp(argv[1], "c"))
+    if (not_c_key && not_p_key && not_s_key)
+        err_code = ERR_ARGS;
+
+    if (!not_c_key)
         err_code = fmake_bin(argv[2]);
-    else
-        err_code = ERR_ARGS;
    
-    if (!strcmp(argv[1], "p"))
+    if (!not_p_key)
         err_code = fprint_bin(argv[2]);
-    else
-        err_code = ERR_ARGS;
     
-    if (!strcmp(argv[1], "s"))
+    if (!not_s_key)
         err_code = fsort_bin(argv[2]);
-    else
-        err_code = ERR_ARGS;
 
     show_err(err_code);
 
