@@ -40,10 +40,10 @@ int fmake_bin(const char *file_name)
     if (err_init)
         return err_init;
 
-    fclose(fb);
-
     if (ferror(fb))
         return ERR_IO;
+
+    fclose(fb);
 
     printf("File %s was created\n", file_name);
 
@@ -60,10 +60,10 @@ int fget_length(const char *file_name, size_t *const len)
     fseek(fb, ZERO_POS, SEEK_END);
     long int size = ftell(fb);
 
-    fclose(fb);
-
     if (ferror(fb))
         return ERR_IO;
+
+    fclose(fb);
 
     if (size == -1L)
         return ERR_IO;
@@ -100,10 +100,10 @@ int fprint_bin(const char *file_name)
             printf("%d%s", num, (i == len - 1) ? "\n" : " ");
     }
 
-    fclose(fb);
-
     if (ferror(fb))
         return ERR_IO;
+
+    fclose(fb);
 
     return EXIT_SUCCESS;
 }
@@ -120,11 +120,11 @@ int get_number_by_pos(const char *file_name, const long int pos, int *const num)
     if (fread(num, sizeof(int), READ_COUNT, fb) != READ_COUNT)
         return ERR_READ;
 
-    fclose(fb);
-
     if (ferror(fb))
         return ERR_IO;
-    
+ 
+    fclose(fb);
+   
     return EXIT_SUCCESS;
 }
 
@@ -140,10 +140,10 @@ int put_number_by_pos(const char *file_name, const long int pos, const int *cons
     if (!fwrite(num, sizeof(int), INPUT_COUNT, fb))
         return ERR_WRITE;
 
-    fclose(fb);
-
     if (ferror(fb))
         return ERR_IO;
+
+    fclose(fb);
 
     return EXIT_SUCCESS;
 }
