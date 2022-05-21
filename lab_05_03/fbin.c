@@ -18,7 +18,7 @@ int init_rand_bin(FILE *fb)
     {
         int rand_int = rand() % 10;
         if (!fwrite(&rand_int, sizeof(int), INPUT_COUNT, fb))
-            return ERR_INPUT;
+            return ERR_WRITE;
     }
 
     return EXIT_SUCCESS;
@@ -30,10 +30,7 @@ int fmake_bin(const char *file_name)
     fb = fopen(file_name, "wb");
 
     if (fb == NULL)
-    {
-        printf("I/O error\n");
         return ERR_IO;
-    }
 
     int err_init = init_rand_bin(fb);
 
@@ -62,7 +59,10 @@ int fget_length(const char *file_name, size_t *const len)
     if (size == -1L)
         return ERR_IO;
 
-    *len = size / sizeof(int);
+    if (size % sizeof(int) == 0)
+        *len = size / sizeof(int);
+    else
+        return ERR_DATA;
     
     return EXIT_SUCCESS;
 }
@@ -73,12 +73,10 @@ int fprint_bin(const char *file_name)
     int err_code = fget_length(file_name, &len);
 
     if (err_code)
-    {
-        printf("I/O error\n");
         return err_code;
-    }    
 
-    // printf("%lu\n", len);
+    if (len == 0)
+        return ERR_EMPTY;
 
     FILE *fb;
     fb = fopen(file_name, "rb");
@@ -88,15 +86,11 @@ int fprint_bin(const char *file_name)
         int num;
 
         if (fread(&num, sizeof(int), READ_COUNT, fb) != READ_COUNT)
-        {
-            printf("Error while reading bin file\n");
-            return ERR_IO;
-        }
+            return ERR_READ;
         else
-            printf("%d ", num);
+            printf("%d%s", num, (i == len - 1) ? "\n" : " ");
     }
 
-    printf("\n");
     fclose(fb);
 
     return EXIT_SUCCESS;
@@ -112,7 +106,7 @@ int get_number_by_pos(const char *file_name, const long int pos, int *const num)
     fseek(fb, pos * sizeof(int), SEEK_SET);
     
     if (fread(num, sizeof(int), READ_COUNT, fb) != READ_COUNT)
-        return ERR_IO;
+        return ERR_READ;
 
     fclose(fb);
     
@@ -129,7 +123,7 @@ int put_number_by_pos(const char *file_name, const long int pos, const int *cons
     fseek(fb, pos * sizeof(int), SEEK_SET);
     
     if (!fwrite(num, sizeof(int), INPUT_COUNT, fb))
-        return ERR_IO;
+        return ERR_WRITE;
 
     fclose(fb);
 
@@ -139,6 +133,7 @@ int put_number_by_pos(const char *file_name, const long int pos, const int *cons
 int fswap_bin(const char *file_name, const size_t pos1, const size_t pos2)
 {
     int a, b;
+
     int err_code = get_number_by_pos(file_name, pos1, &a);
     err_code = get_number_by_pos(file_name, pos2, &b);
 
@@ -157,10 +152,10 @@ int fsort_bin(const char *file_name)
     int err_file = fget_length(file_name, &len);
     
     if (err_file)
-    {
-        printf("I/O error\n");
         return err_file;
-    }
+
+    if (len == 0)
+        return ERR_EMPTY;
 
     for (size_t i = 0; i < len; i++)
         for (size_t j = 0; j < len - i - 1; j++)
@@ -168,7 +163,6 @@ int fsort_bin(const char *file_name)
             int num1 = 0, num2 = 0;
             int err_code = get_number_by_pos(file_name, j, &num1);
             err_code = get_number_by_pos(file_name, j + 1, &num2);
-            // printf("%lu: %d, %d\n", j, num1, num2);
 
             if (num1 > num2)
                 err_code = fswap_bin(file_name, j, j + 1);
