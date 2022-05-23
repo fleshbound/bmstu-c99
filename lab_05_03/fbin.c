@@ -72,6 +72,9 @@ int fget_length(const char *file_name, size_t *const len)
         *len = size / sizeof(int);
     else
         return ERR_DATA;
+
+    if (*len == 0)
+        return ERR_EMPTY;
     
     return EXIT_SUCCESS;
 }
@@ -84,11 +87,11 @@ int fprint_bin(const char *file_name)
     if (err_code)
         return err_code;
 
-    if (len == 0)
-        return ERR_EMPTY;
-
     FILE *fb;
     fb = fopen(file_name, "rb");
+
+    if (ferror(fb))
+        return ERR_IO;
 
     for (size_t i = 0; i < len; i++)
     {
@@ -99,9 +102,6 @@ int fprint_bin(const char *file_name)
         else
             printf("%d%s", num, (i == len - 1) ? "\n" : " ");
     }
-
-    if (ferror(fb))
-        return ERR_IO;
 
     fclose(fb);
 
@@ -115,14 +115,14 @@ int get_number_by_pos(const char *file_name, const long int pos, int *const num)
     if (fb == NULL)
         return ERR_IO;
 
+    if (ferror(fb))
+        return ERR_IO;
+ 
     fseek(fb, pos * sizeof(int), SEEK_SET);
     
     if (fread(num, sizeof(int), READ_COUNT, fb) != READ_COUNT)
         return ERR_READ;
 
-    if (ferror(fb))
-        return ERR_IO;
- 
     fclose(fb);
    
     return EXIT_SUCCESS;
@@ -135,13 +135,13 @@ int put_number_by_pos(const char *file_name, const long int pos, const int *cons
     if (fb == NULL)
         return ERR_IO;
 
+    if (ferror(fb))
+        return ERR_IO;
+
     fseek(fb, pos * sizeof(int), SEEK_SET);
     
     if (!fwrite(num, sizeof(int), INPUT_COUNT, fb))
         return ERR_WRITE;
-
-    if (ferror(fb))
-        return ERR_IO;
 
     fclose(fb);
 
@@ -172,9 +172,6 @@ int fsort_bin(const char *file_name)
     if (err_file)
         return err_file;
 
-    if (len == 0)
-        return ERR_EMPTY;
-
     for (size_t i = 0; i < len; i++)
         for (size_t j = 0; j < len - i - 1; j++)
         {
@@ -182,7 +179,7 @@ int fsort_bin(const char *file_name)
             int err_code = get_number_by_pos(file_name, j, &num1);
             err_code = get_number_by_pos(file_name, j + 1, &num2);
 
-            if (num1 > num2)
+            if ((num1 > num2) && (!err_code))
                 err_code = fswap_bin(file_name, j, j + 1);
             
             if (err_code)
