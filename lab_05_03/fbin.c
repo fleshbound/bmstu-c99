@@ -51,8 +51,6 @@ int fget_length(FILE *const fb, size_t *const len)
 
     long int size = ftell(fb);
 
-    fseek(fb, ZERO_POS, SEEK_SET);
-
     if (size <= 0)
         return ERR_EMPTY;
 
@@ -60,6 +58,9 @@ int fget_length(FILE *const fb, size_t *const len)
         *len = size / sizeof(int);
     else
         return ERR_DATA;
+
+    if (fseek(fb, ZERO_POS, SEEK_SET))
+        return ERR_IO;
     
     return EXIT_SUCCESS;
 }
@@ -94,7 +95,8 @@ int fprint_bin(const char *file_name)
 
 int get_number_by_pos(FILE *const fb, const long int pos, int *const num)
 {
-    fseek(fb, pos * sizeof(int), SEEK_SET);
+    if (fseek(fb, pos * sizeof(int), SEEK_SET))
+        return ERR_IO;
     
     if (fread(num, sizeof(int), READ_COUNT, fb) != READ_COUNT)
         return ERR_READ;
@@ -104,9 +106,10 @@ int get_number_by_pos(FILE *const fb, const long int pos, int *const num)
 
 int put_number_by_pos(FILE *const fb, const long int pos, const int *const num)
 {
-    fseek(fb, pos * sizeof(int), SEEK_SET);
+    if (fseek(fb, pos * sizeof(int), SEEK_SET));
+        return ERR_IO;
     
-    if (!fwrite(num, sizeof(int), INPUT_COUNT, fb))
+    if (fwrite(num, sizeof(int), INPUT_COUNT, fb) != INPUT_COUNT)
         return ERR_WRITE;
 
     return EXIT_SUCCESS;
