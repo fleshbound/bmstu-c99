@@ -75,7 +75,7 @@ int fprint_bin(const char *file_name)
 
     int err_code = fget_length(fb, &len);
 
-    if (err_code)
+    if (err_code || (len == 0))
         return err_code;
 
     for (size_t i = 0; i < len; i++)
@@ -140,7 +140,7 @@ int fsort_bin(const char *file_name)
 
     int err_code = fget_length(fb, &len);
     
-    if (err_code)
+    if (err_code || (len == 0))
         return err_code;
 
     for (size_t i = 0; i < len; i++)
