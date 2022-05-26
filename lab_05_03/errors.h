@@ -10,6 +10,6 @@
 #define ERR_DATA 5
 #define ERR_PATH 6
 
-void show_err(const int code);
+//void show_err(const int code);
 
 #endif // #ifndef __ERRORS_H__
