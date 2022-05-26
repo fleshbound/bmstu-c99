@@ -54,14 +54,13 @@ int fget_length(FILE *const fb, size_t *const len)
 
     if (size == -1L)
         return ERR_IO;
+    else if (size <= 0)
+        return ERR_EMPTY;
 
     if (size % sizeof(int) == 0)
         *len = size / sizeof(int);
     else
         return ERR_DATA;
-
-    if (*len == 0)
-        return ERR_EMPTY;
     
     return EXIT_SUCCESS;
 }
