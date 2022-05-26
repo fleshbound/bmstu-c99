@@ -17,6 +17,7 @@ int init_rand_bin(FILE *fb)
     for (size_t i = 0; i < MAX_COUNT; i++)
     {
         int rand_int = rand() % 10;
+    
         if (!fwrite(&rand_int, sizeof(int), INPUT_COUNT, fb))
             return ERR_WRITE;
     }
@@ -75,7 +76,7 @@ int fprint_bin(const char *file_name)
 
     int err_code = fget_length(fb, &len);
 
-    if (err_code)
+    if (err_code || (len < sizeof(int)))
         return err_code;
 
     for (size_t i = 0; i < len; i++)
@@ -142,7 +143,7 @@ int fsort_bin(const char *file_name)
 
     int err_code = fget_length(fb, &len);
     
-    if (err_code)
+    if (err_code || (len < sizeof(int)))
         return err_code;
 
     for (size_t i = 0; i < len; i++)
