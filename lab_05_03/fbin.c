@@ -18,7 +18,7 @@ int init_rand_bin(FILE *fb)
     {
         int rand_int = rand() % 10;
     
-        if (!fwrite(&rand_int, sizeof(int), INPUT_COUNT, fb))
+        if (fwrite(&rand_int, sizeof(int), INPUT_COUNT, fb) != INPUT_COUNT)
             return ERR_WRITE;
     }
 
@@ -75,7 +75,7 @@ int fprint_bin(const char *file_name)
 
     int err_code = fget_length(fb, &len);
 
-    if (err_code || (len == 0))
+    if (err_code)
         return err_code;
 
     for (size_t i = 0; i < len; i++)
@@ -118,16 +118,15 @@ int put_number_by_pos(FILE *const fb, const long int pos, const int *const num)
 int fswap_bin(FILE *const fb, const size_t pos1, const size_t pos2)
 {
     int a, b;
-    int err_code = get_number_by_pos(fb, pos1, &a);
+    int err_code = EXIT_SUCCESS;
+    
+    err_code = get_number_by_pos(fb, pos1, &a);
     err_code = get_number_by_pos(fb, pos2, &b);
 
     err_code = put_number_by_pos(fb, pos1, &b);
     err_code = put_number_by_pos(fb, pos2, &a);
 
-    if (err_code)
-        return err_code;
-
-    return EXIT_SUCCESS;
+    return err_code;
 }
 
 int fsort_bin(const char *file_name)
@@ -140,7 +139,7 @@ int fsort_bin(const char *file_name)
 
     int err_code = fget_length(fb, &len);
     
-    if (err_code || (len == 0))
+    if (err_code)
         return err_code;
 
     for (size_t i = 0; i < len; i++)

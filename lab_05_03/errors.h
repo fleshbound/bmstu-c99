@@ -2,7 +2,7 @@
 
 #define __ERRORS_H__
 
-#define ERR_EMPTY -1
+#define ERR_EMPTY 7
 #define ERR_IO 1
 #define ERR_ARGS 2
 #define ERR_READ 3
