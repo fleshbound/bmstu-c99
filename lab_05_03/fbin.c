@@ -106,7 +106,7 @@ int get_number_by_pos(FILE *const fb, const long int pos, int *const num)
 
 int put_number_by_pos(FILE *const fb, const long int pos, const int *const num)
 {
-    if (fseek(fb, pos * sizeof(int), SEEK_SET));
+    if (fseek(fb, pos * sizeof(int), SEEK_SET))
         return ERR_IO;
     
     if (fwrite(num, sizeof(int), INPUT_COUNT, fb) != INPUT_COUNT)
