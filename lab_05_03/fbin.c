@@ -53,9 +53,7 @@ int fget_length(FILE *const fb, size_t *const len)
 
     fseek(fb, ZERO_POS, SEEK_SET);
 
-    if (size == -1L)
-        return ERR_IO;
-    else if (size <= 0)
+    if (size <= 0)
         return ERR_EMPTY;
 
     if (size % sizeof(int) == 0)
@@ -76,7 +74,7 @@ int fprint_bin(const char *file_name)
 
     int err_code = fget_length(fb, &len);
 
-    if (err_code || (len < sizeof(int)))
+    if (err_code)
         return err_code;
 
     for (size_t i = 0; i < len; i++)
@@ -84,11 +82,7 @@ int fprint_bin(const char *file_name)
         int num;
 
         if (fread(&num, sizeof(int), READ_COUNT, fb) != READ_COUNT)
-        {
-            // printf("%lu\n", fread(&num, sizeof(int), READ_COUNT, fb));
-            // printf("LOL>???\n");
             return ERR_READ;
-        }
         else
             printf("%d%s", num, (i == len - 1) ? "\n" : " ");
     }
@@ -143,7 +137,7 @@ int fsort_bin(const char *file_name)
 
     int err_code = fget_length(fb, &len);
     
-    if (err_code || (len < sizeof(int)))
+    if (err_code)
         return err_code;
 
     for (size_t i = 0; i < len; i++)
