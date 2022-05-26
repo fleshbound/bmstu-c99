@@ -57,7 +57,9 @@ int fget_length(const char *file_name, size_t *const len)
     if (fb == NULL)
         return ERR_IO;
 
-    fseek(fb, ZERO_POS, SEEK_END);
+    if (fseek(fb, ZERO_POS, SEEK_END))
+        return ERR_IO;
+
     long int size = ftell(fb);
 
     if (ferror(fb))
