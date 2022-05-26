@@ -158,7 +158,7 @@ int fsort_bin(const char *file_name)
 
     fclose(fb);
 
-    printf("File %s was sorted\n", file_name);
+    printf("File was sorted.\n");
 
     return EXIT_SUCCESS;
 }

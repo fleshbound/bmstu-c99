@@ -41,6 +41,7 @@ else
     ../../app.exe "${app_args[@]}" <"$file_stream_in" >"$file_stream_out_current"
     res_code=$?
     #echo "$res_code"
+    #cat $file_stream_out_current
 fi
 
 error_answer=0
