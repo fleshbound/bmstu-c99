@@ -12,8 +12,7 @@ void mycpy(char *const w1, char *const w2, const size_t len)
         
         if (w2[i] == '\n')
             buf = '\0';
-
-        w2[i] = w1[i];
+        
         w1[i] = buf;
     }
 }
@@ -57,7 +56,7 @@ int is_pair(char *const word1, char *const word2)
     return TRUE;
 }
 
-void get_pairs(char words[WORDS_COUNT][WORD_LEN], word_pair pairs[PAIRS_COUNT], size_t *const count, const size_t wc)
+void get_pairs(char words[][WORD_LEN], word_pair pairs[PAIRS_COUNT], size_t *const count, const size_t wc)
 {
     size_t sc = 0;
 
