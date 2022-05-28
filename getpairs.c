@@ -35,7 +35,7 @@ void get_words(FILE *const f, char words[WORDS_COUNT][WORD_LEN], size_t *const w
             mycpy(words[i++], buf, WORD_LEN);
     }
     
-    *wc = i - 1;
+    *wc = i;
 }
 
 int is_pair(char *const word1, char *const word2)
@@ -64,7 +64,7 @@ void get_pairs(char words[WORDS_COUNT][WORD_LEN], word_pair pairs[PAIRS_COUNT], 
     for (size_t i = 0; i < wc; i++)
         for (size_t j = i + 1; j < wc; j++)
         {
-            printf("%s, %s, %d\n", words[i], words[j], is_pair(words[i], words[j]));
+            //printf("%s, %s, %d\n", words[i], words[j], is_pair(words[i], words[j]));
 
             if (is_pair(words[i], words[j]))
             {
