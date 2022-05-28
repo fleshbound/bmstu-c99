@@ -9,6 +9,9 @@
 
 int stud_fprint(char *file_in, char *file_out, char *sub_str)
 {
+    if (strlen(sub_str) > NAME_LEN - 1)
+        return ERR_ARGS;
+
     FILE *f_in = fopen(file_in, "rt");
 
     if (f_in == NULL)

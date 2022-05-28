@@ -7,7 +7,8 @@
 #define NAME_LEN 11
 #define MARKS_COUNT 4
 
-typedef struct Stud{
+typedef struct stud
+{
     char surname[SURNAME_LEN];
     char name[NAME_LEN];
     uint32_t marks[MARKS_COUNT];

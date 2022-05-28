@@ -62,7 +62,7 @@ int put_stud_delete(FILE *const f_in, studinfo *const stud_all, const size_t stu
     
     for (size_t i = 0; i < stud_count; i++)
     {
-        printf("%f\n", get_avg(&stud_all[i]));
+        // printf("%f\n", get_avg(&stud_all[i]));
         
         if (get_avg(&stud_all[i]) >= avg)
         {
@@ -88,7 +88,7 @@ void null_strings(studinfo *const stud)
 }
 
 // Получить данные об одном студенте
-int get_stud(FILE *const f_in, studinfo *const stud, size_t *const count)
+int get_stud_pack(FILE *const f_in, studinfo *const stud, size_t *const count)
 {
     null_strings(stud);
 
@@ -111,12 +111,12 @@ int get_stud(FILE *const f_in, studinfo *const stud, size_t *const count)
     }
     // Итог: пустая строка допускается только в конце файла
 
-    stud->surname[strlen(stud->surname)-1] = '\0';
+    stud->surname[strlen(stud->surname) - 1] = '\0';
 
     if (fgets(stud->name, NAME_LEN, f_in) == NULL)
         return ERR_READ;
 
-    stud->name[strlen(stud->name)-1] = '\0';
+    stud->name[strlen(stud->name) - 1] = '\0';
 
     for (size_t i = 0; i < MARKS_COUNT; i++)
         if (fscanf(f_in, "%u", &stud->marks[i]) != READ_COUNT)
@@ -126,6 +126,43 @@ int get_stud(FILE *const f_in, studinfo *const stud, size_t *const count)
 
     return EXIT_SUCCESS;
 }
+
+// Получить данные о студенте, игнорируя пустые строки
+int get_stud(FILE *const f_in, studinfo *const stud, size_t *const count)
+{
+    null_strings(stud);
+
+    if (fgets(stud->surname, SURNAME_LEN, f_in) == NULL)
+        return ERR_READ;
+    
+    while (stud->surname[0] == '\n') 
+        if (fgets(stud->surname, SURNAME_LEN, f_in) == NULL)
+        {
+            if (feof(f_in))
+                return EXIT_SUCCESS;
+        }
+
+    stud->surname[strlen(stud->surname) - 1] = '\0';
+
+    if (fgets(stud->name, NAME_LEN, f_in) == NULL)
+        return ERR_READ;
+
+    while (stud->name[0] == '\n') 
+        if (fgets(stud->name, NAME_LEN, f_in) == NULL)
+            return ERR_READ;
+
+    stud->name[strlen(stud->name) - 1] = '\0';
+
+    for (size_t i = 0; i < MARKS_COUNT; i++)
+        if (fscanf(f_in, "%u", &stud->marks[i]) != READ_COUNT)
+            return ERR_READ;
+
+    *count = *count + 1;
+
+    return EXIT_SUCCESS;
+}
+
+
 
 // Считать данные о всех студентах
 int get_stud_all(FILE *const f_in, studinfo stud_all[INFO_COUNT], size_t *const count)
