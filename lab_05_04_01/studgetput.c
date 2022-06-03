@@ -98,9 +98,9 @@ int get_students(FILE *const f, studinfo students[INFO_COUNT], size_t *const stu
     if (!is_end)
         return ERR_DATA;
 
-    *stud_count= q;
+    *stud_count = q;
 
-    if (*stud_count== 0)
+    if (*stud_count == 0)
         return ERR_EMPTY;
 
     return EXIT_SUCCESS;
