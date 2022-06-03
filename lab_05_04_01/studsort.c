@@ -31,12 +31,23 @@ int is_first_bigger(studinfo stud1, studinfo stud2)
     return FALSE;
 }
 
-void sort_studinfo(studinfo *const stud_all, const size_t stud_count)
+void sort_studinfo(studinfo stud_all[INFO_COUNT], const size_t stud_count)
 {
     for (size_t i = 0; i < stud_count - 1; i++)
         for (size_t j = 0; j < stud_count - i - 1; j++)
             if (is_first_bigger(stud_all[j], stud_all[j + 1]))
                 swap_stud(&stud_all[j], &stud_all[j + 1]);
+}
+
+void print_studinfo(studinfo stud_all[INFO_COUNT], const size_t stud_count)
+{
+    for (size_t i = 0; i < stud_count; i++)
+    {
+        printf("%s%s", stud_all[i].surname, stud_all[i].name);
+
+        for (size_t j = 0; j < MARKS_COUNT; j++)
+            printf("%u%s", stud_all[j].marks[j], (j == MARKS_COUNT - 1) ? "\n" : " ");
+    }
 }
 
 int stud_sort(char *const file_in)
@@ -56,18 +67,7 @@ int stud_sort(char *const file_in)
     fclose(f_in);
 
     sort_studinfo(stud_all, stud_c);
-
-    FILE *f_out = fopen(file_in, "wt");
-
-    if (f_out == NULL)
-        return ERR_IO;
-
-    err_code = put_stud_all(f_out, stud_all, stud_c);
-
-    if (err_code)
-        return err_code;
-
-    fclose(f_out);
-    
+    print_studinfo(stud_all, stud_c);
+   
     return EXIT_SUCCESS;
 }
