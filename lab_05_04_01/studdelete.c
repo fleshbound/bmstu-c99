@@ -27,16 +27,26 @@ double get_avg_all(studinfo stud_all[INFO_COUNT], const size_t stud_count)
     return sum / stud_count;
 }
 
-size_t get_higher_avg(studinfo stud_all[INFO_COUNT], const size_t all_count, studinfo higher_avg[INFO_COUNT])
+int put_higher_avg(FILE *const f, studinfo stud_all[INFO_COUNT], size_t const all_count)
 {
-    size_t high_count = 0;
     double avg = get_avg_all(stud_all, all_count);
+    size_t count = 0;
 
     for (size_t i = 0; i < all_count; i++)
         if (get_avg(stud_all[i]) >= avg)
-            higher_avg[high_count++] = stud_all[i];
+        {
+            int err_code = put_stud(f, stud_all[i]);
 
-    return high_count;
+            if (err_code)
+                return err_code;
+
+            count++;
+        }
+
+    if (count == 0)
+        return ERR_EMPTY;
+
+    return EXIT_SUCCESS;
 }
 
 int stud_delete(char *file_in)
@@ -55,18 +65,12 @@ int stud_delete(char *file_in)
 
     fclose(f_in);
 
-    studinfo higher_avg[INFO_COUNT];
-    size_t high_count = get_higher_avg(stud_all, stud_count, higher_avg);
-
-    if (high_count == 0)
-        return ERR_EMPTY;
-
     FILE *f_out = fopen(file_in, "wt");
 
     if (f_out == NULL)
         return ERR_IO;
 
-    err_code = put_stud_all(f_out, higher_avg, high_count);
+    err_code = put_higher_avg(f_out, stud_all, stud_count);
 
     if (err_code)
         return err_code;

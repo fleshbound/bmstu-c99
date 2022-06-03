@@ -7,15 +7,25 @@
 #include "studfprint.h"
 #include "studgetput.h"
 
-size_t get_matches(studinfo stud_all[INFO_COUNT], const size_t all_count, studinfo matches[INFO_COUNT], char *const substr)
+int put_matches(FILE *const f, studinfo stud_all[INFO_COUNT], const size_t all_count, char *const substr)
 {
-    size_t match_count = 0;
+    size_t count = 0;
 
     for (size_t i = 0; i < all_count; i++)
         if (strstr(stud_all[i].surname, substr) == stud_all[i].surname)
-            matches[match_count++] = stud_all[i];
+        {
+            int err_code = put_stud(f, stud_all[i]);
 
-    return match_count;
+            if (err_code)
+                return err_code;
+
+            count++;
+        }
+
+    if (count == 0)
+        return ERR_EMPTY;
+
+    return EXIT_SUCCESS;
 }
 
 int stud_fprint(char *const file_in, char *const file_out, char *const sub_str)
@@ -37,18 +47,12 @@ int stud_fprint(char *const file_in, char *const file_out, char *const sub_str)
 
     fclose(f_in);
 
-    studinfo matches[INFO_COUNT];
-    size_t match_count = get_matches(stud_all, stud_count, matches, sub_str);
-
-    if (match_count == 0)
-        return ERR_EMPTY;
-
     FILE *f_out = fopen(file_out, "wt");
 
     if (f_out == NULL)
         return ERR_IO;
 
-    err_code = put_stud_all(f_out, matches, match_count);
+    err_code = put_matches(f_out, stud_all, stud_count, sub_str);
 
     if (err_code)
         return err_code;

@@ -27,11 +27,11 @@ int put_stud(FILE *const f, studinfo stud)
 }
 
 // Записать данные всех студентов списка
-int put_stud_all(FILE *const f, studinfo *const stud_all, const size_t stud_count)
+int put_stud_all(FILE *const f, studinfo *const stud_all, const size_t stud_size)
 {
     rewind(f);
 
-    for (size_t i = 0; i < stud_count; i++)
+    for (size_t i = 0; i < stud_size; i++)
     {
         int err_code = put_stud(f, stud_all[i]);
 
@@ -53,7 +53,7 @@ void null_strings(studinfo *const stud)
 }
 
 // Считать данные о всех студентах
-int get_stud_all(FILE *const f, studinfo stud_all[INFO_COUNT], size_t *const count)
+int get_stud_all(FILE *const f, studinfo stud_all[INFO_COUNT], size_t *const size)
 {
     int is_end = FALSE;
     size_t q = 0;
@@ -98,9 +98,9 @@ int get_stud_all(FILE *const f, studinfo stud_all[INFO_COUNT], size_t *const cou
     if (!is_end)
         return ERR_DATA;
 
-    *count = q;
+    *size = q;
 
-    if (*count == 0)
+    if (*size == 0)
         return ERR_EMPTY;
 
     return EXIT_SUCCESS;

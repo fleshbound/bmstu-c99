@@ -23,8 +23,6 @@ int get_stud_all(FILE *const f, studinfo stud_all[INFO_COUNT], size_t *const cou
 
 int put_stud_all(FILE *const f, studinfo *const stud_all, const size_t stud_count);
 
-int put_stud_fprint(FILE *const f, studinfo *const stud_all, const size_t stud_count, char *const substr);
-
-int put_stud_delete(FILE *const f, studinfo stud_all[INFO_COUNT], const size_t stud_count);
+int put_stud(FILE *const f, studinfo stud);
 
 #endif // #ifndef __STUDGETPUT_H__

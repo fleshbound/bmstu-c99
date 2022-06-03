@@ -39,7 +39,7 @@ void sort_studinfo(studinfo *const stud_all, const size_t stud_count)
                 swap_stud(&stud_all[j], &stud_all[j + 1]);
 }
 
-int stud_sort(char *file_in)
+int stud_sort(char *const file_in)
 {
     FILE *f_in = fopen(file_in, "rt");
 
@@ -58,6 +58,9 @@ int stud_sort(char *file_in)
     sort_studinfo(stud_all, stud_c);
 
     FILE *f_out = fopen(file_in, "wt");
+
+    if (f_out == NULL)
+        return ERR_IO;
 
     err_code = put_stud_all(f_out, stud_all, stud_c);
 
