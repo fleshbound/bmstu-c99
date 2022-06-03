@@ -1,11 +1,7 @@
 *.exe
-*.c.gcov
-*.gcda
-*.gcno
 *.swp
-*.out
-*.o
-*.pch
-*.gch
-
 *.swo
+*.o
+*.gcno
+*.gcda
+
