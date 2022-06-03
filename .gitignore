@@ -1,7 +1,7 @@
 *.exe
-*.out
-*.o
-*.pch
-*.gch
 *.swp
+*.swo
+*.o
+*.gcno
+*.gcda
 
