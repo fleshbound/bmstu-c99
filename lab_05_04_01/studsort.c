@@ -46,7 +46,7 @@ void print_studinfo(studinfo stud_all[INFO_COUNT], const size_t stud_count)
         printf("%s%s", stud_all[i].surname, stud_all[i].name);
 
         for (size_t j = 0; j < MARKS_COUNT; j++)
-            printf("%u%s", stud_all[j].marks[j], (j == MARKS_COUNT - 1) ? "\n" : " ");
+            printf("%u%s", stud_all[i].marks[j], (j == MARKS_COUNT - 1) ? "\n" : " ");
     }
 }
 
