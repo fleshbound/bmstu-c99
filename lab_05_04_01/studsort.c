@@ -17,15 +17,15 @@ void swap_stud(studinfo *const stud1, studinfo *const stud2)
     *stud2 = buf;
 }
 
-int is_first_bigger(studinfo *const stud1, studinfo *const stud2)
+int is_first_bigger(studinfo stud1, studinfo stud2)
 {
-    if (strcmp(stud1->surname, stud2->surname) > 0)
+    if (strcmp(stud1.surname, stud2.surname) > 0)
         return TRUE;
 
-    if (strcmp(stud1->surname, stud2->surname) < 0)
+    if (strcmp(stud1.surname, stud2.surname) < 0)
         return FALSE;
 
-    if (strcmp(stud1->name, stud2->name) > 0)
+    if ((strcmp(stud1.name, stud2.name) >= 0) && (strcmp(stud1.surname, stud2.surname) == 0))
         return TRUE;
 
     return FALSE;
@@ -35,7 +35,7 @@ void sort_studinfo(studinfo *const stud_all, const size_t stud_count)
 {
     for (size_t i = 0; i < stud_count - 1; i++)
         for (size_t j = 0; j < stud_count - i - 1; j++)
-            if (is_first_bigger(&stud_all[j], &stud_all[j + 1]))
+            if (is_first_bigger(stud_all[j], stud_all[j + 1]))
                 swap_stud(&stud_all[j], &stud_all[j + 1]);
 }
 
