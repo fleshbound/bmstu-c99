@@ -20,7 +20,7 @@ int put_stud(FILE *const f, studinfo stud)
         return ERR_WRITE;
 
     for (size_t i = 0; i < MARKS_COUNT; i++)
-        if (fprintf(f, "%u\n", stud.marks[i]) < 0)
+        if (fprintf(f, "%u%s", stud.marks[i], (i == MARKS_COUNT - 1) ? "\n" : " ") < 0)
             return ERR_WRITE;
 
     return EXIT_SUCCESS;
@@ -38,71 +38,6 @@ int put_stud_all(FILE *const f, studinfo *const stud_all, const size_t stud_coun
         if (err_code)
             return err_code;
     }
-
-    return EXIT_SUCCESS;
-}
-
-// Получить средний балл студента
-double get_avg(studinfo stud)
-{
-    double sum = 0.;
-    
-    for (size_t i = 0; i < MARKS_COUNT; i++)
-        sum += stud.marks[i];
-    
-    return sum / MARKS_COUNT;
-}
-
-double get_avg_all(studinfo stud_all[INFO_COUNT], const size_t stud_count)
-{
-    double sum = 0.;
-
-    for (size_t i = 0; i < stud_count; i++)
-        sum += get_avg(stud_all[i]);
-
-    return sum / stud_count;
-}
-
-// Записать данные студентов, чей средний балл выше, чем средний балл файла
-int put_stud_delete(FILE *const f, studinfo stud_all[INFO_COUNT], const size_t stud_count)
-{
-    if (f == NULL)
-        return ERR_IO;
-
-    rewind(f);
-    
-    double avg = get_avg_all(stud_all, stud_count);
-    
-    for (size_t i = 0; i < stud_count; i++)
-    {
-        if (get_avg(stud_all[i]) >= avg)
-        {
-            int err_code = put_stud(f, stud_all[i]);
-
-            if (err_code)
-                return err_code;
-        }
-    }
-
-    return EXIT_SUCCESS;
-}
-
-// Записать данные, начинающиеся с substr
-int put_stud_fprint(FILE *const f, studinfo *const stud_all, const size_t stud_count, char *const substr)
-{
-    if (f == NULL)
-        return ERR_IO;
-
-    rewind(f);
-
-    for (size_t i = 0; i < stud_count; i++)
-         if (strstr(stud_all[i].surname, substr) == stud_all[i].surname)
-         {
-            int err_code = put_stud(f, stud_all[i]);
-            
-            if (err_code)
-                return err_code;
-         }
 
     return EXIT_SUCCESS;
 }

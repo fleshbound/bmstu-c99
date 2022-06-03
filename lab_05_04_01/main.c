@@ -33,7 +33,5 @@ int main(int argc, char *argv[])
     if (key_code == DEL_CODE)
         err_code = stud_delete(argv[2]);
 
-    //show_err(err_code);
-
     return err_code;
 }

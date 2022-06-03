@@ -47,7 +47,6 @@ int stud_sort(char *file_in)
         return ERR_IO;
 
     studinfo stud_all[INFO_COUNT];
-
     size_t stud_c = 0;
     int err_code = get_stud_all(f_in, stud_all, &stud_c);
 
@@ -59,9 +58,6 @@ int stud_sort(char *file_in)
     sort_studinfo(stud_all, stud_c);
 
     FILE *f_out = fopen(file_in, "wt");
-
-    if (f_out == NULL)
-        return ERR_IO;
 
     err_code = put_stud_all(f_out, stud_all, stud_c);
 
