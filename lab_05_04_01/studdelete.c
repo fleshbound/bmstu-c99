@@ -17,25 +17,25 @@ double get_avg(studinfo stud)
     return sum / MARKS_COUNT;
 }
 
-double get_avg_all(studinfo stud_all[INFO_COUNT], const size_t stud_count)
+double get_avg_all(studinfo students[INFO_COUNT], const size_t stud_count)
 {
     double sum = 0.;
 
     for (size_t i = 0; i < stud_count; i++)
-        sum += get_avg(stud_all[i]);
+        sum += get_avg(students[i]);
 
     return sum / stud_count;
 }
 
-int put_higher_avg(FILE *const f, studinfo stud_all[INFO_COUNT], size_t const all_count)
+int put_higher_avg(FILE *const f, studinfo students[INFO_COUNT], size_t const stud_count)
 {
-    double avg = get_avg_all(stud_all, all_count);
+    double avg = get_avg_all(students, stud_count);
     size_t count = 0;
 
-    for (size_t i = 0; i < all_count; i++)
-        if (get_avg(stud_all[i]) >= avg)
+    for (size_t i = 0; i < stud_count; i++)
+        if (get_avg(students[i]) >= avg)
         {
-            int err_code = put_stud(f, stud_all[i]);
+            int err_code = put_stud(f, students[i]);
 
             if (err_code)
                 return err_code;
@@ -56,9 +56,9 @@ int stud_delete(char *file_in)
     if (f_in == NULL)
         return ERR_IO;
 
-    studinfo stud_all[INFO_COUNT];
+    studinfo students[INFO_COUNT];
     size_t stud_count = 0;
-    int err_code = get_stud_all(f_in, stud_all, &stud_count);
+    int err_code = get_students(f_in, students, &stud_count);
 
     if (err_code)
         return err_code;
@@ -70,7 +70,7 @@ int stud_delete(char *file_in)
     if (f_out == NULL)
         return ERR_IO;
 
-    err_code = put_higher_avg(f_out, stud_all, stud_count);
+    err_code = put_higher_avg(f_out, students, stud_count);
 
     if (err_code)
         return err_code;

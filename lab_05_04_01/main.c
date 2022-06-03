@@ -5,7 +5,7 @@
 #include "errors.h"
 #include "argch.h"
 #include "studsort.h"
-#include "studfprint.h"
+#include "studmatch.h"
 #include "studdelete.h"
 
 int main(int argc, char *argv[])
@@ -27,8 +27,8 @@ int main(int argc, char *argv[])
         err_code = stud_sort(argv[2]);
 
     // filein fileout substr
-    if (key_code == FORM_CODE)
-        err_code = stud_fprint(argv[2], argv[3], argv[4]);
+    if (key_code == MATCH_CODE)
+        err_code = show_stud_matches(argv[2], argv[3], argv[4]);
 
     if (key_code == DEL_CODE)
         err_code = stud_delete(argv[2]);

@@ -4,11 +4,7 @@
 #include <string.h>
 
 #include "errors.h"
-#include "studsort.h"
 #include "studgetput.h"
-#include "studdelete.h"
-
-#define READ_COUNT 1
 
 // Записать данные студента
 int put_stud(FILE *const f, studinfo stud)
@@ -27,13 +23,13 @@ int put_stud(FILE *const f, studinfo stud)
 }
 
 // Записать данные всех студентов списка
-int put_stud_all(FILE *const f, studinfo *const stud_all, const size_t stud_size)
+int put_students(FILE *const f, studinfo *const students, const size_t stud_count)
 {
     rewind(f);
 
-    for (size_t i = 0; i < stud_size; i++)
+    for (size_t i = 0; i < stud_count; i++)
     {
-        int err_code = put_stud(f, stud_all[i]);
+        int err_code = put_stud(f, students[i]);
 
         if (err_code)
             return err_code;
@@ -53,42 +49,46 @@ void null_strings(studinfo *const stud)
 }
 
 // Считать данные о всех студентах
-int get_stud_all(FILE *const f, studinfo stud_all[INFO_COUNT], size_t *const size)
+// Пока считываются пустые строчки, считывать фамилию и имя
+// Если не получилось, конец файла или ошибка
+// Если получилось и не конец файла, читаем следующее
+// Если закончили читать и не конец файла, ошибка...
+int get_students(FILE *const f, studinfo students[INFO_COUNT], size_t *const stud_count)
 {
     int is_end = FALSE;
     size_t q = 0;
     
     while (!is_end)
     {
-        //printf("sur %lu: %s\n", q, stud_all[q].surname);
-        null_strings(&stud_all[q]);
+        null_strings(&students[q]);
 
-        if ((!is_end) && (fgets(stud_all[q].surname, SURNAME_LEN, f) == NULL))
+        // Фамилия
+        if ((!is_end) && (fgets(students[q].surname, SURNAME_LEN, f) == NULL))
             return ERR_DATA;
 
-        while ((!is_end) && (stud_all[q].surname[0] == '\n'))
+        while ((!is_end) && (students[q].surname[0] == '\n'))
         {
-            if ((fgets(stud_all[q].surname, SURNAME_LEN, f) == NULL) && (!feof(f)))
+            if ((fgets(students[q].surname, SURNAME_LEN, f) == NULL) && (!feof(f)))
                 return ERR_DATA;
             else if (feof(f))
                 is_end = TRUE;
         }
 
-        if ((!is_end) && (fgets(stud_all[q].name, NAME_LEN, f) == NULL))
+        // Имя
+        if ((!is_end) && (fgets(students[q].name, NAME_LEN, f) == NULL))
             return ERR_DATA;
 
-        while ((!is_end) && (stud_all[q].name[0] == '\n'))
+        while ((!is_end) && (students[q].name[0] == '\n'))
         {
-            if ((fgets(stud_all[q].name, NAME_LEN, f) == NULL) && (!feof(f)))
+            if ((fgets(students[q].name, NAME_LEN, f) == NULL) && (!feof(f)))
                 return ERR_DATA;
             else if (feof(f))
                 is_end = TRUE;
         }
 
-        //printf("name %lu: %s\n", q, stud_all[q].name);
-
+        // Оценки
         for (size_t i = 0; (!is_end) && (i < MARKS_COUNT); i++)
-            if (fscanf(f, "%u", &stud_all[q].marks[i]) < 0)
+            if (fscanf(f, "%u", &students[q].marks[i]) < 0)
                 return ERR_DATA; 
 
         if (!is_end)
@@ -98,9 +98,9 @@ int get_stud_all(FILE *const f, studinfo stud_all[INFO_COUNT], size_t *const siz
     if (!is_end)
         return ERR_DATA;
 
-    *size = q;
+    *stud_count= q;
 
-    if (*size == 0)
+    if (*stud_count== 0)
         return ERR_EMPTY;
 
     return EXIT_SUCCESS;
