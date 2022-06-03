@@ -41,27 +41,34 @@ void sort_studinfo(studinfo *const stud_all, const size_t stud_count)
 
 int stud_sort(char *file_in)
 {
-    FILE *f = fopen(file_in, "rt+");
+    FILE *f_in = fopen(file_in, "rt");
 
-    if (f == NULL)
+    if (f_in == NULL)
         return ERR_IO;
 
     studinfo stud_all[INFO_COUNT];
 
     size_t stud_c = 0;
-    int err_code = get_stud_all(f, stud_all, &stud_c);
+    int err_code = get_stud_all(f_in, stud_all, &stud_c);
 
     if (err_code)
         return err_code;
+
+    fclose(f_in);
 
     sort_studinfo(stud_all, stud_c);
 
-    err_code = put_stud_all(f, stud_all, stud_c);
+    FILE *f_out = fopen(file_in, "wt");
+
+    if (f_out == NULL)
+        return ERR_IO;
+
+    err_code = put_stud_all(f_out, stud_all, stud_c);
 
     if (err_code)
         return err_code;
 
-    fclose(f);
+    fclose(f_out);
     
     return EXIT_SUCCESS;
 }

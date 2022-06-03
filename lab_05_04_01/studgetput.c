@@ -11,29 +11,29 @@
 #define READ_COUNT 1
 
 // Записать данные студента
-int put_stud(FILE *const f_in, studinfo *const stud)
+int put_stud(FILE *const f, studinfo stud)
 {
-    if (fprintf(f_in, "%s\n", stud->surname) < 0)
+    if (fprintf(f, "%s", stud.surname) < 0)
         return ERR_WRITE;
 
-    if (fprintf(f_in, "%s\n", stud->name) < 0)
+    if (fprintf(f, "%s", stud.name) < 0)
         return ERR_WRITE;
 
     for (size_t i = 0; i < MARKS_COUNT; i++)
-        if (fprintf(f_in, "%u%s", stud->marks[i], (i == MARKS_COUNT - 1) ? "\n" : " ") < 0)
+        if (fprintf(f, "%u\n", stud.marks[i]) < 0)
             return ERR_WRITE;
 
     return EXIT_SUCCESS;
 }
 
 // Записать данные всех студентов списка
-int put_stud_all(FILE *const f_in, studinfo *const stud_all, const size_t stud_count)
+int put_stud_all(FILE *const f, studinfo *const stud_all, const size_t stud_count)
 {
-    rewind(f_in);
+    rewind(f);
 
     for (size_t i = 0; i < stud_count; i++)
     {
-        int err_code = put_stud(f_in, &stud_all[i]);
+        int err_code = put_stud(f, stud_all[i]);
 
         if (err_code)
             return err_code;
@@ -43,36 +43,75 @@ int put_stud_all(FILE *const f_in, studinfo *const stud_all, const size_t stud_c
 }
 
 // Получить средний балл студента
-double get_avg(studinfo *const stud)
+double get_avg(studinfo stud)
 {
     double sum = 0.;
     
     for (size_t i = 0; i < MARKS_COUNT; i++)
-        sum += stud->marks[i];
+        sum += stud.marks[i];
     
     return sum / MARKS_COUNT;
 }
 
-// Записать данные студентов, чей средний балл выше, чем средний балл файла
-int put_stud_delete(FILE *const f_in, studinfo *const stud_all, const size_t stud_count, const double avg)
+double get_avg_all(studinfo stud_all[INFO_COUNT], const size_t stud_count)
 {
-    rewind(f_in);
+    double sum = 0.;
 
-    printf("%f\n", avg);
+    for (size_t i = 0; i < stud_count; i++)
+        sum += get_avg(stud_all[i]);
+
+    return sum / stud_count;
+}
+
+// Записать данные студентов, чей средний балл выше, чем средний балл файла
+int put_stud_delete(FILE *const f, studinfo stud_all[INFO_COUNT], const size_t stud_count)
+{
+    if (f == NULL)
+        return ERR_IO;
+
+    rewind(f);
+    
+    double avg = get_avg_all(stud_all, stud_count);
     
     for (size_t i = 0; i < stud_count; i++)
     {
+<<<<<<< HEAD
+        //printf("(%lu) avg: %f, curr avg: %f", i, avg, get_avg(stud_all[i]));
+
+        if (get_avg(stud_all[i]) >= avg)
+=======
         // printf("%f\n", get_avg(&stud_all[i]));
         
         if (get_avg(&stud_all[i]) >= avg)
+>>>>>>> 9a8149f9a740b2a6d4c514c60eab0118f95306cb
         {
             
-            int err_code = put_stud(f_in, &stud_all[i]);
+            int err_code = put_stud(f, stud_all[i]);
 
             if (err_code)
                 return err_code;
         }
     }
+
+    return EXIT_SUCCESS;
+}
+
+// Записать данные, начинающиеся с substr
+int put_stud_fprint(FILE *const f, studinfo *const stud_all, const size_t stud_count, char *const substr)
+{
+    if (f == NULL)
+        return ERR_IO;
+
+    rewind(f);
+
+    for (size_t i = 0; i < stud_count; i++)
+         if (strstr(stud_all[i].surname, substr) == stud_all[i].surname)
+         {
+            int err_code = put_stud(f, stud_all[i]);
+            
+            if (err_code)
+                return err_code;
+         }
 
     return EXIT_SUCCESS;
 }
@@ -87,24 +126,35 @@ void null_strings(studinfo *const stud)
         stud->name[i] = '\0';
 }
 
+<<<<<<< HEAD
+// Считать данные о всех студентах
+int get_stud_all(FILE *const f, studinfo stud_all[INFO_COUNT], size_t *const count)
+=======
 // Получить данные об одном студенте
 int get_stud_pack(FILE *const f_in, studinfo *const stud, size_t *const count)
+>>>>>>> 9a8149f9a740b2a6d4c514c60eab0118f95306cb
 {
-    null_strings(stud);
+    if (f == NULL)
+       return ERR_IO;
 
-    if (fgets(stud->surname, SURNAME_LEN, f_in) == NULL)
-        return ERR_READ;
+    rewind(f);
+    int readc, is_end = FALSE;
+    size_t q = 0;
+    null_strings(&stud_all[q]);
     
-    // Если мы считали переход на новую строку
-    // после строки с оценками
-    if (stud->surname[0] == '\n') 
+    while ((!is_end) && (fgets(stud_all[q].surname, SURNAME_LEN, f) != NULL))
     {
-        // Если мы не смогли считать строку и это конец файла
-        if (fgets(stud->surname, SURNAME_LEN, f_in) == NULL)
+        //printf("sur %lu: %s\n", q, stud_all[q].surname);
+
+        while ((!is_end) && (stud_all[q].surname[0] == '\n'))
         {
-            if (feof(f_in))
-                return EXIT_SUCCESS;
+            if ((fgets(stud_all[q].surname, SURNAME_LEN, f) == NULL) && (!feof(f)))
+                return ERR_DATA;
+            else if (feof(f))
+                is_end = TRUE;
         }
+<<<<<<< HEAD
+=======
         // Если мы смогли считать строку и это пустая строка
         else if (stud->surname[0] == '\n')
             return ERR_READ;
@@ -143,22 +193,37 @@ int get_stud(FILE *const f_in, studinfo *const stud, size_t *const count)
         }
 
     stud->surname[strlen(stud->surname) - 1] = '\0';
+>>>>>>> 9a8149f9a740b2a6d4c514c60eab0118f95306cb
 
-    if (fgets(stud->name, NAME_LEN, f_in) == NULL)
-        return ERR_READ;
+        //printf("sur %lu: %s\n", q, stud_all[q].surname);
 
+<<<<<<< HEAD
+        if ((!is_end) && (fgets(stud_all[q].name, NAME_LEN, f) == NULL))
+            return ERR_DATA;
+=======
     while (stud->name[0] == '\n') 
         if (fgets(stud->name, NAME_LEN, f_in) == NULL)
             return ERR_READ;
 
     stud->name[strlen(stud->name) - 1] = '\0';
+>>>>>>> 9a8149f9a740b2a6d4c514c60eab0118f95306cb
 
-    for (size_t i = 0; i < MARKS_COUNT; i++)
-        if (fscanf(f_in, "%u", &stud->marks[i]) != READ_COUNT)
-            return ERR_READ;
+        while ((!is_end) && (stud_all[q].name[0] == '\n'))
+        {
+            if ((fgets(stud_all[q].name, NAME_LEN, f) == NULL) && (!feof(f)))
+                return ERR_DATA;
+            else if (feof(f))
+                is_end = TRUE;
+        }
 
-    *count = *count + 1;
+        //printf("name %lu: %s\n", q, stud_all[q].name);
 
+<<<<<<< HEAD
+        for (size_t i = 0; (!is_end) && (i < MARKS_COUNT); i++)
+        {
+            readc = fscanf(f, "%u", &stud_all[q].marks[i]);
+            //printf("mark %lu [%lu]: %u\n", q, i, stud_all[q].marks[i]);
+=======
     return EXIT_SUCCESS;
 }
 
@@ -171,72 +236,24 @@ int get_stud_all(FILE *const f_in, studinfo stud_all[INFO_COUNT], size_t *const 
 
     int err_code = EXIT_SUCCESS;
     size_t i = 0;
+>>>>>>> 9a8149f9a740b2a6d4c514c60eab0118f95306cb
 
-    while (!feof(f_in))
-    {
-        err_code = get_stud(f_in, &stud_all[i], &i);
+            if (readc != READ_COUNT)
+                return ERR_DATA;
+        }
 
-        if (err_code)
-            return err_code;
+        if (!is_end)
+            q++;
     }
 
-    *count = i;
+    if (!is_end)
+        return ERR_DATA;
 
-    return err_code;
+    *count = q;
+
+    if (*count == 0)
+        return ERR_EMPTY;
+
+    return EXIT_SUCCESS;
 }
 
-// Считать данные о студентах, чьи фамилии начинаются с substr
-int get_stud_fprint(FILE *const f_in, studinfo stud_all[INFO_COUNT], size_t *const count, char *const substr)
-{
-    rewind(f_in);
-
-    int err_code = EXIT_SUCCESS;
-    size_t i = 0;
-
-    while (!feof(f_in))
-    {
-        studinfo buf;
-        err_code = get_stud(f_in, &buf, &i);
-        
-        if (buf.surname == strstr(buf.surname, substr))
-            stud_all[i - 1] = buf;
-        else if (!feof(f_in))
-            i--;
-        
-        if (err_code)
-            return err_code;
-    }
-
-    *count = i;
-
-    return err_code;
-}
-
-// Считать данные о студентах с расчетом среднего
-int get_stud_delete(FILE *const f_in, studinfo stud_all[INFO_COUNT], size_t *const count, double *const avg)
-{
-    rewind(f_in);
-
-    int err_code = EXIT_SUCCESS;
-    size_t i = 0;
-    double curr_sum = 0.;
-
-    while (!feof(f_in))
-    {
-        err_code = get_stud(f_in, &stud_all[i], &i);
-
-        if ((!feof(f_in)) && (!err_code))
-            for (size_t j = 0; j < MARKS_COUNT; j++)
-                curr_sum += stud_all[i - 1].marks[j];
-
-        if (err_code)
-            return err_code;
-    }
-
-    *count = i;
-    
-    if (i != 0)
-        *avg = curr_sum / (i * MARKS_COUNT);
-
-    return err_code;
-}

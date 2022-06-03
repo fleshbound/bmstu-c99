@@ -7,6 +7,14 @@
 #define NAME_LEN 11
 #define MARKS_COUNT 4
 
+<<<<<<< HEAD
+#ifndef __TRUEFALSE__
+#define TRUE 1
+#define FALSE 0
+#endif
+
+=======
+>>>>>>> 9a8149f9a740b2a6d4c514c60eab0118f95306cb
 typedef struct stud
 {
     char surname[SURNAME_LEN];
@@ -14,14 +22,12 @@ typedef struct stud
     uint32_t marks[MARKS_COUNT];
 } studinfo;
 
-int put_stud_all(FILE *const f_in, studinfo *const stud_all, const size_t stud_count);
+int get_stud_all(FILE *const f, studinfo stud_all[INFO_COUNT], size_t *const count);
 
-int get_stud_all(FILE *const f_in, studinfo stud_all[INFO_COUNT], size_t *const count);
+int put_stud_all(FILE *const f, studinfo *const stud_all, const size_t stud_count);
 
-int get_stud_fprint(FILE *const f_in, studinfo stud_all[INFO_COUNT], size_t *const count, char *const substr);
+int put_stud_fprint(FILE *const f, studinfo *const stud_all, const size_t stud_count, char *const substr);
 
-int put_stud_delete(FILE *const f_in, studinfo *const stud_all, const size_t stud_count, const double avg);
-
-int get_stud_delete(FILE *const f_in, studinfo stud_all[INFO_COUNT], size_t *const count, double *const avg);
+int put_stud_delete(FILE *const f, studinfo stud_all[INFO_COUNT], const size_t stud_count);
 
 #endif // #ifndef __STUDGETPUT_H__
