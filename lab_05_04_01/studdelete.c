@@ -15,11 +15,7 @@ int stud_delete(char *file_in)
 
     size_t stud_count = 0;
     studinfo stud_all[INFO_COUNT];
-<<<<<<< HEAD
     int err_code = get_stud_all(f_in, stud_all, &stud_count);
-=======
-    int err_code = get_stud_delete(f_in, stud_all, &stud_count, &average);
->>>>>>> 9a8149f9a740b2a6d4c514c60eab0118f95306cb
 
     if (err_code)
         return err_code;

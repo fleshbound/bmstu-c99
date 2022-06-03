@@ -7,14 +7,11 @@
 #define NAME_LEN 11
 #define MARKS_COUNT 4
 
-<<<<<<< HEAD
 #ifndef __TRUEFALSE__
 #define TRUE 1
 #define FALSE 0
 #endif
 
-=======
->>>>>>> 9a8149f9a740b2a6d4c514c60eab0118f95306cb
 typedef struct stud
 {
     char surname[SURNAME_LEN];
