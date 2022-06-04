@@ -22,6 +22,7 @@ int main(void)
     int err_proc = process(f, &res_max_1, &res_max_2);
 
     fclose(f);
+    
     if (err_proc)
         return err_proc;
 

@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     if (key_code == SORT_CODE)
         err_code = stud_sort(argv[2]);
 
-    // filein fileout substr
+    // Входной файл, выходной файл, подстрока
     if (key_code == MATCH_CODE)
         err_code = show_stud_matches(argv[2], argv[3], argv[4]);
 
