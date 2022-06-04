@@ -2,6 +2,6 @@
 
 #define __STUDMATCH_H__
 
-int show_stud_matches(char *file_in, char *file_out, char *sub_str);
+int show_stud_matches(char *const file_in, char *const file_out, char *const sub_str);
 
 #endif // #ifndef __STUDFPRINT_H__
