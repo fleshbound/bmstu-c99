@@ -48,6 +48,22 @@ void null_strings(studinfo *const stud)
         stud->name[i] = '\0';
 }
 
+int get_studstr(FILE *const f, int *const is_end, char *str, const size_t max_len)
+{
+    if ((!*is_end) && (fgets(str, max_len, f) == NULL))
+        return ERR_DATA;
+
+    while ((!*is_end) && (str[0] == '\n'))
+    {
+        if ((fgets(str, max_len, f) == NULL) && (!feof(f)))
+            return ERR_DATA;
+        else if (feof(f))
+            *is_end = TRUE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
 // Считать данные о всех студентах
 // Пока считываются пустые строчки, считывать фамилию и имя
 // Если не получилось, конец файла или ошибка
@@ -62,29 +78,15 @@ int get_students(FILE *const f, studinfo students[INFO_COUNT], size_t *const stu
     {
         null_strings(&students[q]);
 
-        // Фамилия
-        if ((!is_end) && (fgets(students[q].surname, SURNAME_LEN, f) == NULL))
-            return ERR_DATA;
+        int err_code = get_studstr(f, &is_end, students[q].surname, SURNAME_LEN);
 
-        while ((!is_end) && (students[q].surname[0] == '\n'))
-        {
-            if ((fgets(students[q].surname, SURNAME_LEN, f) == NULL) && (!feof(f)))
-                return ERR_DATA;
-            else if (feof(f))
-                is_end = TRUE;
-        }
+        if (err_code)
+            return err_code;
 
-        // Имя
-        if ((!is_end) && (fgets(students[q].name, NAME_LEN, f) == NULL))
-            return ERR_DATA;
+        err_code = get_studstr(f, &is_end, students[q].name, NAME_LEN);
 
-        while ((!is_end) && (students[q].name[0] == '\n'))
-        {
-            if ((fgets(students[q].name, NAME_LEN, f) == NULL) && (!feof(f)))
-                return ERR_DATA;
-            else if (feof(f))
-                is_end = TRUE;
-        }
+        if (err_code)
+            return err_code;
 
         // Оценки
         for (size_t i = 0; (!is_end) && (i < MARKS_COUNT); i++)
