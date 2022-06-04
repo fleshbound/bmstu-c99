@@ -10,7 +10,7 @@
 #define READ_COUNT 1
 #define ZERO_POS 0
 
-int init_rand_bin(FILE *fb)
+int init_rand_bin(FILE *const fb)
 {
     srand(time(NULL));
 
@@ -25,7 +25,7 @@ int init_rand_bin(FILE *fb)
     return EXIT_SUCCESS;
 }
 
-int fmake_bin(const char *file_name)
+int fmake_bin(const char *const file_name)
 {
     FILE *fb = fopen(file_name, "wb");
 
@@ -65,7 +65,7 @@ int fget_length(FILE *const fb, size_t *const len)
     return EXIT_SUCCESS;
 }
 
-int fprint_bin(const char *file_name)
+int fprint_bin(const char *const file_name)
 {
     size_t len = 0;
     FILE *fb = fopen(file_name, "rb");
@@ -129,7 +129,7 @@ int fswap_bin(FILE *const fb, const size_t pos1, const size_t pos2)
     return err_code;
 }
 
-int fsort_bin(const char *file_name)
+int fsort_bin(const char *const file_name)
 {
     size_t len = 0;
     FILE *fb = fopen(file_name, "rb+");

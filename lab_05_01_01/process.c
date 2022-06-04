@@ -11,7 +11,7 @@ void swap_int(int *const a, int *const b)
 }
 
 // Поиск первого и второго максимумов в файле
-int process(FILE *f, int *const res_1, int *const res_2)
+int process(FILE *const f, int *const res_1, int *const res_2)
 {
     rewind(f);
 

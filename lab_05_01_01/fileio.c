@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "fileio.h"
 
-void finput_int(FILE *f)
+void finput_int(FILE *const f)
 {
     rewind(f);
 

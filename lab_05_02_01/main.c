@@ -28,8 +28,11 @@ int main(int argc, char *argv[])
         return err_code;
 
     double avg = (max + min) / 2;
+
     rewind(f);
+    
     size_t count = fget_bigger_count(f, avg);
+    
     fclose(f);
 
     print_result(count);
