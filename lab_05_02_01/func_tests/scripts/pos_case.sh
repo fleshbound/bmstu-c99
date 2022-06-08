@@ -34,13 +34,16 @@ if [ "$FLAG_VAL" = "1" ]; then
         res_code=$?
     } > $file_stream_out_current
 
+    # cat $file_stream_out_current
+
     if [ -s "log.txt" ]; then
         error_memory=1
     fi
 else
     ../../app.exe "${app_args[@]}" <"$file_stream_in" >"$file_stream_out_current"
     res_code=$?
-    #echo "$res_code"
+    # cat $file_stream_out_current
+    # echo "$res_code"
 fi
 
 error_answer=0

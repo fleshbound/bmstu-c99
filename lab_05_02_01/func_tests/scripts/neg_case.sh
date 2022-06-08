@@ -35,7 +35,7 @@ else
     {
         ../../app.exe "${app_args[@]}" < "$file_stream_in"
         res_code=$?
-    } > /dev/null
+    } > /dev/null 2>&1
 fi
 
 error_answer=0
