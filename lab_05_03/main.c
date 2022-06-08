@@ -17,13 +17,12 @@ int main(int argc, char *argv[])
     if (argc != ARG_COUNT)
         return ERR_ARGS;
 
-    int err_code = EXIT_SUCCESS;
     int not_c_key = strcmp(argv[1], "c");
     int not_p_key = strcmp(argv[1], "p");
     int not_s_key = strcmp(argv[1], "s");
 
     if (not_c_key && not_p_key && not_s_key)
-        err_code = ERR_ARGS;
+        return ERR_ARGS;
     else if (strlen(argv[2]) > MAX_PATH)
         return ERR_PATH;
 
@@ -36,5 +35,5 @@ int main(int argc, char *argv[])
     if (!not_s_key)
         return fsort_bin(argv[2]);
 
-    return err_code;
+    return EXIT_SUCCESS;
 }

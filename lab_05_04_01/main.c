@@ -21,17 +21,15 @@ int main(int argc, char *argv[])
     if (err_args)
         return err_args;
 
-    int err_code = EXIT_SUCCESS;
-
     if (key_code == SORT_CODE)
-        err_code = sort_students(argv[2]);
+        return sort_students(argv[2]);
 
     // Входной файл, выходной файл, подстрока
     if (key_code == MATCH_CODE)
-        err_code = show_students(argv[2], argv[3], argv[4]);
+        return show_students(argv[2], argv[3], argv[4]);
 
     if (key_code == DEL_CODE)
-        err_code = delete_students(argv[2]);
+        return delete_students(argv[2]);
 
-    return err_code;
+    return EXIT_SUCCESS;
 }
