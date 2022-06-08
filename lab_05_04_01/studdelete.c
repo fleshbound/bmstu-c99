@@ -7,9 +7,9 @@
 #include "studgetput.h"
 
 // Получить средний балл студента
-double get_avg(studinfo stud)
+double get_avg(student_info_t stud)
 {
-    double sum = 0.;
+    double sum = 0;
 
     for (size_t i = 0; i < MARKS_COUNT; i++)
         sum += stud.marks[i];
@@ -17,9 +17,9 @@ double get_avg(studinfo stud)
     return sum / MARKS_COUNT;
 }
 
-double get_avg_all(studinfo students[INFO_COUNT], const size_t stud_count)
+double get_avg_all(student_info_t students[INFO_COUNT], const size_t stud_count)
 {
-    double sum = 0.;
+    double sum = 0;
 
     for (size_t i = 0; i < stud_count; i++)
         sum += get_avg(students[i]);
@@ -27,7 +27,7 @@ double get_avg_all(studinfo students[INFO_COUNT], const size_t stud_count)
     return sum / stud_count;
 }
 
-int put_higher_avg(FILE *const f, studinfo students[INFO_COUNT], size_t const stud_count)
+int put_higher_avg(FILE *const f, student_info_t students[INFO_COUNT], size_t const stud_count)
 {
     double avg = get_avg_all(students, stud_count);
     size_t count = 0;
@@ -35,11 +35,7 @@ int put_higher_avg(FILE *const f, studinfo students[INFO_COUNT], size_t const st
     for (size_t i = 0; i < stud_count; i++)
         if (get_avg(students[i]) >= avg)
         {
-            int err_code = put_stud(f, students[i]);
-
-            if (err_code)
-                return err_code;
-
+            put_stud(f, students[i]);
             count++;
         }
 
@@ -49,14 +45,14 @@ int put_higher_avg(FILE *const f, studinfo students[INFO_COUNT], size_t const st
     return EXIT_SUCCESS;
 }
 
-int stud_delete(char *file_in)
+int delete_students(char *file_in)
 {
     FILE *f_in = fopen(file_in, "rt");
 
     if (f_in == NULL)
         return ERR_IO;
 
-    studinfo students[INFO_COUNT];
+    student_info_t students[INFO_COUNT];
     size_t stud_count = 0;
     int err_code = get_students(f_in, students, &stud_count);
 

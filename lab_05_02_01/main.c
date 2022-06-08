@@ -5,6 +5,8 @@
 #include "fgetc.h"
 #include "errors.h"
 
+#define EXPECTED_ARGC 2
+
 void print_result(const size_t res)
 {
     printf("Result: %lu\n", res);
@@ -12,11 +14,10 @@ void print_result(const size_t res)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
+    if (argc != EXPECTED_ARGC)
         return ERR_ARG;
 
-    FILE *f;
-    f = fopen(argv[1], "r");
+    FILE *f = fopen(argv[1], "r");
     
     if (f == NULL)
         return ERR_IO;
@@ -28,9 +29,6 @@ int main(int argc, char *argv[])
         return err_code;
 
     double avg = (max + min) / 2;
-
-    rewind(f);
-    
     size_t count = fget_bigger_count(f, avg);
     
     fclose(f);

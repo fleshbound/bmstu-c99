@@ -7,45 +7,31 @@
 #include "studgetput.h"
 
 // Записать данные студента
-int put_stud(FILE *const f, studinfo stud)
+void put_stud(FILE *const f, student_info_t stud)
 {
-    if (fprintf(f, "%s", stud.surname) < 0)
-        return ERR_WRITE;
-
-    if (fprintf(f, "%s", stud.name) < 0)
-        return ERR_WRITE;
+    fprintf(f, "%s", stud.surname);
+    fprintf(f, "%s", stud.name);
 
     for (size_t i = 0; i < MARKS_COUNT; i++)
-        if (fprintf(f, "%u%s", stud.marks[i], (i == MARKS_COUNT - 1) ? "\n" : " ") < 0)
-            return ERR_WRITE;
-
-    return EXIT_SUCCESS;
+        fprintf(f, "%u%s", stud.marks[i], (i == MARKS_COUNT - 1) ? "\n" : " ");
 }
 
 // Записать данные всех студентов списка
-int put_students(FILE *const f, studinfo *const students, const size_t stud_count)
+int put_students(FILE *const f, student_info_t *const students, const size_t stud_count)
 {
     rewind(f);
 
     for (size_t i = 0; i < stud_count; i++)
-    {
-        int err_code = put_stud(f, students[i]);
-
-        if (err_code)
-            return err_code;
-    }
+        put_stud(f, students[i]);
 
     return EXIT_SUCCESS;
 }
 
 // Обнуление фамилии и имени
-void null_strings(studinfo *const stud)
+void null_strings(student_info_t *const stud)
 {
-    for (size_t i = 0; i < SURNAME_LEN; i++)
-        stud->surname[i] = '\0';
-
-    for (size_t i = 0; i < NAME_LEN; i++)
-        stud->name[i] = '\0';
+    memset(stud->surname, '\0', SURNAME_LEN);
+    memset(stud->name, '\0', NAME_LEN);
 }
 
 int get_studstr(FILE *const f, int *const is_end, char *str, const size_t max_len)
@@ -69,7 +55,7 @@ int get_studstr(FILE *const f, int *const is_end, char *str, const size_t max_le
 // Если не получилось, конец файла или ошибка
 // Если получилось и не конец файла, читаем следующее
 // Если закончили читать и не конец файла, ошибка...
-int get_students(FILE *const f, studinfo students[INFO_COUNT], size_t *const stud_count)
+int get_students(FILE *const f, student_info_t students[INFO_COUNT], size_t *const stud_count)
 {
     int is_end = FALSE;
     size_t q = 0;

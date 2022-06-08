@@ -24,14 +24,14 @@ int main(int argc, char *argv[])
     int err_code = EXIT_SUCCESS;
 
     if (key_code == SORT_CODE)
-        err_code = stud_sort(argv[2]);
+        err_code = sort_students(argv[2]);
 
     // Входной файл, выходной файл, подстрока
     if (key_code == MATCH_CODE)
-        err_code = show_stud_matches(argv[2], argv[3], argv[4]);
+        err_code = show_students(argv[2], argv[3], argv[4]);
 
     if (key_code == DEL_CODE)
-        err_code = stud_delete(argv[2]);
+        err_code = delete_students(argv[2]);
 
     return err_code;
 }

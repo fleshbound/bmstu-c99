@@ -28,13 +28,13 @@ int main(int argc, char *argv[])
         return ERR_PATH;
 
     if (!not_c_key)
-        err_code = fmake_bin(argv[2]);
+        return fmake_bin(argv[2]);
    
     if (!not_p_key)
-        err_code = fprint_bin(argv[2]);
+        return fprint_bin(argv[2]);
     
     if (!not_s_key)
-        err_code = fsort_bin(argv[2]);
+        return fsort_bin(argv[2]);
 
     return err_code;
 }

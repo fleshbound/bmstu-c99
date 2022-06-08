@@ -2,6 +2,6 @@
 
 #define __STUDDELETE_H__
 
-int stud_delete(char *file_in);
+int delete_students(char *file_in);
 
 #endif // #ifndef __STUDDELETE_H__

@@ -54,11 +54,11 @@ int fget_length(FILE *const fb, size_t *const len)
     if (size <= 0)
         return ERR_EMPTY;
 
-    if (size % sizeof(int) == 0)
-        *len = size / sizeof(int);
-    else
+    if (size % sizeof(int) != 0)
         return ERR_DATA;
 
+    *len = size / sizeof(int);
+    
     if (fseek(fb, ZERO_POS, SEEK_SET))
         return ERR_IO;
     
@@ -84,8 +84,8 @@ int fprint_bin(const char *const file_name)
 
         if (fread(&num, sizeof(int), READ_COUNT, fb) != READ_COUNT)
             return ERR_READ;
-        else
-            printf("%d%s", num, (i == len - 1) ? "\n" : " ");
+        
+        printf("%d%s", num, (i == len - 1) ? "\n" : " ");
     }
 
     fclose(fb);
@@ -121,9 +121,20 @@ int fswap_bin(FILE *const fb, const size_t pos1, const size_t pos2)
     int err_code = EXIT_SUCCESS;
     
     err_code = get_number_by_pos(fb, pos1, &a);
+
+    if (err_code)
+        return err_code;
+
     err_code = get_number_by_pos(fb, pos2, &b);
 
+    if (err_code)
+        return err_code;
+
     err_code = put_number_by_pos(fb, pos1, &b);
+
+    if (err_code)
+        return err_code;
+
     err_code = put_number_by_pos(fb, pos2, &a);
 
     return err_code;
@@ -146,12 +157,20 @@ int fsort_bin(const char *const file_name)
         for (size_t j = 0; j < len - i - 1; j++)
         {
             int num1 = 0, num2 = 0;
-            int err_code = get_number_by_pos(fb, j, &num1);
+            
+            err_code = get_number_by_pos(fb, j, &num1);
+            
+            if (err_code)
+                return err_code;
+            
             err_code = get_number_by_pos(fb, j + 1, &num2);
 
-            if ((num1 > num2) && (!err_code))
+            if (err_code)
+                return err_code;
+
+            if (num1 > num2)
                 err_code = fswap_bin(fb, j, j + 1);
-            
+    
             if (err_code)
                 return err_code;
         }

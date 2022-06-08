@@ -7,18 +7,14 @@
 #include "studmatch.h"
 #include "studgetput.h"
 
-int put_matches(FILE *const f, studinfo students[INFO_COUNT], const size_t stud_count, char *const substr)
+int put_matches(FILE *const f, student_info_t students[INFO_COUNT], const size_t stud_count, char *const substr)
 {
     size_t count = 0;
 
     for (size_t i = 0; i < stud_count; i++)
         if (strstr(students[i].surname, substr) == students[i].surname)
         {
-            int err_code = put_stud(f, students[i]);
-
-            if (err_code)
-                return err_code;
-
+            put_stud(f, students[i]);
             count++;
         }
 
@@ -28,7 +24,7 @@ int put_matches(FILE *const f, studinfo students[INFO_COUNT], const size_t stud_
     return EXIT_SUCCESS;
 }
 
-int show_stud_matches(char *const file_in, char *const file_out, char *const substr)
+int show_students(char *const file_in, char *const file_out, char *const substr)
 {
     if (strlen(substr) > NAME_LEN - 1)
         return ERR_ARGS;
@@ -38,7 +34,7 @@ int show_stud_matches(char *const file_in, char *const file_out, char *const sub
     if (f_in == NULL)
         return ERR_IO;
 
-    studinfo students[INFO_COUNT];
+    student_info_t students[INFO_COUNT];
     size_t stud_count = 0;
     int err_code = get_students(f_in, students, &stud_count);
 

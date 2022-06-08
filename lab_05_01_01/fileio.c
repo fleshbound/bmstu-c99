@@ -4,8 +4,6 @@
 
 void finput_int(FILE *const f)
 {
-    rewind(f);
-
     int num;
 
     printf("Enter integers:\n");
