@@ -19,8 +19,8 @@ void put_stud(FILE *const f, student_info_t stud)
 // Записать данные всех студентов списка
 int put_students(FILE *const f, student_info_t *const students, const size_t stud_count)
 {
-    rewind(f);
-
+    fseek(f, 0, SEEK_SET);
+	
     for (size_t i = 0; i < stud_count; i++)
         put_stud(f, students[i]);
 
@@ -28,7 +28,7 @@ int put_students(FILE *const f, student_info_t *const students, const size_t stu
 }
 
 // Обнуление фамилии и имени
-void null_strings(student_info_t *const stud)
+void zero_strings(student_info_t *const stud)
 {
     memset(stud->surname, '\0', SURNAME_LEN);
     memset(stud->name, '\0', NAME_LEN);
@@ -62,7 +62,7 @@ int get_students(FILE *const f, student_info_t students[INFO_COUNT], size_t *con
     
     while (!is_end)
     {
-        null_strings(&students[q]);
+        zero_strings(&students[q]);
 
         int err_code = get_studstr(f, &is_end, students[q].surname, SURNAME_LEN);
 

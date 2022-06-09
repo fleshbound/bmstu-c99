@@ -4,11 +4,10 @@
 #include "fgetc.h"
 
 #define READ_COUNT 1
-#define ZERO_POS 0
 
 size_t fget_bigger_count(FILE *const f, const double low_limit)
 {
-    fseek(f, ZERO_POS, SEEK_SET);
+    fseek(f, 0, SEEK_SET);
 
     size_t q = 0;
     double num;

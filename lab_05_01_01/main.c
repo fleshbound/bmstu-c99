@@ -2,33 +2,22 @@
 #include <stdlib.h>
 
 #include "process.h"
-#include "fileio.h"
 #include "errors.h"
 
-#define FILE_IN "in.txt"
+void print_result(const int res_max_1, const int res_max_2)
+{
+    printf("Result: %d %d\n", res_max_1, res_max_2);
+}
 
 int main(void)
 {
-    FILE *f;
-
-    f = fopen(FILE_IN, "w");
-
-    if (f == NULL)
-        return ERR_IO;
-
-    finput_int(f);
-    
-    fclose(f);
-
-    f = fopen(FILE_IN, "r"); 
-    
     int res_max_1, res_max_2;
-    int err_proc = process(f, &res_max_1, &res_max_2);
+    int err_proc = process(stdin, &res_max_1, &res_max_2);
 
-    fclose(f);
-    
     if (err_proc)
         return err_proc;
+
+    print_result(res_max_1, res_max_2);
 
     return EXIT_SUCCESS;
 }
