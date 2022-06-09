@@ -7,7 +7,7 @@
 #include "studsort.h"
 #include "studgetput.h"
 
-#define SWAP(type, a, b) { type c = *a;  *a = *b; *b = c; }
+#define SWAP(type, a, b) { type c = a;  a = b; b = c; }
 
 int is_first_str_bigger(student_info_t stud1, student_info_t stud2)
 {
