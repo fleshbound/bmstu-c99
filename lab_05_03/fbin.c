@@ -8,7 +8,6 @@
 #define MAX_COUNT 10
 #define INPUT_COUNT 1
 #define READ_COUNT 1
-#define ZERO_POS 0
 
 int init_rand_bin(FILE *const fb)
 {
@@ -46,7 +45,7 @@ int fmake_bin(const char *const file_name)
 
 int fget_length(FILE *const fb, size_t *const len)
 {
-    if (fseek(fb, ZERO_POS, SEEK_END))
+    if (fseek(fb, 0, SEEK_END))
         return ERR_IO;
 
     long int size = ftell(fb);
@@ -59,7 +58,7 @@ int fget_length(FILE *const fb, size_t *const len)
 
     *len = size / sizeof(int);
     
-    if (fseek(fb, ZERO_POS, SEEK_SET))
+    if (fseek(fb, 0, SEEK_SET))
         return ERR_IO;
     
     return EXIT_SUCCESS;
