@@ -5,11 +5,10 @@
 #include "fmath.h"
 
 #define READ_COUNT 1
-#define ZERO_POS 0
 
 int fget_min_max(FILE *const f, double *const min, double *const max)
 {
-    fseek(f, ZERO_POS, SEEK_SET);
+    fseek(f, 0, SEEK_SET);
 
     double num, curr_max, curr_min;
 
