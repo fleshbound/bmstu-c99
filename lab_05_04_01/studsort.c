@@ -27,7 +27,7 @@ void sort_student_info(student_info_t students[INFO_COUNT], const size_t stud_co
     for (size_t i = 0; i < stud_count - 1; i++)
         for (size_t j = 0; j < stud_count - i - 1; j++)
             if (is_first_str_bigger(students[j], students[j + 1]))
-                SWAP(student_info_t, &students[j], &students[j + 1]);
+                SWAP(student_info_t, students[j], students[j + 1]);
 }
 
 void print_student_info(student_info_t students[INFO_COUNT], const size_t stud_count)
