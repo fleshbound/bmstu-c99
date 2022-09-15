@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 
     if (mode_code == SHOW_CODE)
         // file, field
-        return show_movies(argv[1], field_code);
+        return show_all_movies(argv[1], field_code);
 
     if (mode_code == SEARCH_CODE)
         // file, field, key
