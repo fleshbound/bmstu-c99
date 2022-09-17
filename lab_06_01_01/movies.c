@@ -20,10 +20,19 @@ int read_movie(FILE *const f, info_movie_t *const movie, int *const end_flag)
         return EXIT_SUCCESS;
     }
 
+    if (movie->title[strlen(movie->title) - 1] != '\n')
+        return ERR_DATA;
+
     if (fgets(movie->name, LEN_NAME, f) == NULL)
         return ERR_DATA;
 
+    if (movie->name[strlen(movie->name) - 1] != '\n')
+        return ERR_DATA;
+
     if (fscanf(f, "%d", &movie->year) < 0)
+        return ERR_DATA;
+
+    if (movie->year < 0)
         return ERR_DATA;
 
     char tmp[LEN_MIN] = "";

@@ -40,18 +40,33 @@ int show_all_movies(char *const filename, const int field_code)
 int is_result(info_movie_t movie, const int field_code, char *const value, int *const err_code)
 {
     if (field_code == TITLE_CODE)
+    {
+        if (strlen(value) > LEN_TITLE - 2)
+        {
+            *err_code = ERR_ARGS;
+            return FALSE;
+        }
+
         if (strncmp(movie.title, value, strlen(movie.title) - 1))
             return FALSE;
-    
+    }    
     if (field_code == NAME_CODE)
+    {
+        if (strlen(value) > LEN_NAME - 2)
+        {
+            *err_code = ERR_ARGS;
+            return FALSE;
+        }
+
         if (strncmp(movie.name, value, strlen(movie.name) - 1))
             return FALSE;
-    
+    }
+
     if (field_code == YEAR_CODE)
     {
         int key = atoi(value);
         
-        if (key == 0)
+        if (key <= 0)
         {
             *err_code = ERR_ARGS;
             return FALSE;
@@ -65,7 +80,7 @@ int is_result(info_movie_t movie, const int field_code, char *const value, int *
 
 int search_movies(char *const filename, const int field_code, char *const key_value)
 {
-    FILE *f = fopen(filename, "rt");
+    FILE *f = fopen(filename, "r");
 
     if (f == NULL)
         return ERR_IO;
@@ -83,15 +98,21 @@ int search_movies(char *const filename, const int field_code, char *const key_va
 
     fclose(f);
 
+    int printed_movies = 0;
+
     for (size_t i = 0; i < size; i++)
     {
         if (is_result(movies[i], field_code, key_value, &err_code))
-            {
-                show_movie(movies[i], stdout);
-            }
+        {
+            show_movie(movies[i], stdout);
+            printed_movies++;
+        }
         else if (err_code)
             return err_code;
-    }   
+    }
+
+    if (printed_movies == 0)
+        return ERR_EMPTY;
 
     return EXIT_SUCCESS;
 }
