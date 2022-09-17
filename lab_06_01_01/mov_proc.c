@@ -8,7 +8,7 @@
 
 void show_movie(info_movie_t movie, FILE *const f)
 {
-    fprintf(f, "%s%s%d\n\n", movie.title, movie.name, movie.year);
+    fprintf(f, "%s%s%d\n", movie.title, movie.name, movie.year);
 }
 
 int show_all_movies(char *const filename, const int field_code)
