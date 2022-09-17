@@ -29,10 +29,7 @@ int read_movie(FILE *const f, info_movie_t *const movie, int *const end_flag)
     char tmp[LEN_MIN] = "";
 
     if (fgets(tmp, LEN_MIN, f) == NULL)
-        return ERR_DATA;
-
-    if (fgets(tmp, LEN_MIN, f) == NULL)
-        return EXIT_SUCCESS;
+        EXIT_SUCCESS;
 
     return EXIT_SUCCESS;
 }

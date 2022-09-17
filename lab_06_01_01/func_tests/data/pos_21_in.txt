@@ -1,11 +1,9 @@
 Title1
 Name1
 2000
-
 Title2
 Name2
 2000
-
 Title3
 Name3
 2000

@@ -1,15 +1,12 @@
 Title1
 Name4
 1999
-
 Title2
 Name3
 1997
-
 Title3
 Name2
 2000
-
 Title4
 Name1
 1980
