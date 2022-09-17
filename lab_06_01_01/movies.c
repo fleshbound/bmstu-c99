@@ -32,8 +32,8 @@ int read_movie(FILE *const f, info_movie_t *const movie, int *const end_flag)
         return ERR_DATA;
 
     if (fgets(tmp, LEN_MIN, f) == NULL)
-        return ERR_DATA;
-    
+        return EXIT_SUCCESS;
+
     return EXIT_SUCCESS;
 }
 
@@ -47,15 +47,15 @@ void copy_movie_1to2(info_movie_t *const mov1, info_movie_t *const mov2)
 int is_first_bigger(info_movie_t mov1, info_movie_t mov2, const int code)
 {
     if (code == TITLE_CODE)
-        if (strncmp(mov1.title, mov2.title, (strlen(mov1.title) > strlen(mov2.title)) ? strlen(mov1.title) : strlen(mov2.title)) <= 0)
+        if (strncmp(mov1.title, mov2.title, (strlen(mov1.title) > strlen(mov2.title)) ? strlen(mov1.title) : strlen(mov2.title)) < 0)
             return FALSE;
 
     if (code == NAME_CODE)
-        if (strncmp(mov1.name, mov2.name, (strlen(mov1.name) > strlen(mov2.name)) ? strlen(mov1.name) : strlen(mov2.name)) <= 0)
+        if (strncmp(mov1.name, mov2.name, (strlen(mov1.name) > strlen(mov2.name)) ? strlen(mov1.name) : strlen(mov2.name)) < 0)
             return FALSE;
 
     if (code == YEAR_CODE)
-        if (mov1.year <= mov2.year)
+        if (mov1.year < mov2.year)
             return FALSE;
 
     return TRUE;
