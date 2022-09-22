@@ -73,7 +73,6 @@ bool is_first_bigger(info_movie_t mov1, info_movie_t mov2, const int code, const
                 return FALSE;
 
             break;
-
         case NAME_CODE:
             if ((strict) && (strncmp(mov1.name, mov2.name, max_length(mov1.name, mov2.name) - 1) <= 0))
                 return FALSE;
@@ -82,7 +81,6 @@ bool is_first_bigger(info_movie_t mov1, info_movie_t mov2, const int code, const
                 return FALSE;
             
             break;
-
         case YEAR_CODE:
             if ((strict) && (mov1.year <= mov2.year))
                 return FALSE;

@@ -19,7 +19,7 @@ void init_movies(info_movie_t *const movies)
 
 int show_all_movies(char *const filename, const int field_code)
 {
-    FILE *f = fopen(filename, "rt");
+    FILE *f = fopen(filename, "r");
 
     if (f == NULL)
         return ERR_IO;
@@ -27,13 +27,12 @@ int show_all_movies(char *const filename, const int field_code)
     info_movie_t movies[ALL_COUNT];
     init_movies(movies);
     size_t size = 0;
-
     int err_code = get_all_movies(f, movies, &size, field_code);
+    
+    fclose(f);
 
     if (err_code)
         return err_code;
-
-    fclose(f);
 
     for (size_t i = 0; i < size; i++)
         show_movie(movies[i], stdout);
@@ -50,13 +49,11 @@ int check_key(const int field_code, char *const value)
                 return ERR_ARGS;
             
             break;
-
         case NAME_CODE:
             if (strlen(value) > LEN_NAME - 2)
                 return ERR_ARGS;
             
             break;
-        
         case YEAR_CODE:
             if (atoi(value) <= 0)
                 return ERR_ARGS;
@@ -77,12 +74,10 @@ void init_tmp_movie(info_movie_t *const dest, char *const value, const int field
             strncpy(dest->title, value, LEN_TITLE - 1);
             dest->title[strlen(value)] = '\n';
             break;
-
         case NAME_CODE:
             strncpy(dest->name, value, LEN_NAME - 1);
             dest->name[strlen(value)] = '\n';
             break;
-
         case YEAR_CODE:
             dest->year = atoi(value);
             break;

@@ -11,11 +11,9 @@ int check_args(const int argc, char *const field, int *const field_code, int *co
         case ARGC_SHOW:
             *mode_code = SHOW_CODE;
             break;
-    
         case ARGC_SEARCH:
             *mode_code = SEARCH_CODE;
             break;
-
         default:
             return ERR_ARGS;
     }
