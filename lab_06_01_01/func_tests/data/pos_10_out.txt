@@ -16,9 +16,6 @@ Name1
 Title14
 Name1
 1995
-Title15
-Name1
-1995
 Title2
 Name1
 1995
