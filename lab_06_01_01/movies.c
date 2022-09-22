@@ -127,6 +127,9 @@ int get_all_movies(FILE *const f, info_movie_t movies[ALL_COUNT], size_t *const 
             add_movie(movies, curr_movie, ++q, field_code);
     }
 
+    if ((!is_end) || (q > ALL_COUNT))
+        return ERR_DATA;
+
     *size = q;
     
     if (*size == 0)
