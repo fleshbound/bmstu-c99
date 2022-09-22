@@ -61,22 +61,33 @@ size_t max_length(char *const str1, char *const str2)
     return (strlen(str1) > strlen(str2)) ? strlen(str1) : strlen(str2);
 }
 
-bool is_first_bigger(info_movie_t mov1, info_movie_t mov2, const int code)
+bool is_first_bigger(info_movie_t mov1, info_movie_t mov2, const int code, const bool strict)
 {
     switch (code) 
     {
         case TITLE_CODE:
-            if (strncmp(mov1.title, mov2.title, max_length(mov1.title, mov2.title) - 1) <= 0)
+            if ((strict) && (strncmp(mov1.title, mov2.title, max_length(mov1.title, mov2.title) - 1) <= 0))
                 return FALSE;
+            
+            if ((!strict) && (strncmp(mov1.title, mov2.title, max_length(mov1.title, mov2.title) - 1) < 0))
+                return FALSE;
+
             break;
 
         case NAME_CODE:
-            if (strncmp(mov1.name, mov2.name, max_length(mov1.name, mov2.name) - 1) <= 0)
+            if ((strict) && (strncmp(mov1.name, mov2.name, max_length(mov1.name, mov2.name) - 1) <= 0))
                 return FALSE;
+            
+            if ((!strict) && (strncmp(mov1.name, mov2.name, max_length(mov1.name, mov2.name) - 1) < 0))
+                return FALSE;
+            
             break;
 
         case YEAR_CODE:
-            if (mov1.year <= mov2.year)
+            if ((strict) && (mov1.year <= mov2.year))
+                return FALSE;
+            
+            if ((!strict) && (mov1.year < mov2.year))
                 return FALSE;
             break;
     }
@@ -95,7 +106,7 @@ void add_movie(info_movie_t movies[ALL_COUNT], info_movie_t movie, const size_t 
 {
     size_t i = 0;
 
-    while ((i < size - 1) && (size > 1) && (is_first_bigger(movie, movies[i], field_code)))
+    while ((i < size - 1) && (size > 1) && (is_first_bigger(movie, movies[i], field_code, FALSE)))
         i++;
 
     for (size_t j = size - 1; (j > i) && (size > 1); j--)

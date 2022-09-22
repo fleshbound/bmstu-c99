@@ -99,9 +99,9 @@ int binary_search_movie(info_movie_t *const movies, const size_t size, const int
     {
         middle = (right + left) / 2;
 
-        if (is_first_bigger(movies[middle], tmp_m, field_code))
+        if (is_first_bigger(movies[middle], tmp_m, field_code, TRUE))
             right = middle - 1;
-        else if (is_first_bigger(tmp_m, movies[middle], field_code))
+        else if (is_first_bigger(tmp_m, movies[middle], field_code, TRUE))
             left = middle + 1;
         else 
             return middle;
