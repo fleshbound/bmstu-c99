@@ -4,22 +4,22 @@
 #include "argch.h"
 #include "errors.h"
 
-#define FIELD_TITLE "title"
-#define FIELD_NAME "name"
-#define FIELD_YEAR "year"
-#define LEN_FIELD_MAX 5
-#define LEN_FIELD_MIN 4
-
-int check_args(const int argc, char *const field, int *const field_code, int *const mode_code)
+int check_args(const int argc, char *const field,
+        int *const field_code, int *const mode_code)
 {
-    if (argc == ARGC_SHOW)
-        *mode_code = SHOW_CODE;
+    switch (argc)
+    {
+        case ARGC_SHOW:
+            *mode_code = SHOW_CODE;
+            break;
     
-    if (argc == ARGC_SEARCH)
-        *mode_code = SEARCH_CODE;
+        case ARGC_SEARCH:
+            *mode_code = SEARCH_CODE;
+            break;
 
-    if (*mode_code == NO_CODE)
-        return ERR_ARGS;
+        default:
+            return ERR_ARGS;
+    }
 
     if (!strncmp(field, FIELD_TITLE, LEN_FIELD_MAX))
         *field_code = TITLE_CODE;

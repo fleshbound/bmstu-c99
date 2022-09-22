@@ -17,6 +17,8 @@ typedef struct info_movie
     int year;
 } info_movie_t;
 
+typedef int bool;
+
 int get_all_movies(FILE *const f, info_movie_t movies[ALL_COUNT], size_t *const size, const int field_code);
 
 int show_all_movies(char *const filename, const int field_code);
@@ -24,5 +26,7 @@ int show_all_movies(char *const filename, const int field_code);
 int search_movies(char *const filename, const int field_code, char *const key_value);
 
 void null_info(info_movie_t *const movie);
+
+bool is_first_bigger(info_movie_t mov1, info_movie_t mov2, const int code);
 
 #endif // #ifndef __MOVIES_H__

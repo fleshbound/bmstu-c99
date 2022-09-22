@@ -13,6 +13,12 @@
 #define NAME_CODE 2
 #define YEAR_CODE 3
 
+#define FIELD_TITLE "title"
+#define FIELD_NAME "name"
+#define FIELD_YEAR "year"
+#define LEN_FIELD_MAX 5
+#define LEN_FIELD_MIN 4
+
 int check_args(const int argc, char *const field, int *const field_code, int *const mode_code);
 
 #endif // #ifndef __ARGCH_H__
