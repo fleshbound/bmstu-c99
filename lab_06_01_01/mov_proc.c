@@ -47,17 +47,14 @@ int check_key(const int field_code, char *const value)
         case TITLE_CODE:
             if (strlen(value) > LEN_TITLE - 2)
                 return ERR_ARGS;
-            
             break;
         case NAME_CODE:
             if (strlen(value) > LEN_NAME - 2)
                 return ERR_ARGS;
-            
             break;
         case YEAR_CODE:
             if (atoi(value) <= 0)
                 return ERR_ARGS;
-
             break;
     }
 
@@ -130,12 +127,9 @@ int search_movie(char *const filename, const int field_code, char *const key_val
     size_t desired_mov_i = binary_search_movie(movies, size, field_code, key_value);
 
     if (desired_mov_i >= ALL_COUNT)
-    {
-        fprintf(stderr, "Not found\n");
-        return ERR_EMPTY;
-    }
-    
-    show_movie(movies[desired_mov_i], stdout);
+        fprintf(stderr, "Not found");
+    else 
+        show_movie(movies[desired_mov_i], stdout);
 
     return EXIT_SUCCESS;
 }

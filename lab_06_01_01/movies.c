@@ -26,18 +26,18 @@ int read_movie(FILE *const f, info_movie_t *const movie, int *const end_flag)
     } 
     // wrong input OR blank space
     else if ((movie->title[strlen(movie->title) - 1] != '\n') 
-            || (is_space_str(movie->title)))
+        || (is_space_str(movie->title)))
         return ERR_DATA;
 
     // wrong input OR blank space OR last symbol isn't \n
     if ((fgets(movie->name, LEN_NAME, f) == NULL) 
-            || (is_space_str(movie->name))
-            || (movie->name[strlen(movie->name) - 1] != '\n'))
+        || (is_space_str(movie->name))
+        || (movie->name[strlen(movie->name) - 1] != '\n'))
         return ERR_DATA;
 
     // wrong input OR negative number
     if ((fscanf(f, "%d", &movie->year) < 0)
-            || (movie->year < 0))
+        || (movie->year < 0))
         return ERR_DATA;
 
     // skipping \n after fscanf'ing the year
@@ -68,23 +68,18 @@ bool is_first_bigger(info_movie_t mov1, info_movie_t mov2, const int code, const
         case TITLE_CODE:
             if ((strict) && (strncmp(mov1.title, mov2.title, max_length(mov1.title, mov2.title) - 1) <= 0))
                 return FALSE;
-            
             if ((!strict) && (strncmp(mov1.title, mov2.title, max_length(mov1.title, mov2.title) - 1) < 0))
                 return FALSE;
-
             break;
         case NAME_CODE:
             if ((strict) && (strncmp(mov1.name, mov2.name, max_length(mov1.name, mov2.name) - 1) <= 0))
                 return FALSE;
-            
             if ((!strict) && (strncmp(mov1.name, mov2.name, max_length(mov1.name, mov2.name) - 1) < 0))
                 return FALSE;
-            
             break;
         case YEAR_CODE:
             if ((strict) && (mov1.year <= mov2.year))
                 return FALSE;
-            
             if ((!strict) && (mov1.year < mov2.year))
                 return FALSE;
             break;
