@@ -23,7 +23,7 @@ int get_all_movies(FILE *const f, info_movie_t movies[ALL_COUNT], size_t *const 
 
 int show_all_movies(char *const filename, const int field_code);
 
-int search_movies(char *const filename, const int field_code, char *const key_value);
+int search_movie(char *const filename, const int field_code, char *const key_value);
 
 void null_info(info_movie_t *const movie);
 

@@ -91,8 +91,7 @@ void null_info(info_movie_t *const movie)
     movie->year = 0;
 }
 
-void add_movie(info_movie_t movies[ALL_COUNT], info_movie_t movie,
-        const size_t size, const int field_code)
+void add_movie(info_movie_t movies[ALL_COUNT], info_movie_t movie, const size_t size, const int field_code)
 {
     size_t i = 0;
 
@@ -105,8 +104,7 @@ void add_movie(info_movie_t movies[ALL_COUNT], info_movie_t movie,
     copy_movie_1to2(&movie, &movies[i]);
 }
 
-int get_all_movies(FILE *const f, info_movie_t movies[ALL_COUNT], 
-        size_t *const size, const int field_code)
+int get_all_movies(FILE *const f, info_movie_t movies[ALL_COUNT], size_t *const size, const int field_code)
 {
     size_t q = 0;
     int is_end = FALSE;

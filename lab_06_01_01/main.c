@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
     if (mode_code == SEARCH_CODE)
         // file, field, key
-        return search_movies(argv[1], field_code, argv[3]);
+        return search_movie(argv[1], field_code, argv[3]);
     
     return EXIT_SUCCESS;
 }

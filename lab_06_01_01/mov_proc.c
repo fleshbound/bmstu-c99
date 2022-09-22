@@ -89,8 +89,7 @@ void init_tmp_movie(info_movie_t *const dest, char *const value, const int field
     }
 }
 
-int binary_search_movie(info_movie_t *const movies, const size_t size, 
-        const int field_code, char *const value)
+int binary_search_movie(info_movie_t *const movies, const size_t size, const int field_code, char *const value)
 {
     int right = size - 1, left = 0, middle;
     info_movie_t tmp_m;
@@ -111,8 +110,7 @@ int binary_search_movie(info_movie_t *const movies, const size_t size,
     return ALL_COUNT + 1;
 }
 
-int search_movies(char *const filename, 
-        const int field_code, char *const key_value)
+int search_movie(char *const filename, const int field_code, char *const key_value)
 {
     FILE *f = fopen(filename, "r");
 

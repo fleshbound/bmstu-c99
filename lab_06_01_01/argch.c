@@ -4,8 +4,7 @@
 #include "argch.h"
 #include "errors.h"
 
-int check_args(const int argc, char *const field,
-        int *const field_code, int *const mode_code)
+int check_args(const int argc, char *const field, int *const field_code, int *const mode_code)
 {
     switch (argc)
     {
