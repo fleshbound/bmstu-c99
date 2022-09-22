@@ -1,1 +1,1 @@
-./func_tests/data/neg_17_in.txt year -1
+./funct_tests/data/neg_17_in.txt title

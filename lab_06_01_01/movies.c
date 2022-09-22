@@ -128,6 +128,10 @@ int get_all_movies(FILE *const f, info_movie_t movies[ALL_COUNT], size_t *const 
     }
 
     *size = q;
+    
+    if (*size == 0)
+        return ERR_EMPTY;
 
     return EXIT_SUCCESS;
 }
+
