@@ -130,7 +130,10 @@ int search_movie(char *const filename, const int field_code, char *const key_val
     size_t desired_mov_i = binary_search_movie(movies, size, field_code, key_value);
 
     if (desired_mov_i >= ALL_COUNT)
+    {
+        fprintf(stderr, "Not found\n");
         return ERR_EMPTY;
+    }
     
     show_movie(movies[desired_mov_i], stdout);
 
