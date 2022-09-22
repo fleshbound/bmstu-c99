@@ -75,10 +75,12 @@ void init_tmp_movie(info_movie_t *const dest, char *const value, const int field
     {
         case TITLE_CODE:
             strncpy(dest->title, value, LEN_TITLE - 1);
+            dest->title[strlen(value)] = '\n';
             break;
 
         case NAME_CODE:
             strncpy(dest->name, value, LEN_NAME - 1);
+            dest->name[strlen(value)] = '\n';
             break;
 
         case YEAR_CODE:
@@ -87,10 +89,10 @@ void init_tmp_movie(info_movie_t *const dest, char *const value, const int field
     }
 }
 
-size_t binary_search_movie(info_movie_t *const movies, const size_t size, 
+int binary_search_movie(info_movie_t *const movies, const size_t size, 
         const int field_code, char *const value)
 {
-    size_t right = size - 1, left = 0, middle;
+    int right = size - 1, left = 0, middle;
     info_movie_t tmp_m;
     init_tmp_movie(&tmp_m, value, field_code);
 
