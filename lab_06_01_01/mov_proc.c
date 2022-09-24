@@ -42,21 +42,14 @@ int show_all_movies(char *const filename, const int field_code)
 
 int check_key(const int field_code, char *const value)
 {
-    switch (field_code)
-    {
-        case TITLE_CODE:
-            if (strlen(value) > LEN_TITLE - 2)
-                return ERR_ARGS;
-            break;
-        case NAME_CODE:
-            if (strlen(value) > LEN_NAME - 2)
-                return ERR_ARGS;
-            break;
-        case YEAR_CODE:
-            if (atoi(value) <= 0)
-                return ERR_ARGS;
-            break;
-    }
+    if ((field_code == TITLE_CODE) && (strlen(value) > LEN_TITLE - 2))
+        return ERR_ARGS;
+
+    if ((field_code == NAME_CODE) && (strlen(value) > LEN_NAME - 2))
+        return ERR_ARGS;
+    
+    if ((field_code == YEAR_CODE) && (atoi(value) <= 0))
+        return ERR_ARGS;
 
     return EXIT_SUCCESS;
 }
@@ -65,20 +58,20 @@ void init_tmp_movie(info_movie_t *const dest, char *const value, const int field
 {
     null_info(dest);
 
-    switch (field_code)
+    if (field_code == TITLE_CODE)
     {
-        case TITLE_CODE:
-            strncpy(dest->title, value, LEN_TITLE - 1);
-            dest->title[strlen(value)] = '\n';
-            break;
-        case NAME_CODE:
-            strncpy(dest->name, value, LEN_NAME - 1);
-            dest->name[strlen(value)] = '\n';
-            break;
-        case YEAR_CODE:
-            dest->year = atoi(value);
-            break;
+        strncpy(dest->title, value, LEN_TITLE - 1);
+        dest->title[strlen(value)] = '\n';
     }
+ 
+    if (field_code == NAME_CODE)
+    {
+        strncpy(dest->name, value, LEN_NAME - 1);
+        dest->name[strlen(value)] = '\n';
+    }
+ 
+    if (field_code == YEAR_CODE)
+        dest->year = atoi(value);
 }
 
 int binary_search_movie(info_movie_t *const movies, const size_t size, const int field_code, char *const value)

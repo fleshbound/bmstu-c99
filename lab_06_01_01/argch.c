@@ -6,17 +6,12 @@
 
 int check_args(const int argc, char *const field, int *const field_code, int *const mode_code)
 {
-    switch (argc)
-    {
-        case ARGC_SHOW:
-            *mode_code = SHOW_CODE;
-            break;
-        case ARGC_SEARCH:
-            *mode_code = SEARCH_CODE;
-            break;
-        default:
-            return ERR_ARGS;
-    }
+    if (argc == ARGC_SHOW)
+        *mode_code = SHOW_CODE;
+    else if (argc == ARGC_SEARCH)
+        *mode_code = SEARCH_CODE;
+    else 
+        return ERR_ARGS;
 
     if (!strncmp(field, FIELD_TITLE, LEN_FIELD_MAX))
         *field_code = TITLE_CODE;
