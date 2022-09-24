@@ -137,4 +137,3 @@ int get_all_movies(FILE *const f, info_movie_t movies[ALL_COUNT], size_t *const 
 
     return EXIT_SUCCESS;
 }
-
