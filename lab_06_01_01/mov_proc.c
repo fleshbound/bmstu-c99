@@ -29,7 +29,8 @@ int show_all_movies(char *const filename, const int field_code)
     size_t size = 0;
     int err_code = get_all_movies(f, movies, &size, field_code);
     
-    fclose(f);
+    if (fclose(f) == EOF)
+        return ERR_IO;
 
     if (err_code)
         return err_code;
@@ -112,7 +113,8 @@ int search_movie(char *const filename, const int field_code, char *const key_val
     init_movies(movies);
     err_code = get_all_movies(f, movies, &size, field_code);
     
-    fclose(f);
+    if (fclose(f) == EOF)
+        return ERR_IO;
 
     if (err_code)
         return err_code;
