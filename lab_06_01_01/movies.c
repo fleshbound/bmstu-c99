@@ -19,31 +19,31 @@ bool is_space_str(char *const string)
 int read_movie(FILE *const f, info_movie_t *const movie, int *const end_flag)
 {
     // if cannot read the title then it's eof
-    if (fgets(movie->title, LEN_TITLE, f) == NULL)
+    if (NULL == fgets(movie->title, LEN_TITLE, f))
     {
         *end_flag = TRUE;
         return EXIT_SUCCESS;
     } 
     // wrong input OR blank space
-    else if ((movie->title[strlen(movie->title) - 1] != '\n') 
+    else if ('\n' != (movie->title[strlen(movie->title) - 1]) 
         || (is_space_str(movie->title)))
         return ERR_DATA;
 
     // wrong input OR blank space OR last symbol isn't \n
-    if ((fgets(movie->name, LEN_NAME, f) == NULL) 
+    if (NULL == (fgets(movie->name, LEN_NAME, f)) 
         || (is_space_str(movie->name))
-        || (movie->name[strlen(movie->name) - 1] != '\n'))
+        || ('\n' != movie->name[strlen(movie->name) - 1]))
         return ERR_DATA;
 
     // wrong input OR negative number
-    if ((fscanf(f, "%d", &movie->year) < 0)
-        || (movie->year < 0))
+    if ((0 > fscanf(f, "%d", &movie->year))
+        || (0 > movie->year))
         return ERR_DATA;
 
     // skipping \n after fscanf'ing the year
     char tmp[LEN_MIN] = "";
 
-    if (fgets(tmp, LEN_MIN, f) == NULL)
+    if (NULL == fgets(tmp, LEN_MIN, f))
         EXIT_SUCCESS;
 
     return EXIT_SUCCESS;
@@ -61,9 +61,9 @@ size_t max_length(char *const str1, char *const str2)
     return (strlen(str1) > strlen(str2)) ? strlen(str1) : strlen(str2);
 }
 
-bool is_first_bigger(info_movie_t mov1, info_movie_t mov2, const int code, const bool strict)
+bool compare(info_movie_t mov1, info_movie_t mov2, const int code, const bool strict)
 {
-    if (code == TITLE_CODE)
+    if (TITLE_CODE == code)
     {
         if ((strict) && (strncmp(mov1.title, mov2.title, max_length(mov1.title, mov2.title) - 1) <= 0))
             return FALSE;
@@ -72,7 +72,7 @@ bool is_first_bigger(info_movie_t mov1, info_movie_t mov2, const int code, const
             return FALSE;
     }
 
-    if (code == NAME_CODE)
+    if (NAME_CODE == code)
     {
         if ((strict) && (strncmp(mov1.name, mov2.name, max_length(mov1.name, mov2.name) - 1) <= 0))
             return FALSE;
@@ -81,7 +81,7 @@ bool is_first_bigger(info_movie_t mov1, info_movie_t mov2, const int code, const
             return FALSE;
     }
     
-    if (code == YEAR_CODE)
+    if (YEAR_CODE == code)
     {
         if ((strict) && (mov1.year <= mov2.year))
             return FALSE;
@@ -104,10 +104,10 @@ void add_movie(info_movie_t movies[ALL_COUNT], info_movie_t movie, const size_t 
 {
     size_t i = 0;
 
-    while ((i < size - 1) && (size > 1) && (is_first_bigger(movie, movies[i], field_code, FALSE)))
+    while ((i < size - 1) && (1 < size) && (compare(movie, movies[i], field_code, FALSE)))
         i++;
 
-    for (size_t j = size - 1; (j > i) && (size > 1); j--)
+    for (size_t j = size - 1; (j > i) && (1 < size); j--)
         copy_movie_1to2(&movies[j - 1], &movies[j]);
     
     copy_movie_1to2(&movie, &movies[i]);
@@ -120,7 +120,7 @@ int get_all_movies(FILE *const f, info_movie_t movies[ALL_COUNT], size_t *const 
     int err_code = EXIT_SUCCESS;
     info_movie_t curr_movie;
 
-    while ((!is_end) && (q < ALL_COUNT))
+    while ((!is_end) && (ALL_COUNT > q))
     {
         null_info(&curr_movie);
         err_code = read_movie(f, &curr_movie, &is_end);
@@ -132,12 +132,12 @@ int get_all_movies(FILE *const f, info_movie_t movies[ALL_COUNT], size_t *const 
             add_movie(movies, curr_movie, ++q, field_code);
     }
 
-    if ((!is_end) || (q > ALL_COUNT))
+    if ((!is_end) || (ALL_COUNT < q))
         return ERR_DATA;
 
     *size = q;
     
-    if (*size == 0)
+    if (0 == *size)
         return ERR_EMPTY;
 
     return EXIT_SUCCESS;

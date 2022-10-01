@@ -27,6 +27,6 @@ int search_movie(char *const filename, const int field_code, char *const key_val
 
 void null_info(info_movie_t *const movie);
 
-bool is_first_bigger(info_movie_t mov1, info_movie_t mov2, const int code, const bool strict);
+bool compare(info_movie_t mov1, info_movie_t mov2, const int code, const bool strict);
 
 #endif // #ifndef __MOVIES_H__

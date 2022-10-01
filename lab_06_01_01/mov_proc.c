@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include "errors.h"
 #include "movies.h"
@@ -13,7 +14,7 @@ void show_movie(info_movie_t movie, FILE *const f)
 
 void init_movies(info_movie_t *const movies)
 {
-    for (size_t i = 0; i < ALL_COUNT; i++)
+    for (size_t i = 0; ALL_COUNT > i; i++)
         null_info(&movies[i]);
 }
 
@@ -21,7 +22,7 @@ int show_all_movies(char *const filename, const int field_code)
 {
     FILE *f = fopen(filename, "r");
 
-    if (f == NULL)
+    if (NULL == f)
         return ERR_IO;
 
     info_movie_t movies[ALL_COUNT];
@@ -29,7 +30,7 @@ int show_all_movies(char *const filename, const int field_code)
     size_t size = 0;
     int err_code = get_all_movies(f, movies, &size, field_code);
     
-    if (fclose(f) == EOF)
+    if (EOF == fclose(f))
         return ERR_IO;
 
     if (err_code)
@@ -43,13 +44,13 @@ int show_all_movies(char *const filename, const int field_code)
 
 int check_key(const int field_code, char *const value)
 {
-    if ((field_code == TITLE_CODE) && (strlen(value) > LEN_TITLE - 2))
+    if ((TITLE_CODE == field_code) && (LEN_TITLE - 2 < strlen(value)))
         return ERR_ARGS;
 
-    if ((field_code == NAME_CODE) && (strlen(value) > LEN_NAME - 2))
+    if ((NAME_CODE == field_code) && (LEN_NAME - 2 < strlen(value)))
         return ERR_ARGS;
     
-    if ((field_code == YEAR_CODE) && (atoi(value) <= 0))
+    if ((YEAR_CODE == field_code) && ((0 >= strtol(value, NULL, 10)) || (errno == ERANGE)))
         return ERR_ARGS;
 
     return EXIT_SUCCESS;
@@ -59,20 +60,20 @@ void init_tmp_movie(info_movie_t *const dest, char *const value, const int field
 {
     null_info(dest);
 
-    if (field_code == TITLE_CODE)
+    if (TITLE_CODE == field_code)
     {
         strncpy(dest->title, value, LEN_TITLE - 1);
         dest->title[strlen(value)] = '\n';
     }
  
-    if (field_code == NAME_CODE)
+    if (NAME_CODE == field_code)
     {
         strncpy(dest->name, value, LEN_NAME - 1);
         dest->name[strlen(value)] = '\n';
     }
  
-    if (field_code == YEAR_CODE)
-        dest->year = atoi(value);
+    if (YEAR_CODE == field_code)
+        dest->year = strtol(value, NULL, 10);
 }
 
 int binary_search_movie(info_movie_t *const movies, const size_t size, const int field_code, char *const value)
@@ -85,9 +86,9 @@ int binary_search_movie(info_movie_t *const movies, const size_t size, const int
     {
         middle = (right + left) / 2;
 
-        if (is_first_bigger(movies[middle], tmp_m, field_code, TRUE))
+        if (compare(movies[middle], tmp_m, field_code, TRUE))
             right = middle - 1;
-        else if (is_first_bigger(tmp_m, movies[middle], field_code, TRUE))
+        else if (compare(tmp_m, movies[middle], field_code, TRUE))
             left = middle + 1;
         else 
             return middle;
@@ -100,7 +101,7 @@ int search_movie(char *const filename, const int field_code, char *const key_val
 {
     FILE *f = fopen(filename, "r");
 
-    if (f == NULL)
+    if (NULL == f)
         return ERR_IO;
 
     int err_code = check_key(field_code, key_value);
@@ -113,7 +114,7 @@ int search_movie(char *const filename, const int field_code, char *const key_val
     init_movies(movies);
     err_code = get_all_movies(f, movies, &size, field_code);
     
-    if (fclose(f) == EOF)
+    if (EOF == fclose(f))
         return ERR_IO;
 
     if (err_code)
@@ -121,7 +122,7 @@ int search_movie(char *const filename, const int field_code, char *const key_val
     
     size_t desired_mov_i = binary_search_movie(movies, size, field_code, key_value);
 
-    if (desired_mov_i >= ALL_COUNT)
+    if (ALL_COUNT <= desired_mov_i)
         fprintf(stderr, "Not found");
     else 
         show_movie(movies[desired_mov_i], stdout);

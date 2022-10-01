@@ -11,11 +11,11 @@ int main(int argc, char *argv[])
     if (err_code)
         return err_code;
 
-    if (mode_code == SHOW_CODE)
+    if (SHOW_CODE == mode_code)
         // file, field
         return show_all_movies(argv[1], field_code);
 
-    if (mode_code == SEARCH_CODE)
+    if (SEARCH_CODE == mode_code)
         // file, field, key
         return search_movie(argv[1], field_code, argv[3]);
     
