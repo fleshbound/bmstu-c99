@@ -11,7 +11,7 @@ release: CFLAGS += -g0 -O3 -DNDEBUG
 release: app.exe unit_tests.exe
 
 func: 
-	./func_tests/scripts/func_tests.sh
+	./func_tests/scripts/func_tests.sh -USE_VALGRIND
 
 unit: 
 	./unit_tests.exe

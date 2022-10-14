@@ -4,35 +4,38 @@
 
 #include "process.h"
 
+#define start_test START_TEST
+#define end_test END_TEST
+
 // KEY TESTING
-START_TEST(key_nullbeg_src_error)
+start_test (key_nullbeg_src_error)
 {
     int *pb_src = NULL, *pe_src = (int *) 0xDEADBEEF;
     int *pb_dest = NULL, *pe_dest = NULL;
 
     ck_assert(key(pb_src, pe_src, &pb_dest, &pe_dest) != EXIT_SUCCESS);
 }
-END_TEST
+end_test
 
-START_TEST(key_nullend_src_error)
+start_test (key_nullend_src_error)
 {
     int *pb_src = (int *) 0xDEADBEEF, *pe_src = NULL;
     int *pb_dest = NULL, *pe_dest = NULL;
 
     ck_assert(key(pb_src, pe_src, &pb_dest, &pe_dest) != EXIT_SUCCESS);
 }
-END_TEST
+end_test
 
-START_TEST(key_eqbegend_src_error)
+start_test (key_eqbegend_src_error)
 {
     int *pb_src = (int *) 0xDEADBEEF, *pe_src = pb_src;
     int *pb_dest = NULL, *pe_dest = NULL;
 
     ck_assert(key(pb_src, pe_src, &pb_dest, &pe_dest) != EXIT_SUCCESS);
 }
-END_TEST
+end_test
 
-START_TEST(key_emptyresult_error)
+start_test (key_emptyresult_error)
 {
     int *a = malloc(2 * sizeof(int));
     int *pb_dest = NULL, *pe_dest = NULL;
@@ -47,9 +50,9 @@ START_TEST(key_emptyresult_error)
 
     free(a);
 }
-END_TEST
+end_test
 
-START_TEST(key_endafterbeg_success)
+start_test (key_endafterbeg_success)
 {
     size_t n = 5, m = 3;
     int *a = malloc(n * sizeof(int)),
@@ -77,10 +80,10 @@ START_TEST(key_endafterbeg_success)
     free(b);
     free(pb_dest);
 }
-END_TEST
+end_test
 
 // MYSORT TESTING
-START_TEST(mysort_increasing_success)
+start_test (mysort_increasing_success)
 {
     size_t n = 5;
     int *a = malloc(n * sizeof(int)),
@@ -102,9 +105,9 @@ START_TEST(mysort_increasing_success)
     free(a);
     free(b);
 }
-END_TEST
+end_test
 
-START_TEST(mysort_decreasing_success)
+start_test (mysort_decreasing_success)
 {
     size_t n = 5;
     int *a = malloc(n * sizeof(int)),
@@ -126,9 +129,9 @@ START_TEST(mysort_decreasing_success)
     free(a);
     free(b);
 }
-END_TEST
+end_test
 
-START_TEST(mysort_equal_success)                               
+start_test (mysort_equal_success)                               
 {                                                                   
     size_t n = 5;                                                   
     int *a = malloc(n * sizeof(int)),                               
@@ -150,9 +153,9 @@ START_TEST(mysort_equal_success)
     free(a);                                                        
     free(b);                                                        
 }                                                                   
-END_TEST
+end_test
 
-START_TEST(mysort_randomsigned_success)
+start_test (mysort_randomsigned_success)
 {
     size_t n = 3;
     int *a = malloc(n * sizeof(int)),
@@ -176,7 +179,7 @@ START_TEST(mysort_randomsigned_success)
     free(a);
     free(b);
 }
-END_TEST
+end_test
 
 Suite *process_suite(void)
 {
