@@ -1,6 +1,6 @@
 #!/bin/bash
 
-files="*.o *.exe *.gcda *.gcno *.out *.gcov *.txt"
+files="*.o *.d *.exe *.gcda *.gcno *.out *.gcov *.txt"
 files_in_scripts="./func_tests/scripts/*.txt"
 
 i=0
