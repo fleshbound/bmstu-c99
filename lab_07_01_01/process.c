@@ -6,6 +6,18 @@
 #include "argch.h"
 
 #define SWAP(t, a, b) do{ t _c = a; a = b; b = _c; }while(0)
+#define SWAPMEM(a, b, size) \
+    do  \
+    {   \
+        size_t __size = (size); \
+        char *__a = (a), *__b = (b); \
+        do  \
+	    {	\
+	        char __tmp = *__a; \
+	        *__a++ = *__b; \
+	        *__b++ = __tmp; \
+	    } while (--__size > 0);	\
+    } while (0)
 
 int cmp_int(const void *a, const void *b)
 {
@@ -52,20 +64,15 @@ void fill_array(FILE *const f, const int *pbeg, const int *pend)
 // bubble sort
 void mysort(void *pbeg, size_t count, size_t t_size, cmpf_ptr_t cmp)
 {
-    int *pj = pbeg;
-    
-    for (size_t i = 0; (pbeg != NULL) && (t_size == 4) && (i < count - 1); i++)
-    {
-        pj = pbeg;
+    if ((count == 0) || (pbeg == NULL) || (t_size == 0))
+        return;
 
-        for (size_t j = 0; j < count - i - 1; j++)
-        {
-            if ((*cmp) (pj, pj + 1) > 0)
-                SWAP(int, *pj, *(pj + 1));
+    char *begin = (char *) pbeg;
 
-            pj++;
-        }
-    }
+    for (size_t i = 0; i < count - 1; i++)
+        for (size_t j = 0; j < count - 1 - i; j++)
+            if (cmp(begin + j * t_size, begin + (j + 1) * t_size) > 0)
+                SWAPMEM(begin + j * t_size, begin + (j + 1) * t_size, t_size);
 }
 
 // find pointer to min or max element

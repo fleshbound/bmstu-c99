@@ -1,19 +1,19 @@
 CFLAGS := -std=c99 -Wall -Werror -pedantic -Wextra -Wfloat-equal -Wfloat-conversion -Wvla -Wno-error=unused-function
-TST_FLAGS := -lcheck -lm -lpthread -lrt -lsubunit
+TST_FLAGS := -lcheck -lm -lpthread -lsubunit -lrt
 OBJS := process.o argch.o # объектные файлы
 CC := gcc # компилятор
 SRCS := $(wildcard *.c) # все c-файлы
 
 debug: CFLAGS += -g3 -O0
-debug: app.exe unit_tests.exe
+debug: app.exe
 
 release: CFLAGS += -g0 -O3 -DNDEBUG
-release: app.exe unit_tests.exe
+release: app.exe
 
 func: 
 	./func_tests/scripts/func_tests.sh -USE_VALGRIND
 
-unit: 
+unit: unit_tests.exe
 	./unit_tests.exe
 
 app.exe: $(OBJS) main.o
