@@ -48,6 +48,9 @@ int get_fsize(FILE *const f, size_t *const size)
 // fill array with ints from file f
 void fill_array(FILE *const f, const int *pbeg, const int *pend)
 {
+    if ((ferror(f)) || (pbeg == NULL) || (pend == NULL))
+        return;
+
     fseek(f, 0, SEEK_SET);
 
     int elem = 0, *pi = (int *) pbeg;
@@ -161,15 +164,22 @@ int key(const int *pb_src, const int *pe_src, int **pb_dest, int **pe_dest)
 }
 
 // print array to file f
-void fprint_array(FILE *const f, const int *pbeg, const int *pend)
+int fprint_array(FILE *const f, const int *pbeg, const int *pend)
 {
     int *pi = (int *) pbeg;
 
+    if ((pend <= pbeg) || (pbeg == NULL) || (pend == NULL))
+        return ERR_IO;
+    
     while (pi != pend)
     {
-        fprintf(f, "%d%s", *pi, (pend - pi > 1) ? " " : "\n");
+        if (fprintf(f, "%d%s", *pi, (pend - pi > 1) ? " " : "\n") < 0)
+            return ERR_IO;
+
         pi++;
     }
+
+    return EXIT_SUCCESS;
 }
 
 // output sorted name_in-file to name_out-file
@@ -221,18 +231,23 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
     if (f_out == NULL)
         return ERR_PATH;
 
-    if (pb_dest != NULL)
+    if ((pb_dest != NULL) && (pe_dest != NULL))
     {
-        fprint_array(f_out, pb_dest, pe_dest);
+        if (fprint_array(f_out, pb_dest, pe_dest))
+            return ERR_IO;
+
         free(pb_dest);
     }
     else
-        fprint_array(f_out, pb_src, pe_src);
+    {
+        if (fprint_array(f_out, pb_src, pe_src))
+            return ERR_IO;       
+    
+        free(pb_src);
+    };
 
     if (fclose(f_out) == EOF)
         return ERR_IO;
-
-    free(pb_src);
 
     return EXIT_SUCCESS;
 }
