@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "argch.h"
-#include "errors.h"
+#include "../inc/argch.h"
+#include "../inc/errors.h"
 
 int check_args(const int argc, char *const argv[], int *const mode_code)
 {

@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "errors.h"
-#include "argch.h"
-#include "process.h"
+#include "../inc/argch.h"
+#include "../inc/process.h"
 
 int main(int argc, char *argv[])
 {
