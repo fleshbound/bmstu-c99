@@ -55,8 +55,7 @@ int fprint_array(FILE *const f, const int *pbeg, const int *pend)
 
     while (pi < pend)
     {
-        if (fprintf(f, "%d%s", *pi, (pend - pi > 1) ? " " : "\n") < 0)
-            return ERR_IO;
+        fprintf(f, "%d%s", *pi, (pend - pi > 1) ? " " : "\n")
 
         pi++;
     }
