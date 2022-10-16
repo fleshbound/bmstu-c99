@@ -46,10 +46,10 @@ int get_fsize(FILE *const f, size_t *const size)
 }
 
 // fill array with ints from file f
-void fill_array(FILE *const f, const int *pbeg, const int *pend)
+int fill_array(FILE *const f, const int *pbeg, const int *pend)
 {
     if ((pbeg == NULL) || (pend == NULL))
-        return;
+        return ERR_DATA;
 
     fseek(f, 0, SEEK_SET);
 
@@ -59,9 +59,13 @@ void fill_array(FILE *const f, const int *pbeg, const int *pend)
     {
         if (fscanf(f, "%d", &elem) == READ_INT)
             *pi = elem;
+        else
+            return ERR_IO;
 
         pi++;
     }
+
+    return EXIT_SUCCESS;
 }
 
 // bubble sort
@@ -106,7 +110,7 @@ int key(const int *pb_src, const int *pe_src, int **pb_dest, int **pe_dest)
     // if no source found or destination has already filled up
     if ((pb_src == NULL) || (pe_src == NULL) 
         || (*pb_dest != NULL) || (*pe_dest != NULL)
-        || (pb_src == pe_src) || (pb_src > pe_src))
+        || (pb_src >= pe_src))
         return ERR_DATA;
 
     // get ptrs of min and max
@@ -164,15 +168,22 @@ int key(const int *pb_src, const int *pe_src, int **pb_dest, int **pe_dest)
 }
 
 // print array to file f
-void fprint_array(FILE *const f, const int *pbeg, const int *pend)
+int fprint_array(FILE *const f, const int *pbeg, const int *pend)
 {
+    if ((pbeg == NULL) || (pend == NULL) || (pbeg == pend))
+        return ERR_DATA;
+
     int *pi = (int *) pbeg;
 
-    while (pi != pend)
+    while (pi < pend)
     {
-        fprintf(f, "%d%s", *pi, (pend - pi > 1) ? " " : "\n");
+        if (fprintf(f, "%d%s", *pi, (pend - pi > 1) ? " " : "\n") < 0)
+            return ERR_IO;
+
         pi++;
     }
+
+    return EXIT_SUCCESS;
 }
 
 // output sorted name_in-file to name_out-file
@@ -187,19 +198,34 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
     int err_code = get_fsize(f_in, &size); // size
     
     if (err_code)
+    {
+        fclose(f_in);
         return err_code;
+    }
 
     if (size == 0)
+    {
+        fclose(f_in);
         return ERR_EMPTY;
+    }
 
     int *tmp = malloc(size * sizeof(int)); // main array
 
     if (tmp == NULL)
+    {
+        fclose(f_in);
         return ERR_MEM;
+    }
 
     int *pb_src = tmp, *pe_src = pb_src + size;
 
-    fill_array(f_in, pb_src, pe_src); // filling
+    err_code = fill_array(f_in, pb_src, pe_src); // filling
+    
+    if (err_code)
+    {
+        fclose(f_in);
+        return err_code;
+    }
 
     if (fclose(f_in) == EOF)
         return ERR_IO;
@@ -213,7 +239,6 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
         if (err_code)
             return err_code;
 
-        // ???
         mysort(pb_dest, pe_dest - pb_dest, sizeof(int), cmp_int);
     }
     else
@@ -226,11 +251,31 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
 
     if ((pb_dest != NULL) && (pe_dest != NULL))
     {
-        fprint_array(f_out, pb_dest, pe_dest);
+        err_code = fprint_array(f_out, pb_dest, pe_dest);
+        
+        if (err_code)
+        {
+            fclose(f_out);
+            return err_code;
+        }
+        
         free(pb_dest);
     }
+    else if ((pb_dest == NULL) && (pe_dest == NULL))
+    {
+        err_code = fprint_array(f_out, pb_src, pe_src);
+
+        if (err_code)
+        {
+            fclose(f_out);
+            return err_code;
+        }
+    }
     else
-        fprint_array(f_out, pb_src, pe_src);
+    {
+        fclose(f_out);
+        return ERR_MEM;
+    }
 
     if (fclose(f_out) == EOF)
         return ERR_IO;

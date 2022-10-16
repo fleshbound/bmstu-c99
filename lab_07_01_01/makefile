@@ -14,7 +14,7 @@ func:
 	./func_tests/scripts/func_tests.sh -USE_VALGRIND
 
 unit: unit_tests.exe
-	./unit_tests.exe
+	valgrind --tool=memcheck --log-file=tmp1.txt ./unit_tests.exe
 
 app.exe: $(OBJS) main.o
 	$(CC) $^ -o $@
