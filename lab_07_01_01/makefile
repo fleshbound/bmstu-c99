@@ -34,7 +34,7 @@ app.exe: make_out_dir $(OBJS) $(OUT_DIR)/main.o
 	$(CC) $(CFLAGS) $(OBJS) $(OUT_DIR)/main.o -o $@
 
 unit_tests.exe: make_out_dir $(OBJS) $(TEST_OBJS)
-	$(CC) $^ $(TST_FLAGS) -o $@
+	$(CC) $(OBJS) $(TEST_OBJS) $(TST_FLAGS) -o $@
 
 $(OUT_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $^ -o $@
