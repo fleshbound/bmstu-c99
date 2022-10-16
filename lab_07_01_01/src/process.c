@@ -15,7 +15,7 @@ int get_fsize(FILE *const f, size_t *const size)
     int elem = 0;
     size_t count = 0;
 
-    while (fscanf(f, "%d", &elem) == READ_INT)
+    while (fscanf(f, "%d ", &elem) == READ_INT)
         count++;
 
     fgetc(f);
@@ -40,7 +40,7 @@ int fill_array(FILE *const f, const int *pbeg, const int *pend)
 
     while (pi < pend)
     {
-        if (fscanf(f, "%d", &elem) == READ_INT)
+        if (fscanf(f, "%d ", &elem) == READ_INT)
             *pi = elem;
         else
             return ERR_IO;
@@ -82,22 +82,34 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
     int err_code = get_fsize(f_in, &size); // size
     
     if (err_code)
+    {
+        fclose(f_in);
         return err_code;
+    }
 
     if (size == 0)
+    {
+        fclose(f_in);
         return ERR_EMPTY;
+    }
 
     int *tmp = malloc(size * sizeof(int)); // main array
 
     if (tmp == NULL)
+    {
+        fclose(f_in);
         return ERR_MEM;
+    }
 
     int *pb_src = tmp, *pe_src = pb_src + size;
 
     err_code = fill_array(f_in, pb_src, pe_src); // filling
     
     if (err_code)
+    {
+        fclose(f_in);
         return err_code;
+    }
 
     if (fclose(f_in) == EOF)
         return ERR_IO;
@@ -126,8 +138,11 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
         err_code = fprint_array(f_out, pb_dest, pe_dest);
         
         if (err_code)
+        {
+            fclose(f_out);
             return err_code;
-        
+        }
+
         free(pb_dest);
     }
     else if ((pb_dest == NULL) && (pe_dest == NULL))
@@ -135,10 +150,16 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
         err_code = fprint_array(f_out, pb_src, pe_src);
 
         if (err_code)
+        {
+            fclose(f_out);
             return err_code;
+        }
     }
     else
+    {
+        fclose(f_out);
         return ERR_MEM;
+    }
 
     if (fclose(f_out) == EOF)
         return ERR_IO;
