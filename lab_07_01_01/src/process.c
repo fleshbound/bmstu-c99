@@ -31,9 +31,6 @@ int get_fsize(FILE *const f, size_t *const size)
 // fill array with ints from file f
 int fill_array(FILE *const f, const int *pbeg, const int *pend)
 {
-    if ((pbeg == NULL) || (pend == NULL) || (pbeg >= pend))
-        return ERR_DATA;
-
     fseek(f, 0, SEEK_SET);
 
     int elem = 0, *pi = (int *) pbeg;
@@ -54,9 +51,6 @@ int fill_array(FILE *const f, const int *pbeg, const int *pend)
 // print array to file f
 int fprint_array(FILE *const f, const int *pbeg, const int *pend)
 {
-    if ((pbeg == NULL) || (pend == NULL) || (pbeg == pend))
-        return ERR_DATA;
-
     int *pi = (int *) pbeg;
 
     while (pi < pend)
