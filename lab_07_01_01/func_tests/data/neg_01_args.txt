@@ -1,1 +1,1 @@
-nothing.txt 1.txt
+nothing.txt ./out/1.txt

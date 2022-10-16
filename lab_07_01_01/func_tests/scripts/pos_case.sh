@@ -11,7 +11,7 @@ ERROR_NONE=255
 file_stream_in="$1"
 file_stream_out_except="$2"
 file_app_args="$3"
-file_stream_out_current="1.txt"
+file_stream_out_current="./out/1.txt"
 
 #cd ../../
 
@@ -33,7 +33,7 @@ touch $file_stream_out_current
 error_memory=0
 if [ "$FLAG_VAL" = "1" ]; then
     {
-        valgrind --tool=memcheck --log-file=log.txt --quiet ./app.exe "${app_args[@]}" < "$file_stream_in"
+        valgrind --tool=memcheck --log-file=./out/log.txt --quiet ./app.exe "${app_args[@]}" < "$file_stream_in"
         res_code=$?
     } > $file_stream_out_current
 
@@ -46,7 +46,7 @@ if [ "$FLAG_VAL" = "1" ]; then
 #    echo "GOT:"
 #    cat $file_stream_out_current
     
-    if [ -s "log.txt" ]; then
+    if [ -s "./out/log.txt" ]; then
         error_memory=1
     fi
 else

@@ -1,4 +1,4 @@
-CFLAGS := -std=c99 -Wall -Werror -pedantic -Wextra -Wfloat-equal -Wfloat-conversion -Wvla -Wno-error=unused-function -I./inc/
+CFLAGS := -std=c99 -Wall -Werror -pedantic -Wextra -Wfloat-equal -Wfloat-conversion -Wvla -Wno-error=unused-function
 TST_FLAGS := -lcheck -lm -lpthread -lsubunit -lrt
 CC := gcc # компилятор
 
@@ -27,7 +27,8 @@ func: gcov
 	./func_tests/scripts/func_tests.sh -USE_VALGRIND
 
 unit: unit_tests.exe
-	valgrind --tool=memcheck --log-file=tmp1.txt ./unit_tests.exe
+	#valgrind --tool=memcheck --log-file=$(OUT_DIR)/tmp1.txt 
+	./unit_tests.exe
 
 app.exe: $(OBJS) $(OUT_DIR)/main.o
 	$(CC) $(CFLAGS) $(OBJS) $(OUT_DIR)/main.o -o $@

@@ -17,5 +17,5 @@ int main(void)
 
     srunner_free(runner);
     
-    return count_failed;
+    return (count_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

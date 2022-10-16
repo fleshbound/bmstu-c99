@@ -26,11 +26,11 @@ fi
 error_memory=0
 if [ "$FLAG_VAL" = "1" ]; then
     {
-        valgrind --tool=memcheck --log-file=log.txt --quiet ./app.exe "${app_args[@]}" < "$file_stream_in"
+        valgrind --tool=memcheck --log-file=./out/log.txt --quiet ./app.exe "${app_args[@]}" < "$file_stream_in"
         res_code=$?
     } > /dev/null 2>&1
 
-    if [ -s "log.txt" ]; then
+    if [ -s "./out/log.txt" ]; then
         error_memory=1
     fi
 else
