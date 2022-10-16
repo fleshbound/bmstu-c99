@@ -1,4 +1,4 @@
-CFLAGS := -std=c99 -Wall -Werror -pedantic -Wextra -Wfloat-equal -Wfloat-conversion -Wvla -Wno-error=unused-function
+CFLAGS := -std=c99 -Wall -Werror -pedantic -I./inc/
 TST_FLAGS := -lcheck -lm -lpthread -lsubunit -lrt
 CC := gcc # компилятор
 
@@ -10,7 +10,7 @@ TEST_OBJS := $(patsubst $(UNIT_DIR)/%.c,$(OUT_DIR)/%.o,$(wildcard $(UNIT_DIR)/*.
 OBJS := $(patsubst $(SRC_DIR)/%.c,$(OUT_DIR)/%.o,$(wildcard $(SRC_DIR)/*.c))
 OBJS := $(filter-out $(OUT_DIR)/main.o,$(OBJS))
 
-RM_FILES := $(OUT_DIR)/* *.txt *.bin *.out *.o *.exe
+RM_FILES := $(OUT_DIR) *.txt *.bin *.out *.o *.exe
 
 .PHONY: release debug make_out_dir func cov gcov
 
@@ -30,10 +30,10 @@ unit: unit_tests.exe
 	#valgrind --tool=memcheck --log-file=$(OUT_DIR)/tmp1.txt 
 	./unit_tests.exe
 
-app.exe: $(OBJS) $(OUT_DIR)/main.o
+app.exe: make_out_dir $(OBJS) $(OUT_DIR)/main.o
 	$(CC) $(CFLAGS) $(OBJS) $(OUT_DIR)/main.o -o $@
 
-unit_tests.exe: $(OBJS) $(TEST_OBJS)
+unit_tests.exe: make_out_dir $(OBJS) $(TEST_OBJS)
 	$(CC) $^ $(TST_FLAGS) -o $@
 
 $(OUT_DIR)/%.o: $(SRC_DIR)/%.c
@@ -46,7 +46,7 @@ $(OUT_DIR)/%.o: $(UNIT_DIR)/%.c
 	$(CC) $(CFLAGS) -c $^ -o $@
 
 clean:
-	$(RM) $(RM_FILES) 
+	$(RM) -r $(RM_FILES) 
 
 gcov: CFLAGS += -O0 -g --coverage -dumpbase ''
 gcov: app.exe
