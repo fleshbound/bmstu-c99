@@ -91,10 +91,10 @@ int fsort_array(int *pb_src, int *pe_src, int **pb_dest, int **pe_dest, const in
 
 void free_all_data(int *data1, int *data2)
 {
-    if (data1)
+    if (data1 != NULL)
         free(data1);
 
-    if (data2)
+    if (data2 != NULL)
         free(data2);
 }
 
