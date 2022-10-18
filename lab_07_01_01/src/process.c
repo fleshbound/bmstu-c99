@@ -7,7 +7,7 @@
 #include "../inc/filter.h"
 #include "../inc/sort.h"
 
-// file elements' count
+/* Get count of integers in file */
 int get_fsize(FILE *const f, size_t *const size)
 {
     fseek(f, 0, SEEK_SET);
@@ -24,11 +24,14 @@ int get_fsize(FILE *const f, size_t *const size)
         return ERR_DATA;
 
     *size = count;
-    
+
+    if (*size == 0)
+        return ERR_EMPTY;
+
     return EXIT_SUCCESS;
 }
 
-// fill array with ints from file f
+/* Fill array with integers from file */
 int fill_array(FILE *const f, const int *pbeg, const int *pend)
 {
     fseek(f, 0, SEEK_SET);
@@ -48,19 +51,51 @@ int fill_array(FILE *const f, const int *pbeg, const int *pend)
     return EXIT_SUCCESS;
 }
 
-// print array to file f
-int fprint_array(FILE *const f, const int *pbeg, const int *pend)
+/* Get filtered array with key func */
+int get_filtered_array(const int *pb_src, const int *pe_src, int **pb_dest, int **pe_dest)
+{
+    return key(pb_src, pe_src, pb_dest, pe_dest);
+}
+
+/* Print array to file */
+void fprint_array(FILE *const f, const int *pbeg, const int *pend)
 {
     int *pi = (int *) pbeg;
 
     while (pi < pend)
     {
         fprintf(f, "%d%s", *pi, (pend - pi > 1) ? " " : "\n");
-
         pi++;
     }
+}
 
-    return EXIT_SUCCESS;
+/* Sort old array or make and sort new filtered array */
+int fsort_array(int *pb_src, int *pe_src, int **pb_dest, int **pe_dest, const int code)
+{
+    int err_code = EXIT_SUCCESS;
+
+    if (code == F_CODE)
+    {
+        err_code = get_filtered_array(pb_src, pe_src, pb_dest, pe_dest);
+
+        if (err_code)
+            return err_code;
+
+        mysort(*pb_dest, *pe_dest - *pb_dest, sizeof(int), cmp_int);
+    }
+    else
+        mysort(pb_src, pe_src - pb_src, sizeof(int), cmp_int);
+
+    return err_code;
+}
+
+void free_all_data(int *data1, int *data2)
+{
+    if (data1)
+        free(data1);
+
+    if (data2)
+        free(data2);
 }
 
 // output sorted name_in-file to name_out-file
@@ -71,93 +106,68 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
     if (f_in == NULL)
         return ERR_PATH;
 
+    /* Size */
     size_t size = 0;
-    int err_code = get_fsize(f_in, &size); // size
-    
+    int err_code = get_fsize(f_in, &size);
+
     if (err_code)
     {
         fclose(f_in);
         return err_code;
     }
 
-    if (size == 0)
-    {
-        fclose(f_in);
-        return ERR_EMPTY;
-    }
+    /* Main array */
+    int *pb_src = malloc(size * sizeof(int));
 
-    int *tmp = malloc(size * sizeof(int)); // main array
-
-    if (tmp == NULL)
+    if (pb_src == NULL)
     {
         fclose(f_in);
         return ERR_MEM;
     }
 
-    int *pb_src = tmp, *pe_src = pb_src + size;
+    int *pe_src = pb_src + size, *pb_dest = NULL, *pe_dest = NULL;
+    err_code = fill_array(f_in, pb_src, pe_src);
 
-    err_code = fill_array(f_in, pb_src, pe_src); // filling
-    
     if (err_code)
     {
         fclose(f_in);
+        free_all_data(pb_src, NULL);
         return err_code;
     }
 
     if (fclose(f_in) == EOF)
-        return ERR_IO;
-
-    int *pb_dest = NULL, *pe_dest = NULL;
-
-    if (fcode == F_CODE)
     {
-        int err_code = key(pb_src, pe_src, &pb_dest, &pe_dest);
-
-        if (err_code)
-            return err_code;
-
-        mysort(pb_dest, pe_dest - pb_dest, sizeof(int), cmp_int);
+        free_all_data(pb_src, NULL);
+        return ERR_IO;
     }
-    else
-        mysort(pb_src, pe_src - pb_src, sizeof(int), cmp_int);
 
-    FILE *f_out = fopen(name_out, "wt");
+    /* Array sorting according to fcode */    
+    err_code = fsort_array(pb_src, pe_src, &pb_dest, &pe_dest, fcode);
+
+    if (err_code)
+    {
+        free_all_data(pb_src, pe_src);
+        return err_code;
+    }
+
+    /* Writing result array to file */
+    FILE *f_out = fopen(name_out, "wt");   
 
     if (f_out == NULL)
-        return ERR_PATH;
-
-    if ((pb_dest != NULL) && (pe_dest != NULL))
     {
-        err_code = fprint_array(f_out, pb_dest, pe_dest);
-        
-        if (err_code)
-        {
-            fclose(f_out);
-            return err_code;
-        }
-
-        free(pb_dest);
+        free_all_data(pb_src, pb_dest);
+        return ERR_IO;
     }
-    else if ((pb_dest == NULL) && (pe_dest == NULL))
-    {
-        err_code = fprint_array(f_out, pb_src, pe_src);
-
-        if (err_code)
-        {
-            fclose(f_out);
-            return err_code;
-        }
-    }
+    
+    if (fcode == F_CODE)
+        fprint_array(f_out, pb_dest, pe_dest);
     else
-    {
-        fclose(f_out);
-        return ERR_MEM;
-    }
+        fprint_array(f_out, pb_src, pe_src);
+
+    free_all_data(pb_src, pb_dest);
 
     if (fclose(f_out) == EOF)
         return ERR_IO;
-
-    free(pb_src);
 
     return EXIT_SUCCESS;
 }

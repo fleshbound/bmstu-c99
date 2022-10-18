@@ -85,5 +85,8 @@ int key(const int *pb_src, const int *pe_src, int **pb_dest, int **pe_dest)
 
     *pe_dest = pj;
 
+    if ((*pe_dest <= *pb_dest) || (*pe_dest == NULL) || (*pb_dest == NULL))
+        return ERR_MEM;
+
     return EXIT_SUCCESS;
 }
