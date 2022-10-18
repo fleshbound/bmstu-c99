@@ -146,7 +146,7 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
 
     if (err_code)
     {
-        free_all_data(pb_src, pe_src);
+        free_all_data(pb_src, pb_dest);
         return err_code;
     }
 
