@@ -1,57 +1,56 @@
-CFLAGS := -std=c99 -Wall -Werror -pedantic -I./inc/
-TST_FLAGS := -lcheck -lm -lpthread -lsubunit -lrt
-CC := gcc # компилятор
-
-OUT_DIR := ./out
 SRC_DIR := ./src
+INC_DIR := ./inc
+OUT_DIR := ./out
 UNIT_DIR := ./unit_tests
+FUNC_DIR := ./func_tests
 
-TEST_OBJS := $(patsubst $(UNIT_DIR)/%.c,$(OUT_DIR)/%.o,$(wildcard $(UNIT_DIR)/*.c))
+CC := gcc
+CFLAGS := -std=c99 -I$(INC_DIR) -Wall -Werror -Wpedantic -Wextra -Wfloat-equal -Wfloat-conversion -Wvla
+UNIT_FLAGS := -lcheck -lm -lpthread -lsubunit -lrt
+
+APP := app.exe
+UNIT_APP := unit_tests.exe
+
+ifeq ($(mode), debug)
+    CFLAGS += -g3 -O0
+endif
+
+ifeq ($(mode), release)
+    CFLAGS += -g0 -O3
+endif
+
+SRCS := $(wildcard $(SRC_DIR)/*.c)
+#OBJS := $(SRCS:$(SRC_DIR)/%.c=$(OUT_PATH)/%.o)
+#UNIT_SRCS := $(wildcard $(UNIT_DIR)/*.c)
+#UNIT_OBJS := $(UNIT_SRCS:$(UTEST_DIR)/%.c=$(OUT_PATH)/%.o)
+UNIT_OBJS := $(patsubst $(UNIT_DIR)/%.c,$(OUT_DIR)/%.o,$(wildcard $(UNIT_DIR)/*.c))
 OBJS := $(patsubst $(SRC_DIR)/%.c,$(OUT_DIR)/%.o,$(wildcard $(SRC_DIR)/*.c))
 OBJS := $(filter-out $(OUT_DIR)/main.o,$(OBJS))
 
-RM_FILES := $(OUT_DIR) *.txt *.bin *.out *.o *.exe
+.PHONY : build unit clean make_outdir
 
-.PHONY: release debug make_out_dir func cov gcov
+release: $(APP)
 
-debug: CFLAGS += -g3 -O0
-debug: app.exe
+func: 
+	$(FUNC_DIR)/scripts/func_tests.sh -USE_VALGRIND
 
-release: CFLAGS += -g0 -O3 -DNDEBUG
-release: app.exe
+unit: $(UNIT_APP)
 
-make_out_dir:
-	mkdir -p $(OUT_DIR)
+$(APP): make_outdir $(OBJS) $(OUT_DIR)/main.o
+	@$(CC) $(CFLAGS) $(OBJS) $(OUT_DIR)/main.o $(UNIT_FLAGS) -o $@
 
-func: gcov
-	./func_tests/scripts/func_tests.sh -USE_VALGRIND
+$(UNIT_APP): make_outdir $(OBJS) $(UNIT_OBJS)
+	@$(CC) $(CFLAGS) $(OBJS) $(UNIT_OBJS) $(UNIT_FLAGS) -o $@
 
-unit: unit_tests.exe
-	#valgrind --tool=memcheck --log-file=$(OUT_DIR)/tmp1.txt 
-	./unit_tests.exe
-
-app.exe: make_out_dir $(OBJS) $(OUT_DIR)/main.o
-	$(CC) $(CFLAGS) $(OBJS) $(OUT_DIR)/main.o -o $@
-
-unit_tests.exe: make_out_dir $(OBJS) $(TEST_OBJS)
-	$(CC) $(OBJS) $(TEST_OBJS) $(TST_FLAGS) -o $@
+make_outdir:
+	@mkdir -p $(OUT_DIR)
 
 $(OUT_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -c $^ -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
-#$(OUT_DIR)/%.d: $(SRC_DIR)/%.c
-#	$(CC) -M $(SRC_DIR)/%.c > $@
-
-$(OUT_DIR)/%.o: $(UNIT_DIR)/%.c
-	$(CC) $(CFLAGS) -c $^ -o $@
+$(OUT_DIR)/check_%.o: $(UNIT_DIR)/check_%.c
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
-	$(RM) -r $(RM_FILES) 
+	@rm -rf $(OUT_DIR) *.exe *.txt *.bin
 
-gcov: CFLAGS += -O0 -g --coverage -dumpbase ''
-gcov: app.exe
-
-cov : gcov
-	./collect_coverage.sh
-
-#include $(OUT_DIR)/$(SRCS:.c=.d)
