@@ -1,68 +1,69 @@
-.PHONY : build utest stat clean outdir
+.PHONY : build unit stat clean outdir
 
-EXEC := app.exe
-UTEST_EXEC := unit_tests.exe
-STAT_EXEC := stat.exe
+APP := app.exe
+UNIT_APP := unit_tests.exe
+#STAT_APP := stat.exe
 
-SRC_PATH := ./src
-INC_PATH := ./inc
-OUT_PATH := ./out
+SRC_DIR := ./src
+INC_DIR := ./inc
+OUT_DIR := ./out
+APPS_DIR := ./apps1
 
-UTEST_PATH := ./unit_tests
-FTEST_PATH := ./func_tests
-STAT_PATH := ./stat
+UNIT_DIR := ./unit_tests
+FTEST_DIR := ./func_tests
+STAT_DIR := ./stat
 
 CC := gcc
-CFLAGS := -std=gnu99 -I$(INC_PATH) -Wall -Werror -Wpedantic -Wextra -Wfloat-equal -Wfloat-conversion -Wvla
+CFLAGS := -std=c99 -I$(INC_DIR) -Wall -Werror -Wpedantic -Wextra -Wfloat-equal -Wfloat-conversion -Wvla
 LD_FLAGS := `pkg-config --cflags --libs check`
 
 ifeq ($(mode), debug)
-    CFLAGS += -g3
+    CFLAGS += -g3 -O0
 endif
 
 ifeq ($(mode), release)
-    CFLAGS += -O3
+    CFLAGS += -O3 -g0
 endif
 
-SRCS := $(wildcard $(SRC_PATH)/*.c)
-OBJS := $(SRCS:$(SRC_PATH)/%.c=$(OUT_PATH)/%.o)
+SRCS := $(wildcard $(SRC_DIR)/*.c)
+OBJS := $(SRCS:$(SRC_DIR)/%.c=$(OUT_DIR)/%.o)
 
-UTEST_SRCS := $(wildcard $(UTEST_PATH)/*.c)
-UTEST_OBJS := $(UTEST_SRCS:$(UTEST_PATH)/%.c=$(OUT_PATH)/%.o)
+UNIT_SRCS := $(wildcard $(UNIT_DIR)/*.c)
+UNIT_OBJS := $(UNIT_SRCS:$(UTEST_DIR)/%.c=$(OUT_DIR)/%.o)
 
-STAT_SRCS := $(wildcard $(STAT_PATH)/*.c)
-STAT_OBJS := $(STAT_SRCS:$(STAT_PATH)/%.c=$(OUT_PATH)/%.o)
+STAT_SRCS := $(wildcard $(STAT_DIR)/*.c)
+STAT_OBJS := $(STAT_SRCS:$(STAT_DIR)/%.c=$(OUT_DIR)/%.o)
 
-build: $(EXEC)
+build: $(APP)
 
-utest: $(UTEST_EXEC)
+unit: $(UNIT_APP)
 
-stat: $(STAT_EXEC)
+stat: $(STAT_APP)
 
-$(EXEC): $(OBJS)
+$(APP): $(OBJS)
 	@$(CC) $(CFLAGS) -o $@ $^ $(LD_FLAGS)
 
-$(UTEST_EXEC) : $(filter-out $(OUT_PATH)/main.o, $(OBJS)) $(UTEST_OBJS)
+$(UNIT_APP) : $(filter-out $(OUT_DIR)/main.o, $(OBJS)) $(UNIT_OBJS)
 	@$(CC) $(CFLAGS) -o $@ $^ $(LD_FLAGS)
 
-$(STAT_EXEC) : $(filter-out $(OUT_PATH)/main.o, $(OBJS)) $(STAT_OBJS)
-	@$(CC) $(CFLAGS) -o $@ $^ $(LD_FLAGS)
+$(STAT_APP) : $(STAT_OBJS)
+	@$(CC) $(CFLAGS) -DN_MAX="$(CURR_SIZE)" -DCODE="$(CURR_CODE)" -o $@ $^ #$(LD_FLAGS)
 
 outdir:
-	@mkdir -p $(OUT_PATH)
+	@mkdir -p $(OUT_DIR)
 
-${OUT_PATH}/%.o : ${SRC_PATH}/%.c outdir
+${OUT_DIR}/%.o : ${SRC_DIR}/%.c outdir
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-$(OUT_PATH)/check_%.o : $(UTEST_PATH)/check_%.c outdir
+$(OUT_DIR)/check_%.o : $(UNIT_DIR)/check_%.c outdir
 	@$(CC) $(CFLAGS) -o $@ -c $<
 
-$(OUT_PATH)/stat_%.o : $(STAT_PATH)/stat_%.c outdir
-	@$(CC) $(CFLAGS) -o $@ -c $<
+$(OUT_DIR)/stat_%.o : $(STAT_DIR)/stat_%.c outdir
+	@$(CC) $(CFLAGS) -DN_MAX="$(CURR_SIZE)" -DCODE="$(CURR_CODE)" -DMYSORT_CODE="$(SORTC)" -o $@ -c $<
 
-$(INC_PATH)/%.h:
+$(INC_DIR)/%.h:
 
 clean:
-	@rm -f $(EXEC) $(UTEST_EXEC) $(STAT_EXEC) ${OUT_PATH}/*
-	@rm -rf $(OUT_PATH)
+	@rm -f $(APP) $(UNIT_EXEC) $(STAT_EXEC) ${OUT_DIR}/*
+	@rm -rf $(OUT_DIR)
 
