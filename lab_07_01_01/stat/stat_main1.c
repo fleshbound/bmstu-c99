@@ -6,14 +6,17 @@
 #include "../inc/stat_sort.h"
 
 #ifndef N_MAX
+#define N_MAX 1
 #error No N_MAX was defined
 #endif
 
 #ifndef CODE
+#define CODE 1
 #error No CODE was defined
 #endif
 
 #ifndef MYSORT_CODE
+#define MYSORT_CODE 1
 #error No MYSORT_CODE was defined
 #endif
 
@@ -33,7 +36,7 @@ void fill_array(const int code)
 
     if (code == REVERSED)
         for (size_t i = 0; i < N_MAX; i++)
-            array[i] = -i;
+            array[i] = N_MAX - i;
 
     if (code == RANDOM)
         for (size_t i = 0; i < N_MAX; i++)
