@@ -13,7 +13,7 @@ function make_all_postdata
         fi
     done
     
-    fill_codes="RANDOM SORTED REVERSED"
+    fill_codes="RANDOM REVERSED SORTED"
     codecount=3
     q=1
 
@@ -43,6 +43,7 @@ function make_all_postdata
             for file in $files; do
                 x=$( echo "$file" | cut -d'_' -f2 )
                 avg=$( head -n 1 ./predata"${i}"/"${file}" )
+#                echo "${file} : ${code}"
                 echo "${x} ${avg}" >> "./postdata"${i}"/${j}_${i}_${code}_avg.txt"
             done
             

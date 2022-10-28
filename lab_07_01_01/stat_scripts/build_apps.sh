@@ -15,24 +15,24 @@ function lzero
     curr_size="$var"
 }
 
-min_size=1
-sizes="$min_size "
-i=$min_size
+#MIN_SIZE=1
+sizes="$MIN_SIZE "
+i=$MIN_SIZE
 q=1
-step=1
-mid_step=200
-middle=600
+#STEP=50
+#MID_STEP=200
+#MIDDLE=600
 
 while [ "$i" -lt "$MAX_SIZE" ]; do
-    if [ "$i" -lt "$step" ]; then
-        i=$(( i + step - min_size ))
+    if [ "$i" -lt "$STEP" ]; then
+        i=$(( i + STEP - MIN_SIZE ))
     else
-        i=$(( i + step ))
+        i=$(( i + STEP ))
     fi
 
-    #if [ "$i" -eq "$middle" ]; then
-    #    step=$mid_step
-    #fi
+    if [ "$i" -eq "$MIDDLE" ]; then
+        STEP=$MID_STEP
+    fi
 
     q=$(( q + 1 ))
     sizes="$sizes$i "
@@ -60,7 +60,7 @@ for code in $fill_codes; do
             export SORTC="0"
         fi
 
-        make stat
+        make stat >tmp.txt
         i=$(( i + 1 ))
     done
 done

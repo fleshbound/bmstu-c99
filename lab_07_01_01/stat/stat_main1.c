@@ -35,9 +35,14 @@ void fill_array(const int code)
             array[i] = i;
 
     if (code == REVERSED)
+    {
         for (size_t i = 0; i < N_MAX; i++)
+        {
             array[i] = N_MAX - i;
-
+//            printf("%d ", array[i]);
+        }
+  //      printf("\n");
+    }
     if (code == RANDOM)
         for (size_t i = 0; i < N_MAX; i++)
             array[i] = rand();

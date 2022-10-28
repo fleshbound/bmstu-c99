@@ -27,7 +27,10 @@ function make_dirs
     cd stat_scripts/
 }
 
-
+export MIN_SIZE=1
+export MIDDLE=600
+export STEP=1
+export MID_STEP=200
 export NUM_OF_MAIN=1
 export MAX_SIZE=100
 
