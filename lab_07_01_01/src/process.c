@@ -7,9 +7,12 @@
 #include "../inc/filter.h"
 #include "../inc/sort.h"
 
+#define ERR_STR "Error: "
+
 /* Get count of integers in file */
 int get_fsize(FILE *const f, size_t *const size)
 {
+    long int curr_pos = ftell(f);
     fseek(f, 0, SEEK_SET);
 
     int elem = 0;
@@ -23,6 +26,7 @@ int get_fsize(FILE *const f, size_t *const size)
     if (!feof(f))
         return ERR_DATA;
 
+    fseek(f, curr_pos, SEEK_SET);
     *size = count;
 
     if (*size == 0)
@@ -34,6 +38,7 @@ int get_fsize(FILE *const f, size_t *const size)
 /* Fill array with integers from file */
 int fill_array(FILE *const f, const int *pbeg, const int *pend)
 {
+    long int curr_pos = ftell(f);
     fseek(f, 0, SEEK_SET);
 
     int elem = 0, *pi = (int *) pbeg;
@@ -47,6 +52,8 @@ int fill_array(FILE *const f, const int *pbeg, const int *pend)
 
         pi++;
     }
+
+    fseek(f, curr_pos, SEEK_SET);
 
     return EXIT_SUCCESS;
 }
@@ -89,13 +96,10 @@ int fsort_array(int *pb_src, int *pe_src, int **pb_dest, int **pe_dest, const in
     return err_code;
 }
 
-void free_all_data(int *data1, int *data2)
+void free_data(int *data)
 {
-    if (data1 != NULL)
-        free(data1);
-
-    if (data2 != NULL)
-        free(data2);
+    if (data != NULL)
+        free(data);
 }
 
 // output sorted name_in-file to name_out-file
@@ -104,7 +108,10 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
     FILE *f_in = fopen(name_in, "rt");
 
     if (f_in == NULL)
+    {
+        perror(ERR_STR);
         return ERR_PATH;
+    }
 
     /* Size */
     size_t size = 0;
@@ -121,7 +128,11 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
 
     if (pb_src == NULL)
     {
-        fclose(f_in);
+        perror(ERR_STR);
+        
+        if (fclose(f_in) == EOF)
+            perror(ERR_STR);
+
         return ERR_MEM;
     }
 
@@ -130,14 +141,17 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
 
     if (err_code)
     {
-        fclose(f_in);
-        free_all_data(pb_src, NULL);
+        if (fclose(f_in) == EOF)
+            perror(ERR_STR);
+
+        free_data(pb_src);
         return err_code;
     }
 
     if (fclose(f_in) == EOF)
     {
-        free_all_data(pb_src, NULL);
+        perror(ERR_STR);
+        free_data(pb_src);
         return ERR_IO;
     }
 
@@ -146,7 +160,8 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
 
     if (err_code)
     {
-        free_all_data(pb_src, pb_dest);
+        free_data(pb_src);
+        free_data(pb_dest);
         return err_code;
     }
 
@@ -155,7 +170,9 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
 
     if (f_out == NULL)
     {
-        free_all_data(pb_src, pb_dest);
+        perror(ERR_STR);
+        free_data(pb_src);
+        free_data(pb_dest);
         return ERR_IO;
     }
     
@@ -164,10 +181,14 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
     else
         fprint_array(f_out, pb_src, pe_src);
 
-    free_all_data(pb_src, pb_dest);
+    free_data(pb_src);
+    free_data(pb_dest);
 
     if (fclose(f_out) == EOF)
+    {
+        perror(ERR_STR);
         return ERR_IO;
+    }
 
     return EXIT_SUCCESS;
 }
