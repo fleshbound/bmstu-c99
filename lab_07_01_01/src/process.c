@@ -119,7 +119,9 @@ int fsort_file(char *const name_in, char *const name_out, const int fcode)
 
     if (err_code)
     {
-        fclose(f_in);
+        if (fclose(f_in) == EOF)
+            perror(ERR_STR);
+
         return err_code;
     }
 
