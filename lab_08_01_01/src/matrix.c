@@ -96,8 +96,12 @@ void power_matrix(const size_t size, int **matrix, int **res_matrix, const size_
 // delete row by row_ind
 void delete_matrix_row(int **matrix, size_t *const rows, const size_t row_ind)
 {
+    int *tmp = matrix[row_ind];
+
     for (size_t i = row_ind; i < *rows - 1; i++)
         matrix[i] = matrix[i + 1];
+
+    matrix[*rows - 1] = tmp;
 
     free(matrix[*rows - 1]);
     (*rows)--;
