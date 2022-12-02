@@ -130,21 +130,21 @@ int frestrict_matrix(int **matrix, size_t *const rows, size_t *const cols)
     return rc;
 }
 
-int make_sizes_equal(int ***matrix_A, int ***matrix_B, size_t *const size_A, size_t *const size_B)
+int make_sizes_equal(int ***matrix_a, int ***matrix_b, size_t *const size_a, size_t *const size_b)
 {
     int rc = EXIT_SUCCESS;
 
-    if (*size_A > *size_B)
+    if (*size_a > *size_b)
     {
-        rc = expand_matrix(matrix_B, size_B, *size_A);
+        rc = expand_matrix(matrix_b, size_b, *size_a);
     }
     else
-        rc = expand_matrix(matrix_A, size_A, *size_B);
+        rc = expand_matrix(matrix_a, size_a, *size_b);
     
     if (rc)
     {
-        free_matrix(*matrix_A, *size_A);
-        free_matrix(*matrix_B, *size_B);
+        free_matrix(*matrix_a, *size_a);
+        free_matrix(*matrix_b, *size_b);
     }
 
     return rc;
@@ -162,22 +162,22 @@ int get_matrix_power(const size_t size, int **matrix, int ***res_matrix, const s
     return EXIT_SUCCESS;
 }
 
-int multiply_powers(const size_t size, int **matrix_A, int **matrix_B, int ***res_matrix)
+int multiply_powers(const size_t size, int **matrix_a, int **matrix_b, int ***res_matrix)
 {
-    int **new_A = NULL, **new_B = NULL;
-    size_t power_A = 1, power_B = 1;
+    int **new_a = NULL, **new_b = NULL;
+    size_t power_a = 1, power_b = 1;
 
-    if ((input_nonneg(&power_A)) || (input_nonneg(&power_B)))
+    if ((input_nonneg(&power_a)) || (input_nonneg(&power_b)))
     {
-        free_matrix(matrix_A, size);
-        free_matrix(matrix_B, size);
+        free_matrix(matrix_a, size);
+        free_matrix(matrix_b, size);
         return ERR_DATA;
     }
 
-    if ((get_matrix_power(size, matrix_A, &new_A, power_A)) || (get_matrix_power(size, matrix_B, &new_B, power_B)))
+    if ((get_matrix_power(size, matrix_a, &new_a, power_a)) || (get_matrix_power(size, matrix_b, &new_b, power_b)))
     {
-        free_matrix(matrix_A, size);
-        free_matrix(matrix_B, size);
+        free_matrix(matrix_a, size);
+        free_matrix(matrix_b, size);
         return ERR_MEM;
     }
 
@@ -185,14 +185,16 @@ int multiply_powers(const size_t size, int **matrix_A, int **matrix_B, int ***re
     
     if (*res_matrix == NULL)
     {
-        free_matrix(matrix_A, size);
-        free_matrix(matrix_B, size);
+        free_matrix(matrix_a, size);
+        free_matrix(matrix_b, size);
+        free_matrix(new_a, size);
+        free_matrix(new_b, size);
         return ERR_MEM;
     }
 
-    multiply_matrices(size, new_A, new_B, *res_matrix);
-    free_matrix(new_A, size);
-    free_matrix(new_B, size);
+    multiply_matrices(size, new_a, new_b, *res_matrix);
+    free_matrix(new_a, size);
+    free_matrix(new_b, size);
 
     return EXIT_SUCCESS;
 }
