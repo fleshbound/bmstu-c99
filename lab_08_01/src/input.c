@@ -2,17 +2,11 @@
 
 int finput_nonneg(FILE *const f, size_t *const numb)
 {
-    /* printf("input's here!\n"); */
-
     if (fscanf(f, "%zu", numb) != READ_COUNT)
-    {
-        /* printf("uh-oh...\n"); */
         return EXIT_FAILURE;
-    }
 
     if (*numb > MAX_SIZE)
         return EXIT_FAILURE;
-    /* printf("got it!\n"); */
 
     return EXIT_SUCCESS;
 }
@@ -28,6 +22,17 @@ int finput_size(FILE *const f, size_t *const size)
     return EXIT_SUCCESS;
 }
 
+int finput_power(FILE *const f, int *const power)
+{
+    if (fscanf(f, "%d", power) != READ_COUNT)
+        return EXIT_FAILURE;
+
+    if ((*power > MAX_SIZE) || (*power < 0))
+        return EXIT_FAILURE;
+
+    return EXIT_SUCCESS;
+}
+
 int finput_matrix(FILE *const f, int **matrix, const size_t rows, const size_t cols)
 {
     for (size_t i = 0; i < rows; i++)
@@ -36,6 +41,11 @@ int finput_matrix(FILE *const f, int **matrix, const size_t rows, const size_t c
                 return EXIT_FAILURE;
 
     return EXIT_SUCCESS;
+}
+
+int input_power(int *const power)
+{
+    return finput_power(stdin, power);
 }
 
 int input_size(size_t *const size)

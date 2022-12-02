@@ -14,6 +14,7 @@ int input_matrix(int **matrix, const size_t rows, const size_t cols);
 int input_nonneg(size_t *const numb);
 int input_size(size_t *const size);
 void foutput_matrix(FILE *const f, int **matrix, const size_t rows, const size_t cols);
+int input_power(int *const power);
 void output_matrix(int **matrix, const size_t rows, const size_t cols);
 
 #endif

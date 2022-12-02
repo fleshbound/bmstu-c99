@@ -149,7 +149,7 @@ int make_sizes_equal(int ***matrix_a, int ***matrix_b, size_t *const size_a, siz
     return rc;
 }
 
-int get_matrix_power(const size_t size, int **matrix, int ***res_matrix, const size_t power)
+int get_matrix_power(const size_t size, int **matrix, int ***res_matrix, const int power)
 {
     *res_matrix = allocate_matrix(size, size);
     
@@ -164,9 +164,9 @@ int get_matrix_power(const size_t size, int **matrix, int ***res_matrix, const s
 int multiply_powers(const size_t size, int **matrix_a, int **matrix_b, int ***res_matrix)
 {
     int **new_a = NULL, **new_b = NULL;
-    size_t power_a = 1, power_b = 1;
+    int power_a = 1, power_b = 1;
 
-    if ((input_nonneg(&power_a)) || (input_nonneg(&power_b)))
+    if ((input_power(&power_a)) || (input_power(&power_b)))
     {
         free_matrix(matrix_a, size);
         free_matrix(matrix_b, size);
