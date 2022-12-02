@@ -41,7 +41,7 @@ void multiply_matrices(const size_t size, int **matrix1, int **matrix2, int **re
 
             for (size_t k = 0; k < size; k++)
                 new_elem += matrix1[i][k] * matrix2[k][j];
-            
+
             res_matrix[i][j] = new_elem;
         }
 }
@@ -72,25 +72,36 @@ void ident_matrix(int **matrix, const size_t size)
 }
 
 // put power of matrix (square: size) in res_matrix
-void power_matrix(const size_t size, int **matrix, int **res_matrix, const size_t power)
+int power_matrix(const size_t size, int **matrix, int **res_matrix, const int power)
 {
     if (power == 0)
     {
         ident_matrix(res_matrix, size);
-        return;
+        return EXIT_SUCCESS;
     }
 
-    if (power == 1)
+    copy_matrix(res_matrix, matrix, size, size);
+    int **tmp = NULL;
+
+    if (power > 1)
     {
-        copy_matrix(res_matrix, matrix, size, size);
-        return;
+        tmp = allocate_matrix(size, size);
+
+        if (tmp == NULL)
+            return EXIT_FAILURE;
+
+        for (int i = 0; i < power - 1; i++)
+        {
+            copy_matrix(tmp, res_matrix, size, size);
+            /* output_matrix(res_matrix, size, size); */
+            /* output_matrix(matrix, size, size); */
+            multiply_matrices(size, tmp, matrix, res_matrix);
+        }
+
+        free_matrix(tmp, size);
     }
 
-    // 0
-    multiply_matrices(size, matrix, matrix, res_matrix);
-
-    for (size_t i = 1; i < power - 1; i++)
-        multiply_matrices(size, res_matrix, matrix, res_matrix);
+    return EXIT_SUCCESS;
 }
 
 // delete row by row_ind

@@ -35,7 +35,7 @@ int *get_new_max_col(int **matrix, const size_t rows, const size_t cols)
     return new_col;
 }
 
-int *get_new_avg_row(int **matrix, const size_t rows, const size_t cols)
+int *get_new_avg_row(int ***matrix, const size_t rows, const size_t cols)
 {
     int *new_row = malloc(cols * sizeof(int));
     int col_sum = 0;
@@ -46,7 +46,7 @@ int *get_new_avg_row(int **matrix, const size_t rows, const size_t cols)
             col_sum = 0;
             
             for (size_t i = 0; i < rows; i++)
-                col_sum += matrix[i][j];
+                col_sum += (*matrix)[i][j];
 
             new_row[j] = (int) floor((double) col_sum / (double) rows);
         }
@@ -78,7 +78,7 @@ int expand_matrix(int ***matrix, size_t *const size, const size_t new_size)
 
     while (curr_rows != new_size)
     {
-        new_row = get_new_avg_row(*matrix, curr_rows, curr_cols);
+        new_row = get_new_avg_row(matrix, curr_rows, curr_cols);
         
         if ((new_row == NULL) || (add_row_to_matrix(matrix, new_row, &curr_rows, curr_cols)))
             return EXIT_FAILURE;
@@ -137,7 +137,7 @@ int make_sizes_equal(int ***matrix_a, int ***matrix_b, size_t *const size_a, siz
     {
         rc = expand_matrix(matrix_b, size_b, *size_a);
     }
-    else
+    else if (*size_a < *size_b)
         rc = expand_matrix(matrix_a, size_a, *size_b);
     
     if (rc)
@@ -156,7 +156,8 @@ int get_matrix_power(const size_t size, int **matrix, int ***res_matrix, const i
     if (res_matrix == NULL)
         return EXIT_FAILURE;
 
-    power_matrix(size, matrix, *res_matrix, power);
+    if (power_matrix(size, matrix, *res_matrix, power))
+        return EXIT_FAILURE;
 
     return EXIT_SUCCESS;
 }
