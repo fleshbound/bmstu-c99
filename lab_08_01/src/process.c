@@ -64,9 +64,8 @@ int restrict_matrix(int **matrix, size_t *const rows, size_t *const cols)
         
         if (*rows > *cols)
             delete_matrix_row(matrix, rows, max_elem.row_ind);
-        else 
-            if (delete_matrix_col(matrix, *rows, cols, max_elem.col_ind))
-                return EXIT_FAILURE;
+        else if (delete_matrix_col(matrix, *rows, cols, max_elem.col_ind))
+            return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;

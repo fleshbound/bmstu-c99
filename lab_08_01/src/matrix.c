@@ -115,7 +115,7 @@ int delete_matrix_col(int **matrix, const size_t rows, size_t *const cols, const
     for (size_t i = 0; i < rows; i++)
     {
         for (size_t j = col_ind; j < *cols - 1; j++)
-           matrix[i][j] = matrix[i][j + 1];
+            matrix[i][j] = matrix[i][j + 1];
         
         tmp = realloc(matrix[i], (*cols - 1) * sizeof(int));
 
