@@ -2,8 +2,17 @@
 
 int finput_nonneg(FILE *const f, size_t *const numb)
 {
+    /* printf("input's here!\n"); */
+
     if (fscanf(f, "%zu", numb) != READ_COUNT)
+    {
+        /* printf("uh-oh...\n"); */
         return EXIT_FAILURE;
+    }
+
+    if (*numb > MAX_SIZE)
+        return EXIT_FAILURE;
+    /* printf("got it!\n"); */
 
     return EXIT_SUCCESS;
 }
@@ -13,7 +22,7 @@ int finput_size(FILE *const f, size_t *const size)
     if (finput_nonneg(f, size))
         return EXIT_FAILURE;
 
-    if (*size == 0)
+    if ((*size == 0) || (*size > MAX_SIZE))
         return EXIT_FAILURE;
 
     return EXIT_SUCCESS;

@@ -167,7 +167,7 @@ int multiply_powers(const size_t size, int **matrix_A, int **matrix_B, int ***re
     int **new_A = NULL, **new_B = NULL;
     size_t power_A = 1, power_B = 1;
 
-    if ((input_nonneg(&power_A)) | (input_nonneg(&power_B)))
+    if ((input_nonneg(&power_A)) || (input_nonneg(&power_B)))
     {
         free_matrix(matrix_A, size);
         free_matrix(matrix_B, size);
@@ -180,10 +180,6 @@ int multiply_powers(const size_t size, int **matrix_A, int **matrix_B, int ***re
         free_matrix(matrix_B, size);
         return ERR_MEM;
     }
-    /* power_matrix(size, matrix_A, matrix_A, power_A); */
-    /* output_matrix(matrix_A, size, size); */
-    /* power_matrix(size, matrix_B, matrix_B, power_B); */
-    /* output_matrix(matrix_B, size, size); */
 
     *res_matrix = allocate_matrix(size, size);
     

@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #define READ_COUNT 1
+#define MAX_SIZE 1000000
 
 int finput_size(FILE *const f, size_t *const size);
 int finput_nonneg(FILE *const f, size_t *const numb);
