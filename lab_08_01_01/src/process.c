@@ -1,3 +1,4 @@
+#include <math.h>
 #include "process.h"
 
 // get indexes of maximum
@@ -19,7 +20,7 @@ void get_max_ind(int **matrix, const size_t rows, const size_t cols, element_t *
 
 int *get_new_max_col(int **matrix, const size_t rows, const size_t cols)
 {
-    int *new_col = malloc(rows * sizeof(int));
+    int *new_col = calloc(rows, sizeof(int));
 
     if (new_col != NULL)
         for (size_t i = 0; i < rows; i++)
@@ -47,7 +48,7 @@ int *get_new_avg_row(int **matrix, const size_t rows, const size_t cols)
             for (size_t i = 0; i < rows; i++)
                 col_sum += matrix[i][j];
 
-            new_row[j] = col_sum / rows;
+            new_row[j] = (int) floor((double) col_sum / (double) rows);
         }
 
     return new_row;

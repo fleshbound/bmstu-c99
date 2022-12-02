@@ -39,10 +39,10 @@ unit: $(UNIT_APP)
 stat: $(STAT_APP)
 
 $(APP): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^ $(LD_FLAGS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LD_FLAGS) -lm
 
 $(UNIT_APP) : $(filter-out $(OUT_DIR)/main.o, $(OBJS)) $(UNIT_OBJS)
-	$(CC) $(CFLAGS) -o $@ $^ $(LD_FLAGS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LD_FLAGS) -lm
 
 $(STAT_APP) : $(STAT_OBJS)
 	$(CC) $(CFLAGS) -DN_MAX="$(CURR_SIZE)" -DCODE="$(CURR_CODE)" -o $@ $^ #$(LD_FLAGS)

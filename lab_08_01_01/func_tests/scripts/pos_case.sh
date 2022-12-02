@@ -33,9 +33,9 @@ touch $file_stream_out_current
 error_memory=0
 if [ "$FLAG_VAL" = "1" ]; then
     {
-        valgrind --log-file=./out/log.txt --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all --track-origins=yes ./app.exe "${app_args[@]}" < "$file_stream_in"
+        valgrind --log-file=./out/log.txt --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all --track-origins=yes ./app.exe "${app_args[@]}" <"$file_stream_in"
         res_code=$?
-    } > $file_stream_out_current
+    } >"$file_stream_out_current"
 
 #    echo "FILE NAME IN:"
 #    echo $file_stream_in
