@@ -1,14 +1,18 @@
 #include <assert.h>
 #include "unit_tests.h"
 
-void test_fill(int *data, int ***test, const size_t rows, const size_t cols)
+int test_fill(int *data, int ***test, const size_t rows, const size_t cols)
 {
     *test = test_alloc(rows, cols);
-    assert(test);
+
+    if (*test == NULL)
+        return EXIT_FAILURE;
 
     for (size_t i = 0; i < rows; i++)
         for (size_t j = 0; j < cols; j++)
             (*test)[i][j] = data[i * cols + j];
+
+    return EXIT_SUCCESS;
 }
 
 void test_free(int **data, const size_t rows)
@@ -47,7 +51,8 @@ int main(void)
     suite *matrix_suite = get_matrix_suite();
 
     runner = srunner_create(matrix_suite);
-    srunner_run_all(runner, CK_VERBOSE);
+    srunner_set_fork_status(runner, CK_NOFORK);
+    srunner_run_all(runner, CK_NORMAL);
     count_failed = srunner_ntests_failed(runner);
 
     srunner_free(runner);

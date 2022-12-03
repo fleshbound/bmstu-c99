@@ -14,7 +14,7 @@
 
 void test_free(int **data, const size_t rows);
 int **test_alloc(const size_t rows, const size_t cols);
-void test_fill(int *data, int ***test, const size_t rows, const size_t cols);
+int test_fill(int *data, int ***test, const size_t rows, const size_t cols);
 suite *get_matrix_suite(void);
 
 #endif // __UNIT_TESTS_H__
