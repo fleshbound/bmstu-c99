@@ -6,7 +6,6 @@
 #include "matrix.h"
 
 #define READ_COUNT 1
-#define MAX_SIZE -1LLU
 
 int finput_size(FILE *const f, size_t *const size);
 int finput_nonneg(FILE *const f, int *const numb);
