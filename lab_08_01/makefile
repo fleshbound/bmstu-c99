@@ -59,8 +59,6 @@ $(OUT_DIR)/check_%.o : $(UNIT_DIR)/check_%.c make_outdir
 $(OUT_DIR)/stat_%.o : $(STAT_DIR)/stat_%.c make_outdir
 	$(CC) $(CFLAGS) -DN_MAX="$(CURR_SIZE)" -DCODE="$(CURR_CODE)" -DMYSORT_CODE="$(SORTC)" -o $@ -c $<
 
-$(INC_DIR)/%.h:
-
 clean:
 	rm -f $(APP) $(UNIT_EXEC) $(STAT_EXEC) ${OUT_DIR}/*
 	rm -rf $(OUT_DIR)
