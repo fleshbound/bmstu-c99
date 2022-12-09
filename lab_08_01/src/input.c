@@ -1,11 +1,11 @@
 #include "input.h"
 
-int finput_nonneg(FILE *const f, size_t *const numb)
+int finput_nonneg(FILE *const f, int *const numb)
 {
-    if (fscanf(f, "%zu", numb) != READ_COUNT)
+    if (fscanf(f, "%d", numb) != READ_COUNT)
         return EXIT_FAILURE;
 
-    if (*numb >= MAX_SIZE)
+    if (*numb < 0)
         return EXIT_FAILURE;
 
     return EXIT_SUCCESS;
@@ -13,11 +13,15 @@ int finput_nonneg(FILE *const f, size_t *const numb)
 
 int finput_size(FILE *const f, size_t *const size)
 {
-    if (finput_nonneg(f, size))
+    int tmp = 0;
+
+    if (finput_nonneg(f, &tmp))
         return EXIT_FAILURE;
 
-    if (*size == 0)
+    if (tmp == 0)
         return EXIT_FAILURE;
+
+    *size = tmp;
 
     return EXIT_SUCCESS;
 }
@@ -53,7 +57,7 @@ int input_size(size_t *const size)
     return finput_size(stdin, size);
 }
 
-int input_nonneg(size_t *const numb)
+int input_nonneg(int *const numb)
 {
     return finput_nonneg(stdin, numb);
 }
