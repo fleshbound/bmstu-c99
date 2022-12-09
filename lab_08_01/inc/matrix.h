@@ -4,21 +4,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "input.h"
 
-int **allocate_matrix(const size_t rows, const size_t cols);
-void free_matrix(int **matrix, const size_t rows);
+typedef struct my_matrix
+{
+    size_t rows;
+    size_t cols;
+    int **data;
+} my_matrix_t;
 
-void multiply_matrices(const size_t size, int **matrix1, int **matrix2, int **res_matrix);
-int power_matrix(const size_t size, int **matrix, int **res_matrix, const int power);
+my_matrix_t allocate_matrix(const size_t rows, const size_t cols);
+void free_matrix(my_matrix_t matrix);
 
-int add_col_to_matrix(int **matrix, int *new_col, const size_t rows, size_t *const cols);
-int add_row_to_matrix(int ***matrix, int *new_row, size_t *const rows, const size_t cols);
+void multiply_matrices(my_matrix_t matrix1, my_matrix_t matrix2, my_matrix_t res_matrix);
+int power_matrix(my_matrix_t matrix, my_matrix_t res_matrix, const int power);
 
-int delete_matrix_col(int **matrix, const size_t rows, size_t *const cols, const size_t col_ind);
-void delete_matrix_row(int **matrix, size_t *const rows, const size_t row_ind);
+int add_row_to_matrix(my_matrix_t *matrix, int *new_row);
+int add_col_to_matrix(my_matrix_t *matrix, int *new_col);
 
-void null_matrix(int **matrix, const size_t rows, const size_t cols);
-void copy_matrix(int **dest, int **src, const size_t rows, const size_t cols);
+void delete_matrix_row(my_matrix_t *matrix, const size_t row_ind);
+int delete_matrix_col(my_matrix_t *matrix, const size_t col_ind);
+
+void null_matrix(my_matrix_t matrix);
+void copy_matrix(my_matrix_t dest, my_matrix_t src);
+my_matrix_t init_matrix(void);
 
 #endif

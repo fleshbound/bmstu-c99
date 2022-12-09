@@ -12,57 +12,76 @@
 
 #define MAX_POWER 100
 
+int get_matrices(my_matrix_t *matrix_a, my_matrix_t *matrix_b)
+{
+    int err_code = get_matrix(matrix_a);
+    
+    if (err_code)
+        return err_code;
+
+    err_code = get_matrix(matrix_b);
+    
+    if (err_code)
+    {
+        free_matrix(*matrix_a);
+        return err_code;
+    }
+
+    return err_code;
+}
+
+int restrict_matrices(my_matrix_t *matrix_a, my_matrix_t *matrix_b)
+{
+    int err_code = frestrict_matrix(matrix_a);
+    
+    if (err_code)
+    {
+        free_matrix(*matrix_b);
+        return err_code;
+    }
+    
+    err_code = frestrict_matrix(matrix_b);
+    
+    if (err_code)
+    {
+        free_matrix(*matrix_a);
+        return err_code;
+    }
+    
+    return err_code;
+}
+
 int main(void)
 {
-    size_t rows_a = 0, rows_b = 0, cols_a = 0, cols_b = 0;
-    int **matrix_a = NULL, **matrix_b = NULL;
+    my_matrix_t matrix_a = init_matrix();
+    my_matrix_t matrix_b = init_matrix();
     
-    int err_code = get_matrix(&matrix_a, &rows_a, &cols_a);
-    
-    if (err_code)
-        return err_code;
+    int rc = get_matrices(&matrix_a, &matrix_b);
 
-    err_code = get_matrix(&matrix_b, &rows_b, &cols_b);
-    
-    if (err_code)
-    {
-        free_matrix(matrix_a, rows_a);
-        return err_code;
-    }
+    if (rc)
+        return rc;
 
-    err_code = frestrict_matrix(matrix_a, &rows_a, &cols_a);
+    rc = restrict_matrices(&matrix_a, &matrix_b);
     
-    if (err_code)
-    {
-        free_matrix(matrix_b, rows_b);
-        return err_code;
-    }
-    
-    err_code = frestrict_matrix(matrix_b, &rows_b, &cols_b);
-    
-    if (err_code)
-    {
-        free_matrix(matrix_a, rows_a);
-        return err_code;
-    }
-    
-    size_t size_a = rows_a, size_b = rows_b;
-    err_code = make_sizes_equal(&matrix_a, &matrix_b, &size_a, &size_b);
-    
-    if (err_code)
-        return err_code;
+    if (rc)
+        return rc;
 
-    int **res_matrix = NULL;
-    size_t size = size_a;
-    err_code = multiply_powers(size, matrix_a, matrix_b, &res_matrix);
+    rc = make_sizes_equal(&matrix_a, &matrix_b);
     
-    if (err_code)
-        return err_code;
+    if (rc)
+        return rc;
 
-    free_matrix(matrix_a, size);
-    free_matrix(matrix_b, size);
-    output_matrix(res_matrix, size, size);
-    free_matrix(res_matrix, size);
+    my_matrix_t res_matrix = init_matrix();
+    rc = multiply_powers(matrix_a, matrix_b, &res_matrix);
+    
+    if (rc)
+        return rc;
+
+    free_matrix(matrix_a);
+    free_matrix(matrix_b);
+
+    output_matrix(res_matrix);
+    free_matrix(res_matrix);
 
     return EXIT_SUCCESS;
 }

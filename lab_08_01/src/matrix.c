@@ -1,205 +1,209 @@
 #include "matrix.h"
 
-// free matrix
-void free_matrix(int **matrix, const size_t rows)
+my_matrix_t init_matrix(void)
 {
-    for (size_t i = 0; i < rows; i++)
-        free(matrix[i]);
+    my_matrix_t new = { .rows = 0, .cols = 0, .data = NULL };
+    return new;
+}
 
-    free(matrix);
+// free matrix
+void free_matrix(my_matrix_t matrix)
+{
+    for (size_t i = 0; i < matrix.rows; i++)
+        free(matrix.data[i]);
+
+    free(matrix.data);
 }
 
 // allocate matrix (array of pointers to rows)
-int **allocate_matrix(const size_t rows, const size_t cols)
+my_matrix_t allocate_matrix(const size_t rows, const size_t cols)
 {
-    int **matrix = calloc(rows, sizeof(int *));
+    my_matrix_t matrix = { .rows = rows, .cols = cols };
+    matrix.data = calloc(rows, sizeof(int *));
 
-    if (matrix != NULL)
+    if (matrix.data != NULL)
         for (size_t i = 0; i < rows; i++)
         {
-            matrix[i] = calloc(cols, sizeof(int));
+            matrix.data[i] = calloc(cols, sizeof(int));
 
-            if (matrix[i] == NULL)
-            {
-                free_matrix(matrix, rows);
-                return NULL;
-            }
+            if (matrix.data[i] == NULL)
+                free_matrix(matrix);
         }
 
     return matrix;
 }
 
 // put multi of matrix1 and matrix2 (square: size) in res_matrix
-void multiply_matrices(const size_t size, int **matrix1, int **matrix2, int **res_matrix)
+void multiply_matrices(my_matrix_t matrix1, my_matrix_t matrix2, my_matrix_t res_matrix)
 {
     int new_elem = 0;
 
-    for (size_t i = 0; (res_matrix != NULL) && (i < size); i++)
-        for (size_t j = 0; j < size; j++)
+    for (size_t i = 0; (res_matrix.data != NULL) && (i < matrix1.rows); i++)
+        for (size_t j = 0; j < matrix1.rows; j++)
         {
             new_elem = 0;
 
-            for (size_t k = 0; k < size; k++)
-                new_elem += matrix1[i][k] * matrix2[k][j];
+            for (size_t k = 0; k < matrix1.rows; k++)
+                new_elem += matrix1.data[i][k] * matrix2.data[k][j];
 
-            res_matrix[i][j] = new_elem;
+            res_matrix.data[i][j] = new_elem;
         }
 }
 
 // copy src to dest
-void copy_matrix(int **dest, int **src, const size_t rows, const size_t cols)
+void copy_matrix(my_matrix_t dest, my_matrix_t src)
 {
-    for (size_t i = 0; i < rows; i++)
-        for (size_t j = 0; j < cols; j++)
-            dest[i][j] = src[i][j];
+    for (size_t i = 0; i < src.rows; i++)
+        for (size_t j = 0; j < src.cols; j++)
+            dest.data[i][j] = src.data[i][j];
 }
 
 // null matrix
-void null_matrix(int **matrix, const size_t rows, const size_t cols)
+void null_matrix(my_matrix_t matrix)
 {
-    for (size_t i = 0; i < rows; i++)
-        for (size_t j = 0; j < cols; j++)
-            matrix[i][j] = 0;
+    for (size_t i = 0; i < matrix.rows; i++)
+        for (size_t j = 0; j < matrix.cols; j++)
+            matrix.data[i][j] = 0;
 }
 
 // set matrix (square: size) as identity matrix
-void ident_matrix(int **matrix, const size_t size)
+void ident_matrix(my_matrix_t matrix)
 {
-    null_matrix(matrix, size, size);
+    null_matrix(matrix);
 
-    for (size_t i = 0; i < size; i++)
-        matrix[i][i] = 1;
+    for (size_t i = 0; i < matrix.rows; i++)
+        matrix.data[i][i] = 1;
 }
 
 // put power of matrix (square: size) in res_matrix
-int power_matrix(const size_t size, int **matrix, int **res_matrix, const int power)
+int power_matrix(my_matrix_t matrix, my_matrix_t res_matrix, const int power)
 {
     if (power == 0)
     {
-        ident_matrix(res_matrix, size);
+        ident_matrix(res_matrix);
         return EXIT_SUCCESS;
     }
 
-    copy_matrix(res_matrix, matrix, size, size);
-    int **tmp = NULL;
+    copy_matrix(res_matrix, matrix);
+    my_matrix_t tmp;
 
     if (power > 1)
     {
-        tmp = allocate_matrix(size, size);
+        tmp = allocate_matrix(matrix.rows, matrix.cols);
 
-        if (tmp == NULL)
+        if (tmp.data == NULL)
             return EXIT_FAILURE;
 
         for (int i = 0; i < power - 1; i++)
         {
-            copy_matrix(tmp, res_matrix, size, size);
+            copy_matrix(tmp, res_matrix);
             /* output_matrix(res_matrix, size, size); */
             /* output_matrix(matrix, size, size); */
-            multiply_matrices(size, tmp, matrix, res_matrix);
+            multiply_matrices(tmp, matrix, res_matrix);
         }
 
-        free_matrix(tmp, size);
+        free_matrix(tmp);
     }
 
     return EXIT_SUCCESS;
 }
 
 // delete row by row_ind
-void delete_matrix_row(int **matrix, size_t *const rows, const size_t row_ind)
+void delete_matrix_row(my_matrix_t *matrix, const size_t row_ind)
 {
-    int *tmp = matrix[row_ind];
+    int *tmp = matrix->data[row_ind];
 
-    for (size_t i = row_ind; i < *rows - 1; i++)
-        matrix[i] = matrix[i + 1];
+    for (size_t i = row_ind; i < matrix->rows - 1; i++)
+        matrix->data[i] = matrix->data[i + 1];
 
-    matrix[*rows - 1] = tmp;
+    matrix->data[matrix->rows - 1] = tmp;
 
-    free(matrix[*rows - 1]);
-    (*rows)--;
+    free(matrix->data[matrix->rows - 1]);
+    matrix->rows--;
 }
 
 // delete column by col_ind
-int delete_matrix_col(int **matrix, const size_t rows, size_t *const cols, const size_t col_ind)
+int delete_matrix_col(my_matrix_t *matrix, const size_t col_ind)
 {
     int *tmp = NULL;
 
-    for (size_t i = 0; i < rows; i++)
+    for (size_t i = 0; i < matrix->rows; i++)
     {
-        for (size_t j = col_ind; j < *cols - 1; j++)
-            matrix[i][j] = matrix[i][j + 1];
-        
-        tmp = realloc(matrix[i], (*cols - 1) * sizeof(int));
+        for (size_t j = col_ind; j < matrix->cols - 1; j++)
+            matrix->data[i][j] = matrix->data[i][j + 1];
+
+        tmp = realloc(matrix->data[i], (matrix->cols - 1) * sizeof(int));
 
         if (tmp == NULL)
             return EXIT_FAILURE;
 
-        matrix[i] = tmp;
+        matrix->data[i] = tmp;
     }
 
-    (*cols)--;
+    matrix->cols--;
 
     return EXIT_SUCCESS;
 }
 
 // reallocate matrix to add new column in the end
-int add_matrix_col(int **matrix, const size_t rows, size_t *const cols)
+int add_matrix_col(my_matrix_t *matrix)
 {
     int *tmp = NULL;
 
-    for (size_t i = 0; i < rows; i++)
+    for (size_t i = 0; i < matrix->rows; i++)
     {
-        tmp = realloc(matrix[i], (*cols + 1) * sizeof(int));
+        tmp = realloc(matrix->data[i], (matrix->cols + 1) * sizeof(int));
 
         if (tmp == NULL)
             return EXIT_FAILURE;
 
-        matrix[i] = tmp;
+        matrix->data[i] = tmp;
     }
 
-    (*cols)++;
+    matrix->cols++;
 
     return EXIT_SUCCESS;
 }
 
 // reallocate matrix to add new row in the end
-int add_matrix_row(int ***matrix, size_t *const rows, const size_t cols)
+int add_matrix_row(my_matrix_t *matrix)
 {
-    int **tmp = realloc(*matrix, (*rows + 1) * sizeof(int *));
+    int **tmp = realloc(matrix->data, (matrix->rows + 1) * sizeof(int *));
 
     if (tmp == NULL)
         return EXIT_FAILURE;
 
-    *matrix = tmp;
-    (*matrix)[*rows] = malloc(cols * sizeof(int));
+    matrix->data = tmp;
+    matrix->data[matrix->rows] = malloc(matrix->cols * sizeof(int));
 
-    if ((*matrix)[*rows] == NULL)
+    if (matrix->data[matrix->rows] == NULL)
         return EXIT_FAILURE;
 
-    (*rows)++;
+    matrix->rows++;
 
     return EXIT_SUCCESS;
 }
 
 // add new_row in the end of matrix
-int add_row_to_matrix(int ***matrix, int *new_row, size_t *const rows, const size_t cols)
+int add_row_to_matrix(my_matrix_t *matrix, int *new_row)
 {
-    if (add_matrix_row(matrix, rows, cols))
+    if (add_matrix_row(matrix))
         return EXIT_FAILURE;
 
-    for (size_t j = 0; j < cols; j++)
-        (*matrix)[*rows - 1][j] = new_row[j];
+    for (size_t j = 0; j < matrix->cols; j++)
+        matrix->data[matrix->rows - 1][j] = new_row[j];
 
     return EXIT_SUCCESS;
 }
 
 // add new_col in the end of matrix
-int add_col_to_matrix(int **matrix, int *new_col, const size_t rows, size_t *const cols)
+int add_col_to_matrix(my_matrix_t *matrix, int *new_col)
 {
-    if (add_matrix_col(matrix, rows, cols))
+    if (add_matrix_col(matrix))
         return EXIT_FAILURE;
 
-    for (size_t i = 0; i < rows; i++)
-        matrix[i][*cols - 1] = new_col[i];
+    for (size_t i = 0; i < matrix->rows; i++)
+        matrix->data[i][matrix->cols - 1] = new_col[i];
 
     return EXIT_SUCCESS;
 }

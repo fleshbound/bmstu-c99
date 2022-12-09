@@ -15,9 +15,9 @@ typedef struct elem
 
 /* int restrict_matrix(int **matrix, size_t *const rows, size_t *const cols); */
 /* int expand_matrix(int ***matrix, size_t *const size, const size_t new_size); */
-int get_matrix(int ***matrix, size_t *const rows, size_t *const cols);
-int multiply_powers(const size_t size, int **matrix_a, int **matrix_b, int ***res_matrix);
-int make_sizes_equal(int ***matrix_a, int ***matrix_b, size_t *const size_a, size_t *const size_b);
-int frestrict_matrix(int **matrix, size_t *const rows, size_t *const cols);
+int get_matrix(my_matrix_t *matrix);
+int frestrict_matrix(my_matrix_t *matrix);
+int make_sizes_equal(my_matrix_t *matrix_a, my_matrix_t *matrix_b);
+int multiply_powers(my_matrix_t matrix_a, my_matrix_t matrix_b, my_matrix_t *res_matrix);
 
 #endif

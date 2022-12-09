@@ -5,7 +5,7 @@ int finput_nonneg(FILE *const f, size_t *const numb)
     if (fscanf(f, "%zu", numb) != READ_COUNT)
         return EXIT_FAILURE;
 
-    if (*numb > MAX_SIZE)
+    if (*numb >= MAX_SIZE)
         return EXIT_FAILURE;
 
     return EXIT_SUCCESS;
@@ -16,7 +16,7 @@ int finput_size(FILE *const f, size_t *const size)
     if (finput_nonneg(f, size))
         return EXIT_FAILURE;
 
-    if ((*size == 0) || (*size > MAX_SIZE))
+    if (*size == 0)
         return EXIT_FAILURE;
 
     return EXIT_SUCCESS;
@@ -27,17 +27,17 @@ int finput_power(FILE *const f, int *const power)
     if (fscanf(f, "%d", power) != READ_COUNT)
         return EXIT_FAILURE;
 
-    if ((*power > MAX_SIZE) || (*power < 0))
+    if (*power < 0)
         return EXIT_FAILURE;
 
     return EXIT_SUCCESS;
 }
 
-int finput_matrix(FILE *const f, int **matrix, const size_t rows, const size_t cols)
+int finput_matrix(FILE *const f, my_matrix_t matrix)
 {
-    for (size_t i = 0; i < rows; i++)
-        for (size_t j = 0; j < cols; j++)
-            if (fscanf(f, "%d", &matrix[i][j]) != READ_COUNT)
+    for (size_t i = 0; i < matrix.rows; i++)
+        for (size_t j = 0; j < matrix.cols; j++)
+            if (fscanf(f, "%d", &matrix.data[i][j]) != READ_COUNT)
                 return EXIT_FAILURE;
 
     return EXIT_SUCCESS;
@@ -58,19 +58,19 @@ int input_nonneg(size_t *const numb)
     return finput_nonneg(stdin, numb);
 }
 
-int input_matrix(int **matrix, const size_t rows, const size_t cols)
+int input_matrix(my_matrix_t matrix)
 {
-    return finput_matrix(stdin, matrix, rows, cols);
+    return finput_matrix(stdin, matrix);
 }
 
-void foutput_matrix(FILE *const f, int **matrix, const size_t rows, const size_t cols)
+void foutput_matrix(FILE *const f, my_matrix_t matrix)
 {
-    for (size_t i = 0; i < rows; i++)
-        for (size_t j = 0; j < cols; j++)
-            fprintf(f, "%d%s", matrix[i][j], (j == cols - 1) ? "\n" : " ");
+    for (size_t i = 0; i < matrix.rows; i++)
+        for (size_t j = 0; j < matrix.cols; j++)
+            fprintf(f, "%d%s", matrix.data[i][j], (j == matrix.cols - 1) ? "\n" : " ");
 }
 
-void output_matrix(int **matrix, const size_t rows, const size_t cols)
+void output_matrix(my_matrix_t matrix)
 {
-    foutput_matrix(stdout, matrix, rows, cols);
+    foutput_matrix(stdout, matrix);
 }
