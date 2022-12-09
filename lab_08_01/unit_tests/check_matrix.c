@@ -2,22 +2,22 @@
 #include "matrix.h"
 #include "input.h"
 
-int cmp_res_data(const size_t rows, const size_t cols, int *data1, int **data2)
+int cmp_res_data(int *data1, my_matrix_t data2)
 {
-    for (size_t i = 0; i < rows; i++)
-        for (size_t j = 0; j < cols; j++)
-            if (data1[i * cols + j] != data2[i][j])
-                return data1[i * cols + j] - data2[i][j];
+    for (size_t i = 0; i < data2.rows; i++)
+        for (size_t j = 0; j < data2.cols; j++)
+            if (data1[i * data2.cols + j] != data2.data[i][j])
+                return data1[i * data2.cols + j] - data2.data[i][j];
 
     return 0;
 }
 
 start_test (multi_unitlen_success)
 {
-    int **test_data1 = NULL, **test_data2 = NULL, **res_data = NULL;
-
-    int data1[1] = { 1 }, data2[1] = { 2 }, correct_res[1] = { 2 };
     size_t size = 1;
+    my_matrix_t test_data1, test_data2, res_data;
+    int data1[1] = { 1 }, data2[1] = { 2 }, correct_res[1] = { 2 };
+    
     int rc = test_fill(data1, &test_data1, size, size);
 
     if (rc)
@@ -27,31 +27,31 @@ start_test (multi_unitlen_success)
 
     if (rc)
     {
-        test_free(test_data1, size);
+        test_free(test_data1);
         ck_abort();
     }
 
     res_data = test_alloc(size, size);        
 
-    if (res_data == NULL)
+    if (res_data.data == NULL)
     {
-        test_free(test_data1, size);
-        test_free(test_data2, size);
+        test_free(test_data1);
+        test_free(test_data2);
         ck_abort();
     }
    
-    multiply_matrices(size, test_data1, test_data2, res_data);
-    ck_assert(cmp_res_data(size, size, correct_res, res_data) == 0);
+    multiply_matrices(test_data1, test_data2, res_data);
+    ck_assert(cmp_res_data(correct_res, res_data) == 0);
 
-    test_free(test_data1, size);
-    test_free(test_data2, size);
-    test_free(res_data, size);
+    test_free(test_data1);
+    test_free(test_data2);
+    test_free(res_data);
 }
 end_test
 
 start_test (multi_identmatrix_success)
 {
-    int **test_data1 = NULL, **test_data2 = NULL, **res_data = NULL;
+    my_matrix_t test_data1, test_data2, res_data;
 
     int data1[4] = { 1, 2, 3, 4 },
         data2[4] = { 1, 0, 0, 1 },
@@ -66,31 +66,31 @@ start_test (multi_identmatrix_success)
 
     if (rc)
     {
-        test_free(test_data1, size);
+        test_free(test_data1);
         ck_abort();
     }
 
     res_data = test_alloc(size, size);        
 
-    if (res_data == NULL)
+    if (res_data.data == NULL)
     {
-        test_free(test_data1, size);
-        test_free(test_data2, size);
+        test_free(test_data1);
+        test_free(test_data2);
         ck_abort();
     }
   
-    multiply_matrices(size, test_data1, test_data2, res_data);
-    ck_assert(cmp_res_data(size, size, correct_res, res_data) == 0);
+    multiply_matrices(test_data1, test_data2, res_data);
+    ck_assert(cmp_res_data(correct_res, res_data) == 0);
     
-    test_free(test_data1, size);
-    test_free(test_data2, size);
-    test_free(res_data, size);
+    test_free(test_data1);
+    test_free(test_data2);
+    test_free(res_data);
 }
 end_test
 
 start_test (multi_nullmatrix_success)
 {
-    int **test_data1 = NULL, **test_data2 = NULL, **res_data = NULL;
+    my_matrix_t test_data1, test_data2, res_data;
 
     int data1[4] = { 0, 0, 0, 0 },
         data2[4] = { 1, 2, 3, 4 },
@@ -106,31 +106,31 @@ start_test (multi_nullmatrix_success)
 
     if (rc)
     {
-        test_free(test_data1, size);
+        test_free(test_data1);
         ck_abort();
     }
 
     res_data = test_alloc(size, size);        
 
-    if (res_data == NULL)
+    if (res_data.data == NULL)
     {
-        test_free(test_data1, size);
-        test_free(test_data2, size);
+        test_free(test_data1);
+        test_free(test_data2);
         ck_abort();
     }
   
-    multiply_matrices(size, test_data1, test_data2, res_data);
-    ck_assert(cmp_res_data(size, size, correct_res, res_data) == 0);
+    multiply_matrices(test_data1, test_data2, res_data);
+    ck_assert(cmp_res_data(correct_res, res_data) == 0);
     
-    test_free(test_data1, size);
-    test_free(test_data2, size);
-    test_free(res_data, size);
+    test_free(test_data1);
+    test_free(test_data2);
+    test_free(res_data);
 }
 end_test
 
 start_test (multi_similarmatrices_success)
 {
-    int **test_data1 = NULL, **test_data2 = NULL, **res_data = NULL;
+    my_matrix_t test_data1, test_data2, res_data;
 
     int data1[4] = { 1, 1, 1, 1 },
         data2[4] = { 1, 1, 1, 1 },
@@ -146,31 +146,31 @@ start_test (multi_similarmatrices_success)
 
     if (rc)
     {
-        test_free(test_data1, size);
+        test_free(test_data1);
         ck_abort();
     }
 
     res_data = test_alloc(size, size);        
 
-    if (res_data == NULL)
+    if (res_data.data == NULL)
     {
-        test_free(test_data1, size);
-        test_free(test_data2, size);
+        test_free(test_data1);
+        test_free(test_data2);
         ck_abort();
     }
 
-    multiply_matrices(size, test_data1, test_data2, res_data);
-    ck_assert(cmp_res_data(size, size, correct_res, res_data) == 0);
+    multiply_matrices(test_data1, test_data2, res_data);
+    ck_assert(cmp_res_data(correct_res, res_data) == 0);
     
-    test_free(test_data1, size);
-    test_free(test_data2, size);
-    test_free(res_data, size);
+    test_free(test_data1);
+    test_free(test_data2);
+    test_free(res_data);
 }
 end_test
 
 start_test (power_nillpower_success)
 {
-    int **test_data1 = NULL, **res_data = NULL;
+    my_matrix_t test_data1, res_data;
 
     int data[4] = { 1, 2, 3, 4 },
         correct_res[4] = { 1, 0, 0, 1 },
@@ -184,31 +184,31 @@ start_test (power_nillpower_success)
     
     res_data = test_alloc(size, size);
 
-    if (res_data == NULL)
+    if (res_data.data == NULL)
     {
-        test_free(test_data1, size);
+        test_free(test_data1);
         ck_abort();
     }
 
-    rc = power_matrix(size, test_data1, res_data, power);
+    rc = power_matrix(test_data1, res_data, power);
     
     if (rc)
     {
-        test_free(test_data1, size);
-        test_free(res_data, size);
+        test_free(test_data1);
+        test_free(res_data);
         ck_abort();
     }
 
-    ck_assert(cmp_res_data(size, size, correct_res, res_data) == 0);
+    ck_assert(cmp_res_data(correct_res, res_data) == 0);
      
-    test_free(test_data1, size);
-    test_free(res_data, size);
+    test_free(test_data1);
+    test_free(res_data);
 }
 end_test
 
 start_test (power_onepower_success)
 {
-    int **test_data1 = NULL, **res_data = NULL;
+    my_matrix_t test_data1, res_data;
 
     int data[4] = { 1, 2, 3, 4 },
         correct_res[4] = { 1, 2, 3, 4 },
@@ -222,31 +222,31 @@ start_test (power_onepower_success)
     
     res_data = test_alloc(size, size);
 
-    if (res_data == NULL)
+    if (res_data.data == NULL)
     {
-        test_free(test_data1, size);
+        test_free(test_data1);
         ck_abort();
     }
 
-    rc = power_matrix(size, test_data1, res_data, power);
+    rc = power_matrix(test_data1, res_data, power);
     
     if (rc)
     {
-        test_free(test_data1, size);
-        test_free(res_data, size);
+        test_free(test_data1);
+        test_free(res_data);
         ck_abort();
     }
     
-    ck_assert(cmp_res_data(size, size, correct_res, res_data) == 0);
+    ck_assert(cmp_res_data(correct_res, res_data) == 0);
      
-    test_free(test_data1, size);
-    test_free(res_data, size);
+    test_free(test_data1);
+    test_free(res_data);
 }
 end_test
 
 start_test (power_forthpower_success)
 {
-    int **test_data1 = NULL, **res_data = NULL;
+    my_matrix_t test_data1, res_data;
 
     int data[4] = { 1, 1, 1, 1 },
         correct_res[4] = { 8, 8, 8, 8 },
@@ -260,31 +260,31 @@ start_test (power_forthpower_success)
     
     res_data = test_alloc(size, size);
 
-    if (res_data == NULL)
+    if (res_data.data == NULL)
     {
-        test_free(test_data1, size);
+        test_free(test_data1);
         ck_abort();
     }
 
-    rc = power_matrix(size, test_data1, res_data, power);
+    rc = power_matrix(test_data1, res_data, power);
     
     if (rc)
     {
-        test_free(test_data1, size);
-        test_free(res_data, size);
+        test_free(test_data1);
+        test_free(res_data);
         ck_abort();
     }
 
-    ck_assert(cmp_res_data(size, size, correct_res, res_data) == 0);
+    ck_assert(cmp_res_data(correct_res, res_data) == 0);
      
-    test_free(test_data1, size);
-    test_free(res_data, size);
+    test_free(test_data1);
+    test_free(res_data);
 }
 end_test
 
 start_test (power_identmatrix_success)
 {
-    int **test_data1 = NULL, **res_data = NULL;
+    my_matrix_t test_data1, res_data;
 
     int data[4] = { 1, 0, 0, 1 },
         correct_res[4] = { 1, 0, 0, 1 },
@@ -298,25 +298,25 @@ start_test (power_identmatrix_success)
     
     res_data = test_alloc(size, size);
 
-    if (res_data == NULL)
+    if (res_data.data == NULL)
     {
-        test_free(test_data1, size);
+        test_free(test_data1);
         ck_abort();
     }
 
-    rc = power_matrix(size, test_data1, res_data, power);
+    rc = power_matrix(test_data1, res_data, power);
     
     if (rc)
     {
-        test_free(test_data1, size);
-        test_free(res_data, size);
+        test_free(test_data1);
+        test_free(res_data);
         ck_abort();
     }
 
-    ck_assert(cmp_res_data(size, size, correct_res, res_data) == 0);
+    ck_assert(cmp_res_data(correct_res, res_data) == 0);
      
-    test_free(test_data1, size);
-    test_free(res_data, size);
+    test_free(test_data1);
+    test_free(res_data);
 }
 end_test
 
