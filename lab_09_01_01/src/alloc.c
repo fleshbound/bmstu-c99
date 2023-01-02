@@ -5,6 +5,8 @@
 #include "alloc.h"
 #include "errors.h"
 
+/* static int alloc_count, free_count; */
+
 info_movie_t create_movie(char *title, char *name, const int year)
 {
     info_movie_t movie = calloc(1, sizeof(struct info_movie));
@@ -56,23 +58,43 @@ void free_movies_data(movies_data_t *movies)
     movies->max_size = 0;
 }
 
-info_movie_t *realloc_movies_data(info_movie_t *old_data, size_t *const size)
+info_movie_t *realloc_movies_data(info_movie_t **old_data, size_t *const size)
 {
     info_movie_t *data = NULL;
+    void *tmp;
 
-    if ((*size == 0) && (old_data == NULL))
+    if ((*size == 0) && (*old_data == NULL))
     {
         *size = ALLOC_START_SIZE;
-        data = calloc(*size, sizeof(info_movie_t));
+        data = calloc(ALLOC_START_SIZE, sizeof(info_movie_t));
     }
 
-    if ((*size == 0) && (old_data != NULL))
-        free(old_data);
-
-    if ((*size != 0) && (old_data != NULL))
+    if ((*size == 0) && (*old_data != NULL))
     {
+        *size = 0;
+        
+        for (size_t i = 0; i < *size; i++)
+            free(*old_data[i]);
+
+        free(*old_data);
+    }
+
+    if ((*size != 0) && (*old_data != NULL))
+    {
+        tmp = realloc(*old_data, *size * ALLOC_COEF * sizeof(info_movie_t));
+    
+        if (tmp == NULL)
+        {
+            for (size_t i = 0; i < *size; i++)
+                free(*old_data[i]);
+
+            free(*old_data);
+            
+            return NULL;
+        }
+
+        data = tmp;
         *size = *size * ALLOC_COEF;
-        data = realloc(old_data, *size * sizeof(info_movie_t));
     }
 
     return data;

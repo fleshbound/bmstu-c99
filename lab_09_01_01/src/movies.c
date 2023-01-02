@@ -22,25 +22,35 @@ bool is_space_str(char *const string)
     return TRUE;
 }
 
-int copy_movie(info_movie_t dst, info_movie_t src)
+int copy_movie(info_movie_t *dst, info_movie_t src)
 {
+    if (*dst == NULL)
+    {
+        *dst = create_movie(src->title, src->name, src->year);
+
+        if (*dst == NULL)
+            return EXIT_FAILURE;
+
+        return EXIT_SUCCESS;
+    }
+
     char *title = strdup(src->title);
 
     if (title == NULL)
         return EXIT_FAILURE;
 
-    free(dst->title);
-    dst->title = title;
+    free((*dst)->title);
+    (*dst)->title = title;
 
     char *name = strdup(src->name);
 
     if (name == NULL)
         return EXIT_FAILURE;
 
-    free(dst->name);
-    dst->name = name;
+    free((*dst)->name);
+    (*dst)->name = name;
 
-    dst->year = src->year;
+    (*dst)->year = src->year;
 
     return EXIT_SUCCESS;
 }
@@ -54,19 +64,21 @@ info_movie_t read_movie(FILE *const f, int *const end_flag)
     // if cannot read the title then it's eof
     if (getline(&title, &len, f) == -1)
     {
+        if (title != NULL)
+            free(title);
+
         *end_flag = TRUE;
         return NULL;
     } 
     // wrong input OR blank space
-    else if ((title[len - 1] - 1 != '\n') || (is_space_str(title)))
+    else if ((title[strlen(title) - 1] != '\n') || (is_space_str(title)))
     {
         free(title);
         return NULL;
     }
 
     // wrong input OR blank space OR last symbol isn't \n
-    if ((getline(&name, &len, f) == -1) || (is_space_str(name)) ||
-        (name[len - 1] == '\n'))
+    if ((getline(&name, &len, f) == -1) || (is_space_str(name)) || (name[strlen(name) - 1] != '\n'))
     {
         free(title);
 
@@ -88,6 +100,9 @@ info_movie_t read_movie(FILE *const f, int *const end_flag)
     fgetc(f);
 
     info_movie_t movie = create_movie(title, name, year);
+
+    free(title);
+    free(name);
 
     return movie;
 }
@@ -134,11 +149,14 @@ int add_movie(movies_data_t *movies_data, info_movie_t movie, const int field_co
 {
     if (movies_data->size == movies_data->max_size)
     {
-        movies_data->data = realloc_movies_data(movies_data->data, &movies_data->max_size);
-        
+        //tmp
+        movies_data->data = realloc_movies_data(&movies_data->data, &movies_data->max_size);
         if (movies_data->data == NULL)
             return ERR_MEM;
     } 
+
+    movies_data->size++;
+    movies_data->data[movies_data->size - 1] = NULL;
 
     size_t i = 0;
 
@@ -147,13 +165,17 @@ int add_movie(movies_data_t *movies_data, info_movie_t movie, const int field_co
         i++;
 
     for (size_t j = movies_data->size - 1; (j > i) && (1 < movies_data->size); j--)
-        if (copy_movie(movies_data->data[j], movies_data->data[j - 1]))
+        if (copy_movie(&movies_data->data[j], movies_data->data[j - 1]))
             return ERR_MEM;
     
-    if (copy_movie(movies_data->data[i], movie))
+    if (copy_movie(&movies_data->data[i], movie))
+    {
+        free_movie(&movie);
         return ERR_MEM;
+    }
 
-    movies_data->size++;
+    free_movie(&movie);
+
     return EXIT_SUCCESS;
 }
 

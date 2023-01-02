@@ -20,10 +20,18 @@ int show_all_movies(char *const filename, const int field_code)
     int err_code = fget_movies(f, &movies, field_code);
     
     if (fclose(f) == EOF)
+    {
+        if (movies.size > 0)
+            free_movies_data(&movies);
+        
         return ERR_IO;
+    }
 
     if (err_code)
+    {
+        free_movies_data(&movies);
         return err_code;
+    }
 
     for (size_t i = 0; i < movies.size; i++)
         show_movie(movies.data[i], stdout);
@@ -35,11 +43,11 @@ int show_all_movies(char *const filename, const int field_code)
 
 int check_key(const int field_code, char *const value)
 {
-    if (TITLE_CODE == field_code)
-        return ERR_ARGS;
+    /* if (TITLE_CODE == field_code) */
+    /*     return ERR_ARGS; */
 
-    if (NAME_CODE == field_code)
-        return ERR_ARGS;
+    /* if (NAME_CODE == field_code) */
+    /*     return ERR_ARGS; */
     
     if ((YEAR_CODE == field_code) && ((strtol(value, NULL, 10) <= 0) ||
         (errno == ERANGE)))
@@ -53,6 +61,9 @@ int binary_search_movie(movies_data_t movies, const int field_code, char *value)
     int right = movies.size - 1, left = 0, middle;
     info_movie_t tmp_m = create_movie(value, value, strtol(value, NULL, 10));
 
+    if (tmp_m == NULL)
+        return -1;
+
     while (left <= right)
     {
         middle = (right + left) / 2;
@@ -61,9 +72,14 @@ int binary_search_movie(movies_data_t movies, const int field_code, char *value)
             right = middle - 1;
         else if (compare(tmp_m, movies.data[middle], field_code, TRUE))
             left = middle + 1;
-        else 
+        else
+        {
+            free_movie(&tmp_m); 
             return middle;
+        }
     }
+
+    free_movie(&tmp_m);
 
     return movies.size;
 }
@@ -78,21 +94,34 @@ int search_movie(char *const filename, const int field_code, char *const key_val
     int err_code = check_key(field_code, key_value);
 
     if (err_code)
+    {
+        fclose(f);
         return err_code;
+    }
 
     movies_data_t movies = { .size = 0, .max_size = 0, .data = NULL };
     err_code = fget_movies(f, &movies, field_code);
     
     if (fclose(f) == EOF)
+    {
+        if (movies.size > 0)
+            free_movies_data(&movies);
+
         return ERR_IO;
+    }
 
     if (err_code)
+    {
+        free_movies_data(&movies);
         return err_code;
+    }
     
-    size_t desired_mov_i = binary_search_movie(movies, field_code, key_value);
+    int desired_mov_i = binary_search_movie(movies, field_code, key_value);
 
-    if (desired_mov_i == movies.size)
+    if (desired_mov_i == (int) movies.size)
         fprintf(stderr, "Not found");
+    else if (desired_mov_i == -1)
+        fprintf(stderr, "Mem err");
     else 
         show_movie(movies.data[desired_mov_i], stdout);
 
