@@ -135,7 +135,7 @@ function check_negative
 # ---MAIN-CODE---
 # ---v-v-v-v-v---
 
-cd ../../
+#cd ../../
 
 if [ ! \( -f ./app.exe \) ]; then
     echo "ERROR: No executable file(s) was(were) found"

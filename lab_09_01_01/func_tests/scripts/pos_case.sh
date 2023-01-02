@@ -11,7 +11,7 @@ ERROR_NONE=255
 file_stream_in="$1"
 file_stream_out_except="$2"
 file_app_args="$3"
-file_stream_out_current="tmp.txt"
+file_stream_out_current="./out/1.txt"
 
 #cd ../../
 
@@ -33,9 +33,9 @@ touch $file_stream_out_current
 error_memory=0
 if [ "$FLAG_VAL" = "1" ]; then
     {
-        valgrind --tool=memcheck --log-file=log.txt --quiet ./app.exe "${app_args[@]}" < "$file_stream_in"
+        valgrind --log-file=./out/log.txt --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all --track-origins=yes ./app.exe "${app_args[@]}" <"$file_stream_in"
         res_code=$?
-    } > $file_stream_out_current
+    } >"$file_stream_out_current"
 
 #    echo "FILE NAME IN:"
 #    echo $file_stream_in
@@ -45,25 +45,30 @@ if [ "$FLAG_VAL" = "1" ]; then
 
 #    echo "GOT:"
 #    cat $file_stream_out_current
+
+    error_memory=1
     
-    if [ -s "log.txt" ]; then
-        error_memory=1
+    if grep -q "All heap blocks were freed -- no leaks are possible" ./out/log.txt; then
+        error_memory=0
     fi
 else
     ./app.exe "${app_args[@]}" <"$file_stream_in" >"$file_stream_out_current"
     res_code=$?
 
-#    echo "FILE NAME IN:"
-#    echo $file_stream_in
-
-#     echo "EXPECTED:"
-#     cat $file_stream_out_except
-
-#     echo "GOT:"
-#     cat $file_stream_out_current
+    #echo "FILE NAME IN:"
+    #echo $file_stream_in
     
-#    echo "RESULT CODE:"
-#    echo "$res_code"
+    #echo "FILE NAME OUT:"
+    #echo $file_stream_out_current
+
+    #echo "EXPECTED:"
+    #cat $file_stream_out_except
+
+    #echo "GOT:"
+    #cat $file_stream_out_current
+    
+    #echo "RESULT CODE:"
+    #echo "$res_code"
 fi
 
 error_answer=0
@@ -74,13 +79,14 @@ if [ $res_code -ne 0 ]; then
 else
     ./func_tests/scripts/comparator.sh "$file_stream_out_current" "$file_stream_out_except"
     result=$?
+#    echo "$result"
     
     if [ $result -ne $EXIT_SUCCESS ]; then
-        #echo "EXPECTED:"
-        #cat $file_stream_out_except
+        echo "EXPECTED:"
+        cat $file_stream_out_except
 
-        #echo "GOT:"
-        #cat $file_stream_out_current
+        echo "GOT:"
+        cat $file_stream_out_current
 
         error_answer=1
     fi
@@ -97,3 +103,4 @@ elif [ $error_answer -eq 0 ] && [ $error_memory -ne 0 ]; then
 elif [ $error_answer -ne 0 ] && [ $error_memory -ne 0 ]; then
     exit $ERROR_MEMORY_ANSWER
 fi
+

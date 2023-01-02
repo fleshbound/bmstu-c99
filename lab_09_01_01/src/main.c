@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 #include "argch.h"
-#include "movies.h"
+#include "mov_proc.h"
 
 int main(int argc, char *argv[])
 {

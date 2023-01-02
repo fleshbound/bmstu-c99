@@ -14,7 +14,7 @@ FTEST_DIR := ./func_tests
 STAT_DIR := ./stat
 
 CC := gcc
-CFLAGS := -std=c99 -I$(INC_DIR) -Wall -Werror -Wpedantic -Wextra -Wfloat-equal -Wfloat-conversion -Wvla
+CFLAGS := -std=gnu99 -I$(INC_DIR) -Wall -Werror -Wpedantic -Wextra -Wfloat-equal -Wfloat-conversion -Wvla
 LD_FLAGS := `pkg-config --cflags --libs check`
 
 ifeq ($(mode), debug)
