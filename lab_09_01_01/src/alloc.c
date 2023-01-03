@@ -50,9 +50,6 @@ void free_movie(info_movie_t *movie)
 
 void free_movies_data(movies_data_t *movies)
 {
-    if (movies->data == NULL)
-        return;
-
     for (size_t i = 0; i < movies->size; i++)
         free_movie(&movies->data[i]);
 
