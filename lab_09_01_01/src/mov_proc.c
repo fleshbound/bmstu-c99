@@ -50,7 +50,7 @@ int check_key(const int field_code, char *const value)
 int binary_search_movie(movies_data_t movies, const int field_code, char *value)
 {
     int right = movies.size - 1, left = 0, middle;
-    struct info_movie tmp_m = { .title = value, .name = value, .year = strtol(value, NULL, 10)};
+    struct info_movie tmp_m = { .title = value, .name = value, .year = strtol(value, NULL, 10) };
 
     while (left <= right)
     {

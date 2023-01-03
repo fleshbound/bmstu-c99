@@ -23,17 +23,9 @@ info_movie_t create_movie(char *title, char *name, const int year)
 
 void free_movie(info_movie_t *movie)
 {
-    if (*movie == NULL)
-        return;
-
-    if ((*movie)->title != NULL)
-        free((*movie)->title);
-
-    if ((*movie)->name != NULL)
-        free((*movie)->name);
-
+    free((*movie)->title);
+    free((*movie)->name);
     free(*movie);
-    *movie = NULL;
 }
 
 void show_movie(info_movie_t movie, FILE *const f)
@@ -43,6 +35,9 @@ void show_movie(info_movie_t movie, FILE *const f)
 
 bool is_space_str(char *const string)
 {
+    if (strlen(string) == 0)
+        return TRUE;
+
     for (size_t i = 0; i < strlen(string) - 1; i++)
         if (!isspace(string[i]))
             return FALSE;
@@ -95,17 +90,12 @@ info_movie_t read_movie(FILE *const f, int *const end_flag)
     return movie;
 }
 
-size_t max_length(char *const str1, char *const str2)
-{
-    return (strlen(str1) > strlen(str2)) ? strlen(str1) : strlen(str2);
-}
-
 bool compare_titles(info_movie_t mov1, info_movie_t mov2, const bool strict)
 {
-    if ((strict) && (strncmp(mov1->title, mov2->title, max_length(mov1->title, mov2->title) - 1) <= 0))
+    if ((strict) && (strcmp(mov1->title, mov2->title) <= 0))
         return FALSE;
     
-    if ((!strict) && (strncmp(mov1->title, mov2->title, max_length(mov1->title, mov2->title) - 1) < 0))
+    if ((!strict) && (strcmp(mov1->title, mov2->title) < 0))
         return FALSE;
 
     return TRUE;
@@ -113,10 +103,10 @@ bool compare_titles(info_movie_t mov1, info_movie_t mov2, const bool strict)
 
 bool compare_names(info_movie_t mov1, info_movie_t mov2, const bool strict)
 {
-    if ((strict) && (strncmp(mov1->name, mov2->name, max_length(mov1->name, mov2->name) - 1) <= 0))
+    if ((strict) && (strcmp(mov1->name, mov2->name) <= 0))
         return FALSE;
     
-    if ((!strict) && (strncmp(mov1->name, mov2->name, max_length(mov1->name, mov2->name) - 1) < 0))
+    if ((!strict) && (strcmp(mov1->name, mov2->name) < 0))
         return FALSE;
 
     return TRUE;

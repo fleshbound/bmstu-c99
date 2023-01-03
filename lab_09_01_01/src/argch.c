@@ -13,13 +13,13 @@ int check_args(const int argc, char *const field, int *const field_code, int *co
     else 
         return ERR_ARGS;
 
-    if (!strncmp(field, FIELD_TITLE, LEN_FIELD_MAX))
+    if (!strcmp(field, FIELD_TITLE))
         *field_code = TITLE_CODE;
 
-    if (!strncmp(field, FIELD_NAME, LEN_FIELD_MIN))
+    if (!strcmp(field, FIELD_NAME))
         *field_code = NAME_CODE;
 
-    if (!strncmp(field, FIELD_YEAR, LEN_FIELD_MIN))
+    if (!strcmp(field, FIELD_YEAR))
         *field_code = YEAR_CODE;
 
     if (NO_CODE == *field_code)
