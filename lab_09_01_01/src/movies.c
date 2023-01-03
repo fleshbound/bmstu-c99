@@ -24,33 +24,13 @@ bool is_space_str(char *const string)
 
 int copy_movie(info_movie_t *dst, info_movie_t src)
 {
+    if (*dst != NULL)
+        free_movie(dst);
+
+    *dst = create_movie(src->title, src->name, src->year);
+
     if (*dst == NULL)
-    {
-        *dst = create_movie(src->title, src->name, src->year);
-
-        if (*dst == NULL)
-            return EXIT_FAILURE;
-
-        return EXIT_SUCCESS;
-    }
-
-    char *title = strdup(src->title);
-
-    if (title == NULL)
         return EXIT_FAILURE;
-
-    free((*dst)->title);
-    (*dst)->title = title;
-
-    char *name = strdup(src->name);
-
-    if (name == NULL)
-        return EXIT_FAILURE;
-
-    free((*dst)->name);
-    (*dst)->name = name;
-
-    (*dst)->year = src->year;
 
     return EXIT_SUCCESS;
 }
