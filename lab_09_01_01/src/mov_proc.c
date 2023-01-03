@@ -21,17 +21,13 @@ int show_all_movies(char *const filename, const int field_code)
     
     if (fclose(f) == EOF)
     {
-        if (movies.data != NULL)
-            free_movies_data(&movies);
-        
+        free_movies_data(&movies);
         return ERR_IO;
     }
 
     if (err_code)
     {
-        if (movies.data != NULL)
-            free_movies_data(&movies);
-        
+        free_movies_data(&movies);
         return err_code;
     }
 
@@ -97,17 +93,13 @@ int search_movie(char *const filename, const int field_code, char *const key_val
     
     if (fclose(f) == EOF)
     {
-        if (movies.data != NULL)
-            free_movies_data(&movies);
-
+        free_movies_data(&movies);
         return ERR_IO;
     }
 
     if (err_code)
     {
-        if (movies.data != NULL)
-            free_movies_data(&movies);
-        
+        free_movies_data(&movies);
         return err_code;
     }
     

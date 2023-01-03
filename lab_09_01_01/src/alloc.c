@@ -37,6 +37,9 @@ info_movie_t create_movie(char *title, char *name, const int year)
 
 void free_movie(info_movie_t *movie)
 {
+    if (*movie == NULL)
+        return;
+
     if ((*movie)->title != NULL)
         free((*movie)->title);
 
