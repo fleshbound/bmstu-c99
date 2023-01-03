@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "movies.h"
+#include "info_movie.h"
 
 #define start_test START_TEST
 #define end_test END_TEST

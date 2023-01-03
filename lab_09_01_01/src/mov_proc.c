@@ -3,10 +3,9 @@
 #include <string.h>
 #include <errno.h>
 
-#include "alloc.h"
 #include "argch.h"
 #include "errors.h"
-#include "movies.h"
+#include "movies_data.h"
 #include "mov_proc.h"
 
 int show_all_movies(char *const filename, const int field_code)
@@ -17,7 +16,7 @@ int show_all_movies(char *const filename, const int field_code)
         return ERR_IO;
 
     movies_data_t movies = { .size = 0, .max_size = 0, .data = NULL };
-    int err_code = fget_movies(f, &movies, field_code);
+    int err_code = fill_movies_data(f, &movies, field_code);
     
     if (fclose(f) == EOF)
     {
@@ -89,7 +88,7 @@ int search_movie(char *const filename, const int field_code, char *const key_val
         return ERR_IO;
 
     movies_data_t movies = { .size = 0, .max_size = 0, .data = NULL };
-    err_code = fget_movies(f, &movies, field_code);
+    err_code = fill_movies_data(f, &movies, field_code);
     
     if (fclose(f) == EOF)
     {
