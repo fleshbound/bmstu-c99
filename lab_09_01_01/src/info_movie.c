@@ -90,12 +90,17 @@ info_movie_t read_movie(FILE *const f, int *const end_flag)
     return movie;
 }
 
+size_t max_length(char *const str1, char *const str2)
+{
+    return (strlen(str1) > strlen(str2)) ? strlen(str1) : strlen(str2);
+}
+
 bool compare_titles(info_movie_t mov1, info_movie_t mov2, const bool strict)
 {
-    if ((strict) && (strcmp(mov1->title, mov2->title) <= 0))
+    if ((strict) && (strncmp(mov1->title, mov2->title, max_length(mov1->title, mov2->title) - 1) <= 0))
         return FALSE;
     
-    if ((!strict) && (strcmp(mov1->title, mov2->title) < 0))
+    if ((!strict) && (strncmp(mov1->title, mov2->title, max_length(mov1->title, mov2->title) - 1) < 0))
         return FALSE;
 
     return TRUE;
@@ -103,10 +108,10 @@ bool compare_titles(info_movie_t mov1, info_movie_t mov2, const bool strict)
 
 bool compare_names(info_movie_t mov1, info_movie_t mov2, const bool strict)
 {
-    if ((strict) && (strcmp(mov1->name, mov2->name) <= 0))
+    if ((strict) && (strncmp(mov1->name, mov2->name, max_length(mov1->name, mov2->name) - 1) <= 0))
         return FALSE;
     
-    if ((!strict) && (strcmp(mov1->name, mov2->name) < 0))
+    if ((!strict) && (strncmp(mov1->name, mov2->name, max_length(mov1->name, mov2->name) - 1) < 0))
         return FALSE;
 
     return TRUE;
