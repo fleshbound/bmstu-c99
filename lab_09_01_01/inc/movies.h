@@ -29,5 +29,6 @@ typedef struct movies_data
 int fget_movies(FILE *const f, movies_data_t *movies, const int field_code);
 void show_movie(info_movie_t movie, FILE *const f);
 bool compare(info_movie_t mov1, info_movie_t mov2, const int code, const bool strict);
+info_movie_t read_movie(FILE *const f, int *const end_flag);
 
 #endif // #ifndef __MOVIES_H__
