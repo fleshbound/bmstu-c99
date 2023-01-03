@@ -147,10 +147,7 @@ int add_movie(movies_data_t *movies_data, info_movie_t movie, const int field_co
         movies_data->data = realloc_movies_data(&movies_data->data, &movies_data->max_size);
         
         if (movies_data->data == NULL)
-        {
-            free_movie(&movie);
             return EXIT_FAILURE;
-        }
     } 
 
     movies_data->size++;
@@ -183,7 +180,7 @@ int fget_movies(FILE *const f, movies_data_t *movies, const int field_code)
         curr_movie = read_movie(f, &is_end);
 
         if ((curr_movie == NULL) && (!is_end))
-            return ERR_MEM;
+            return ERR_DATA;
 
         if (!is_end)
             if (add_movie(movies, curr_movie, field_code))
