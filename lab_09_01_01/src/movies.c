@@ -64,27 +64,22 @@ info_movie_t read_movie(FILE *const f, int *const end_flag)
     // if cannot read the title then it's eof
     if (getline(&title, &len, f) == -1)
     {
-        if (title != NULL)
-            free(title);
-
+        free(title);
         *end_flag = TRUE;
         return NULL;
     } 
     // wrong input OR blank space
-    else if ((title[strlen(title) - 1] != '\n') || (is_space_str(title)))
+    else if (is_space_str(title))
     {
         free(title);
         return NULL;
     }
 
     // wrong input OR blank space OR last symbol isn't \n
-    if ((getline(&name, &len, f) == -1) || (is_space_str(name)) || (name[strlen(name) - 1] != '\n'))
+    if ((getline(&name, &len, f) == -1) || (is_space_str(name)))
     {
         free(title);
-
-        if (name != NULL)
-            free(name);
-
+        free(name);
         return NULL;
     }
 

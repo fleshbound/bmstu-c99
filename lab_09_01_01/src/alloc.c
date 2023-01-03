@@ -71,16 +71,6 @@ info_movie_t *realloc_movies_data(info_movie_t **old_data, size_t *const size)
         data = calloc(ALLOC_START_SIZE, sizeof(info_movie_t));
     }
 
-    if ((*size == 0) && (*old_data != NULL))
-    {
-        *size = 0;
-        
-        for (size_t i = 0; i < *size; i++)
-            free(*old_data[i]);
-
-        free(*old_data);
-    }
-
     if ((*size != 0) && (*old_data != NULL))
     {
         tmp = realloc(*old_data, *size * ALLOC_COEF * sizeof(info_movie_t));
