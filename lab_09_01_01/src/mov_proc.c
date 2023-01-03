@@ -29,7 +29,9 @@ int show_all_movies(char *const filename, const int field_code)
 
     if (err_code)
     {
-        free_movies_data(&movies);
+        if (movies.data != NULL)
+            free_movies_data(&movies);
+        
         return err_code;
     }
 
@@ -80,18 +82,15 @@ int binary_search_movie(movies_data_t movies, const int field_code, char *value)
 
 int search_movie(char *const filename, const int field_code, char *const key_value)
 {
+    int err_code = check_key(field_code, key_value);
+    
+    if (err_code)
+        return err_code;
+    
     FILE *f = fopen(filename, "r");
 
     if (f == NULL)
         return ERR_IO;
-
-    int err_code = check_key(field_code, key_value);
-
-    if (err_code)
-    {
-        fclose(f);
-        return err_code;
-    }
 
     movies_data_t movies = { .size = 0, .max_size = 0, .data = NULL };
     err_code = fget_movies(f, &movies, field_code);

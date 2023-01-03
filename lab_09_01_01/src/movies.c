@@ -168,16 +168,12 @@ int add_movie(movies_data_t *movies_data, info_movie_t movie, const int field_co
 
     for (size_t j = movies_data->size - 1; (j > i) && (1 < movies_data->size); j--)
         if (copy_movie(&movies_data->data[j], movies_data->data[j - 1]))
-        {
-            free_movie(&movie);
             return EXIT_FAILURE;
-        }
  
     if (copy_movie(&movies_data->data[i], movie))
-    {
-        free_movie(&movie);
         return EXIT_FAILURE;
-    }
+
+    free_movie(&movie);
 
     return EXIT_SUCCESS;
 }
@@ -196,9 +192,10 @@ int fget_movies(FILE *const f, movies_data_t *movies, const int field_code)
 
         if (!is_end)
             if (add_movie(movies, curr_movie, field_code))
+            {
+                free_movie(&curr_movie);
                 return ERR_MEM;
-
-        free_movie(&curr_movie);
+            }
     }
 
     if (!is_end)
