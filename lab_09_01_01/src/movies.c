@@ -149,10 +149,13 @@ int add_movie(movies_data_t *movies_data, info_movie_t movie, const int field_co
 {
     if (movies_data->size == movies_data->max_size)
     {
-        //tmp
         movies_data->data = realloc_movies_data(&movies_data->data, &movies_data->max_size);
+        
         if (movies_data->data == NULL)
-            return ERR_MEM;
+        {
+            free_movie(&movie);
+            return EXIT_FAILURE;
+        }
     } 
 
     movies_data->size++;
@@ -160,18 +163,17 @@ int add_movie(movies_data_t *movies_data, info_movie_t movie, const int field_co
 
     size_t i = 0;
 
-    while ((i < movies_data->size - 1) && (1 < movies_data->size) &&
-           (compare(movie, movies_data->data[i], field_code, FALSE)))
+    while ((i < movies_data->size - 1) && (1 < movies_data->size) && (compare(movie, movies_data->data[i], field_code, FALSE)))
         i++;
 
     for (size_t j = movies_data->size - 1; (j > i) && (1 < movies_data->size); j--)
         if (copy_movie(&movies_data->data[j], movies_data->data[j - 1]))
-            return ERR_MEM;
+            return EXIT_FAILURE;
     
     if (copy_movie(&movies_data->data[i], movie))
     {
         free_movie(&movie);
-        return ERR_MEM;
+        return EXIT_FAILURE;
     }
 
     free_movie(&movie);
