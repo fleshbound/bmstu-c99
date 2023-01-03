@@ -17,7 +17,7 @@ info_movie_t create_movie(char *title, char *name, const int year)
 
         if (movie->title == NULL)
         {
-            free(movie);
+            free_movie(&movie);
             return NULL;
         }
 
@@ -25,8 +25,7 @@ info_movie_t create_movie(char *title, char *name, const int year)
 
         if (movie->name == NULL)
         {
-            free(movie->title);
-            free(movie);
+            free_movie(&movie);
             return NULL;
         }
 
