@@ -22,19 +22,6 @@ bool is_space_str(char *const string)
     return TRUE;
 }
 
-int copy_movie(info_movie_t *dst, info_movie_t src)
-{
-    if (*dst != NULL)
-        free_movie(dst);
-
-    *dst = create_movie(src->title, src->name, src->year);
-
-    if (*dst == NULL)
-        return EXIT_FAILURE;
-
-    return EXIT_SUCCESS;
-}
-
 info_movie_t read_movie(FILE *const f, int *const end_flag)
 {
     size_t len = 0;
@@ -139,13 +126,9 @@ int add_movie(movies_data_t *movies_data, info_movie_t movie, const int field_co
         i++;
 
     for (size_t j = movies_data->size - 1; (j > i) && (1 < movies_data->size); j--)
-        if (copy_movie(&movies_data->data[j], movies_data->data[j - 1]))
-            return EXIT_FAILURE;
+        movies_data->data[j] = movies_data->data[j - 1];
  
-    if (copy_movie(&movies_data->data[i], movie))
-        return EXIT_FAILURE;
-
-    free_movie(&movie);
+    movies_data->data[i] = movie;
 
     return EXIT_SUCCESS;
 }
