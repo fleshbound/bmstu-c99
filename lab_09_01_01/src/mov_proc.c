@@ -50,27 +50,19 @@ int check_key(const int field_code, char *const value)
 int binary_search_movie(movies_data_t movies, const int field_code, char *value)
 {
     int right = movies.size - 1, left = 0, middle;
-    info_movie_t tmp_m = create_movie(value, value, strtol(value, NULL, 10));
-
-    if (tmp_m == NULL)
-        return -1;
+    struct info_movie tmp_m = { .title = value, .name = value, .year = strtol(value, NULL, 10)};
 
     while (left <= right)
     {
         middle = (right + left) / 2;
 
-        if (compare(movies.data[middle], tmp_m, field_code, TRUE))
+        if (compare(movies.data[middle], &tmp_m, field_code, TRUE))
             right = middle - 1;
-        else if (compare(tmp_m, movies.data[middle], field_code, TRUE))
+        else if (compare(&tmp_m, movies.data[middle], field_code, TRUE))
             left = middle + 1;
         else
-        {
-            free_movie(&tmp_m); 
             return middle;
-        }
     }
-
-    free_movie(&tmp_m);
 
     return movies.size;
 }

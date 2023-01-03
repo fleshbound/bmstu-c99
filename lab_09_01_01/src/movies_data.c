@@ -88,7 +88,10 @@ int fill_movies_data(FILE *const f, movies_data_t *movies, const int field_code)
         
         if (!is_end)
             if (realloc_add_movie(movies, curr_movie, field_code))
+            {
+                free_movie(&curr_movie);
                 return ERR_REALLOC;
+            }
     }
 
     if (movies->size == 0)
