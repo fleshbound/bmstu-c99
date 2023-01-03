@@ -68,9 +68,15 @@ info_movie_t read_movie(FILE *const f, int *const end_flag)
         *end_flag = TRUE;
         return NULL;
     } 
+    // wrong input OR blank space
+    else if (is_space_str(title))
+    {
+        free(title);
+        return NULL;
+    }
 
     // wrong input OR blank space OR last symbol isn't \n
-    if (getline(&name, &len, f) == -1)
+    if ((getline(&name, &len, f) == -1) || (is_space_str(name)))
     {
         free(title);
         free(name);
