@@ -33,7 +33,7 @@ touch $file_stream_out_current
 error_memory=0
 if [ "$FLAG_VAL" = "1" ]; then
     {
-        valgrind --log-file=./out/log.txt --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all --track-origins=yes ./app.exe "${app_args[@]}" <"$file_stream_in"
+        valgrind --log-file=./out/log.txt -q --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=all --track-origins=yes ./app.exe "${app_args[@]}" <"$file_stream_in"
         res_code=$?
     } >"$file_stream_out_current"
 
@@ -48,7 +48,7 @@ if [ "$FLAG_VAL" = "1" ]; then
 
     error_memory=1
     
-    if grep -q "All heap blocks were freed -- no leaks are possible" ./out/log.txt; then
+    if [ ! -s ./out/log.txt ]; then
         error_memory=0
     fi
 else

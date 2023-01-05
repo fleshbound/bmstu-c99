@@ -75,7 +75,7 @@ info_movie_t read_movie(FILE *const f, int *const end_flag)
     }
 
     // wrong input OR negative number
-    if ((fscanf(f, "%d", &year) < 0) || (year < 0))
+    if ((fscanf(f, "%d", &year) != 1) || (year < 0))
     {
         free(title);
         free(name);
