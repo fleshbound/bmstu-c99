@@ -5,19 +5,19 @@
 
 int main(void)
 {
-    int a[5] = { 3, 2, 4, 1, 5 }, rc = EXIT_SUCCESS;
+    /* int a[5] = { 3, 2, 4, 1, 5 }, rc = EXIT_SUCCESS; */
     node_t *list = NULL;
 
-    for (size_t i = 0; i < 5; i++)
-    {
-        rc = insert_value(&list, &a[i]);
+    /* for (size_t i = 0; i < 5; i++) */
+    /* { */
+    /*     rc = insert_value(&list, &a[i]); */
 
-        if (rc)
-        {
-            free_list(list);
-            return rc;
-        }
-    }
+    /*     if (rc) */
+    /*     { */
+    /*         free_list(list); */
+    /*         return rc; */
+    /*     } */
+    /* } */
 
     print_list(list);
    
@@ -25,7 +25,6 @@ int main(void)
 
     if (copy(list, &list_a))
     {
-        free_list(list_a);
         free_list(list);
         return EXIT_FAILURE;
     }

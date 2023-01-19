@@ -39,7 +39,10 @@ void print_int(void *data)
 void print_list(node_t *head)
 {
     if (head == NULL)
+    {
+        puts("List is empty");
         return;
+    }
 
     node_t *curr = head;
 
@@ -92,12 +95,16 @@ void free_elem(node_t *elem)
 
 void *pop_front(node_t **head)
 {
+    if (head == NULL)
+        return NULL;
+
     if (*head == NULL)
         return NULL;
 
-    void *ret_data = (*head)->data;
     node_t *front = *head;
-    *head = front->next;
+    void *ret_data = front->data;
+
+    *head = (*head)->next;
     free_elem(front);
 
     return ret_data;
@@ -105,6 +112,9 @@ void *pop_front(node_t **head)
 
 void *pop_back(node_t **head)
 {
+    if (head == NULL)
+        return NULL;
+
     void *ret_data = NULL;
     node_t *curr = *head, *prev = curr;
 
@@ -132,6 +142,7 @@ int copy(node_t *head, node_t **new_head)
         return EXIT_SUCCESS;
     }
 
+    *new_head = NULL;
     node_t *curr = head, *new_elem;
 
     while (curr != NULL)
@@ -139,7 +150,10 @@ int copy(node_t *head, node_t **new_head)
         new_elem = alloc_elem(curr->data);
 
         if (new_elem == NULL)
+        {
+            free_list(*new_head);
             return EXIT_FAILURE;
+        }
 
         *new_head = insert_elem_back(*new_head, new_elem);
         curr = curr->next;
