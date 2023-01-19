@@ -9,6 +9,7 @@ struct node
     node_t *next;
 };
 
+node_t *pop_end(node_t **head);
 node_t *insert_elem_back(node_t *head, node_t *new_elem);
 int insert_value(node_t **head, void *value);
 node_t *insert_elem(node_t *head, node_t *new_elem);
