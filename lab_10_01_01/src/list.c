@@ -112,7 +112,7 @@ void *pop_front(node_t **head)
 
 void *pop_back(node_t **head)
 {
-    if (*head == NULL || head == NULL)
+    if (head == NULL || *head == NULL)
         return NULL;
 
     void *ret_data = NULL;
@@ -138,33 +138,6 @@ void *pop_back(node_t **head)
     prev->next = NULL;
 
     return ret_data;
-}
-
-node_t *pop_end(node_t **head)
-{
-    node_t *prev;
-    node_t *curr;
-
-    if (head == NULL || *head == NULL)
-        return NULL;
-
-    curr = *head;
-    if ((*head)->next == NULL)
-    {
-        *head = NULL;
-        return curr;
-    }
-
-    prev = NULL;
-    while (curr->next != NULL)
-    {
-        prev = curr;
-        curr = curr->next;
-    }
-
-    prev->next = NULL;
-
-    return curr;
 }
 
 int copy(node_t *head, node_t **new_head)
