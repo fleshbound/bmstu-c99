@@ -142,6 +142,9 @@ void *pop_back(node_t **head)
 
 int copy(node_t *head, node_t **new_head)
 {
+    if (head == NULL)
+        return EXIT_FAILURE;
+
     *new_head = NULL;
     node_t *curr = head, *new_elem;
 
