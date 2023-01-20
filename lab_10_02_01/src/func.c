@@ -66,7 +66,6 @@ int func_list_ddx(void)
         return EXIT_FAILURE;
 
     print_polynom(new_polynom);
-    free_polynom(&polynom);
     free_polynom(&new_polynom);
 
     return EXIT_SUCCESS;
