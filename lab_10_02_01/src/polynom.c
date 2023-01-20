@@ -135,7 +135,7 @@ int get_polynom_data(poly_data_t **data)
     if (scanf("%d", &coef) != READ_COUNT)
         return ERR_DATA;
 
-    if (fgetc(stdin) ==  '\n')
+    if (fgetc(stdin) == '\n')
         return ERR_DATA;
 
     if (scanf("%d", &power) != READ_COUNT)
