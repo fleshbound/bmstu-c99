@@ -1,0 +1,22 @@
+#!/usr/bin/gnuplot
+
+reset
+NO_ANIMATION = 1
+
+set terminal svg size 1000, 800
+set output './graphs/all_lines_100_1.svg'
+set size ratio 0.5625
+
+set title "Piecewise linear graph (all codes)"
+set xlabel "Max size of array, elements"
+set ylabel "Time (CPU time)"
+set grid
+set key left top
+
+plot './postdata1/01_1_RANDOM_avg.txt' with linespoints pt 4 lt 1 ps 0.8 title 'Random, mysort', \
+'./postdata1/03_1_SORTED_avg.txt' with linespoints pt 6 lt 1 ps 0.8 title 'Sorted, mysort', \
+'./postdata1/02_1_REVERSED_avg.txt' with linespoints pt 8 lt 1 ps 0.8 title 'Reversed, mysort', \
+'./postdata2/04_2_RANDOM_avg.txt' with linespoints pt 10 lt 2 ps 0.8 title 'Random, qsort', \
+'./postdata2/06_2_SORTED_avg.txt' with linespoints pt 12 lt 2 ps 0.8 title 'Sorted, qsort', \
+'./postdata2/05_2_REVERSED_avg.txt' with linespoints pt 4 lt 2 ps 0.8 title 'Reversed, qsort'
+

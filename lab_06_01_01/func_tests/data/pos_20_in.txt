@@ -1,9 +1,0 @@
-Title1
-Name
-1990
-Title2
-Name
-1980
-Title3
-Name
-2000
