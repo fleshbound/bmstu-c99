@@ -82,7 +82,6 @@ list_t sum_polynoms(list_t *polynom_a, list_t *polynom_b)
 
         if (((poly_data_t *)curr_a->data)->coef != 0)
             sorted_insert(&sum_polynom, curr_a, cmp_poly_data);
-
         else
             free_elem(curr_a, free_poly_data);
     
@@ -317,7 +316,7 @@ void get_odd_even_poly(list_t polynom, list_t *even, list_t *odd)
         curr->next = NULL;
 
         if (is_even_poly_data(curr->data))
-           *even = insert_elem_back(*even, curr);
+            *even = insert_elem_back(*even, curr);
         else
             *odd = insert_elem_back(*odd, curr);
 
