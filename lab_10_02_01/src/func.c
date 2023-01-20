@@ -60,7 +60,7 @@ int func_list_ddx(void)
         return rc;
     }
 
-    list_t new_polynom = get_ddx_polynom(polynom);
+    list_t new_polynom = get_ddx_polynom(&polynom);
     
     if (new_polynom == NULL)
         return EXIT_FAILURE;
@@ -88,6 +88,7 @@ int func_list_sum(void)
 
     if (rc)
     {
+        free_polynom(&polynom_a);
         fprintf(stderr, "ERROR: %d\n", rc);
         return rc;
     }

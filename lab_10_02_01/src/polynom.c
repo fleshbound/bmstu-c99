@@ -96,7 +96,7 @@ void free_poly_data(void *data)
     free((poly_data_t *) data);
 }
 
-int get_arg_polynom_data(poly_data_t **data)
+int get_arg_polynom_data(poly_data_t **data, const int is_arg_line)
 {
     int coef, power;
 
@@ -113,7 +113,12 @@ int get_arg_polynom_data(poly_data_t **data)
             return ERR_DATA;
     }
     else
-        power = -1;
+    {
+        if (is_arg_line)
+            power = -1;
+        else
+            return ERR_DATA;
+    }
 
     *data = create_polynom_data(coef, power);
 
@@ -128,6 +133,9 @@ int get_polynom_data(poly_data_t **data)
     int coef, power;
 
     if (scanf("%d", &coef) != READ_COUNT)
+        return ERR_DATA;
+
+    if (fgetc(stdin) ==  '\n')
         return ERR_DATA;
 
     if (scanf("%d", &power) != READ_COUNT)
@@ -185,18 +193,22 @@ int input_arg_polynom(list_t *polynom, int *const arg)
     poly_data_t *curr_data = (void *) 0xDEADBEEF;
     list_t curr_elem = NULL;
     size_t count = 0;
+    int is_arg_line = FALSE;
 
     *polynom = NULL;
 
     while (curr_data != NULL)
     {
-        rc = get_arg_polynom_data(&curr_data);
+        rc = get_arg_polynom_data(&curr_data, is_arg_line);
 
         if (rc)
         {
             free_polynom(polynom);
             return rc;
         }
+
+        if (fgetc(stdin) == '\n')
+            is_arg_line = TRUE;
 
         if (curr_data->power == -1)
         {
@@ -258,9 +270,9 @@ int calc_polynom(list_t polynom, const int arg)
     return res;
 }
 
-list_t get_ddx_polynom(list_t polynom)
+list_t get_ddx_polynom(list_t *polynom)
 {
-    list_t new_polynom = NULL, curr = polynom, next, new_elem = NULL;
+    list_t new_polynom = NULL, curr = *polynom, next, new_elem = NULL;
     int new_coef, new_power;
     poly_data_t *new_data = NULL;
 
@@ -269,7 +281,10 @@ list_t get_ddx_polynom(list_t polynom)
         next = curr->next;
         
         if (((poly_data_t *)curr->data)->power == 0)
+        {
+            free_elem(curr, free_poly_data);
             break;
+        }
         
         new_power = ((poly_data_t *)curr->data)->power;
         new_coef = ((poly_data_t *)curr->data)->coef * (new_power--);
@@ -279,6 +294,7 @@ list_t get_ddx_polynom(list_t polynom)
         if (new_data == NULL)
         {
             free_polynom(&new_polynom);
+            free_polynom(polynom);
             return NULL;
         }
         
@@ -287,6 +303,7 @@ list_t get_ddx_polynom(list_t polynom)
         if (new_elem == NULL)
         {
             free_polynom(&new_polynom);
+            free_polynom(polynom);
             return NULL;
         }
 
