@@ -36,7 +36,7 @@ int func_list_val(void)
 
     if (rc)
     {
-        fprintf(stderr, "ERROR: %d\n", rc);
+        //fprintf(stderr, "ERROR: %d\n", rc);
         return rc;
     }
 
@@ -56,7 +56,7 @@ int func_list_ddx(void)
 
     if (rc)
     {
-        fprintf(stderr, "ERROR: %d\n", rc);
+        //fprintf(stderr, "ERROR: %d\n", rc);
         return rc;
     }
 
@@ -79,7 +79,7 @@ int func_list_sum(void)
 
     if (rc)
     {
-        fprintf(stderr, "ERROR: %d\n", rc);
+        //fprintf(stderr, "ERROR: %d\n", rc);
         return rc;
     }
 
@@ -89,7 +89,7 @@ int func_list_sum(void)
     if (rc)
     {
         free_polynom(&polynom_a);
-        fprintf(stderr, "ERROR: %d\n", rc);
+        //fprintf(stderr, "ERROR: %d\n", rc);
         return rc;
     }
 
@@ -111,7 +111,7 @@ int func_list_dvd(void)
 
     if (rc)
     {
-        fprintf(stderr, "ERROR: %d\n", rc);
+        //fprintf(stderr, "ERROR: %d\n", rc);
         return rc;
     }
 
